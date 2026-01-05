@@ -1,0 +1,9 @@
+**/node_modules/
+**/vendor/
+**/.env
+**/.DS_Store
+**/*.log
+ivara-frontend/storage/
+ivara-frontend/public/storage
+backend-microservice/dist/
+backend-microservice/coverage/

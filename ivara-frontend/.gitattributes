@@ -1,0 +1,35 @@
+# Normalize all text files to LF
+* text=auto eol=lf
+
+# Smart diff for common text/code files
+*.blade.php diff=html
+*.css       diff=css
+*.html      diff=html
+*.js        diff=javascript
+*.json      text eol=lf
+*.md        diff=markdown
+*.php       diff=php
+*.scss      text eol=lf
+*.xml       text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+
+# Keep binary files safe
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.gz   binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary
+
+# Ignore these in git archives
+/.github       export-ignore
+CHANGELOG.md   export-ignore
+.styleci.yml   export-ignore
+/tests         export-ignore

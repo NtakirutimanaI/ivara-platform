@@ -1,0 +1,246 @@
+// Example: How to structure MongoDB documents for multilingual content
+// This shows how to update existing models to support translations
+
+// BEFORE (Single language)
+const productBefore = {
+    name: "Laptop Repair",
+    description: "Professional laptop repair services",
+    price: 50000,
+    category: "technical-repair"
+};
+
+// AFTER (Multilingual)
+const productAfter = {
+    name: {
+        en: "Laptop Repair",
+        rw: "Gusana Mudasobwa",
+        sw: "Ukarabati wa Kompyuta",
+        fr: "Réparation d'Ordinateur Portable"
+    },
+    description: {
+        en: "Professional laptop repair services",
+        rw: "Serivisi zo gusana mudasobwa z'umwuga",
+        sw: "Huduma za ukarabati wa kompyuta za kitaalamu",
+        fr: "Services professionnels de réparation d'ordinateurs portables"
+    },
+    price: 50000, // Numbers don't need translation
+    category: "technical-repair" // IDs/slugs don't need translation
+};
+
+// ============================================
+// MONGOOSE SCHEMA EXAMPLE
+// ============================================
+
+import mongoose, { Schema, Document } from 'mongoose';
+
+// Define interface for multilingual text
+interface MultilingualText {
+    en: string;
+    rw?: string;
+    sw?: string;
+    fr?: string;
+}
+
+// Product interface
+interface IProduct extends Document {
+    name: MultilingualText;
+    description: MultilingualText;
+    price: number;
+    category: string;
+    images: string[];
+    seller: mongoose.Types.ObjectId;
+    stock: number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+// Product Schema
+const ProductSchema = new Schema<IProduct>({
+    name: {
+        en: { type: String, required: true },
+        rw: { type: String },
+        sw: { type: String },
+        fr: { type: String }
+    },
+    description: {
+        en: { type: String, required: true },
+        rw: { type: String },
+        sw: { type: String },
+        fr: { type: String }
+    },
+    price: { type: Number, required: true },
+    category: { type: String, required: true },
+    images: [{ type: String }],
+    seller: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    stock: { type: Number, default: 0 }
+}, {
+    timestamps: true
+});
+
+// ============================================
+// CONTROLLER EXAMPLE
+// ============================================
+
+import { Request, Response } from 'express';
+import Product from '../models/Product';
+import translationService from '../services/translationService';
+
+export const getProducts = async (req: Request, res: Response) => {
+    try {
+        // Get locale from request (set by translation middleware)
+        const locale = (req as any).locale || 'en';
+
+        // Fetch products from database
+        const products = await Product.find({ stock: { $gt: 0 } });
+
+        // The translation middleware will automatically translate the response
+        // But you can also manually translate if needed:
+        // const translatedProducts = translationService.translateArray(products, locale);
+
+        res.json({
+            success: true,
+            data: products, // Will be auto-translated by middleware
+            pagination: {
+                total: products.length,
+                page: 1,
+                limit: 20
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: 'error.server',
+            message: 'Failed to fetch products'
+        });
+    }
+};
+
+export const createProduct = async (req: Request, res: Response) => {
+    try {
+        const { name, description, price, category, images, stock } = req.body;
+
+        // Validate that at least English is provided
+        if (!name?.en || !description?.en) {
+            return res.status(400).json({
+                success: false,
+                error: 'error.validation',
+                message: 'English name and description are required'
+            });
+        }
+
+        // Create product with multilingual fields
+        const product = new Product({
+            name: {
+                en: name.en,
+                rw: name.rw || name.en, // Fallback to English if not provided
+                sw: name.sw || name.en,
+                fr: name.fr || name.en
+            },
+            description: {
+                en: description.en,
+                rw: description.rw || description.en,
+                sw: description.sw || description.en,
+                fr: description.fr || description.en
+            },
+            price,
+            category,
+            images: images || [],
+            seller: (req as any).user._id,
+            stock: stock || 0
+        });
+
+        await product.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'success.created',
+            data: product
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: 'error.server',
+            message: 'Failed to create product'
+        });
+    }
+};
+
+// ============================================
+// FRONTEND API CALL EXAMPLE
+// ============================================
+
+// In Laravel Controller or JavaScript
+async function fetchProducts() {
+    // Get current locale from session
+    const locale = app() -> getLocale(); // Laravel
+    // or
+    const locale = localStorage.getItem('locale') || 'en'; // JavaScript
+
+    // Make API call with locale parameter
+    const response = await fetch(`http://localhost:5001/api/products?locale=${locale}`);
+    const data = await response.json();
+
+    // Products will already be translated
+    console.log(data.data); // [{name: "Gusana Mudasobwa", ...}] if locale=rw
+}
+
+// ============================================
+// MIGRATION SCRIPT EXAMPLE
+// ============================================
+
+// Script to migrate existing single-language data to multilingual format
+async function migrateProductsToMultilingual() {
+    const products = await Product.find({});
+
+    for (const product of products) {
+        // Check if already migrated
+        if (typeof product.name === 'object' && product.name.en) {
+            continue; // Already migrated
+        }
+
+        // Convert single language to multilingual
+        const oldName = product.name as any;
+        const oldDescription = product.description as any;
+
+        product.name = {
+            en: oldName,
+            rw: oldName, // Initially same as English
+            sw: oldName,
+            fr: oldName
+        } as any;
+
+        product.description = {
+            en: oldDescription,
+            rw: oldDescription,
+            sw: oldDescription,
+            fr: oldDescription
+        } as any;
+
+        await product.save();
+        console.log(`Migrated product: ${oldName}`);
+    }
+
+    console.log('Migration completed!');
+}
+
+// Run migration
+// migrateProductsToMultilingual();
+
+// ============================================
+// BEST PRACTICES
+// ============================================
+
+/*
+1. ALWAYS provide English (en) as it's the fallback
+2. Use consistent structure across all models
+3. Validate multilingual fields on input
+4. Use the translation service for automatic translation
+5. Store language-independent data (IDs, numbers, dates) normally
+6. Use descriptive field names
+7. Document which fields are multilingual
+8. Test with all supported languages
+9. Provide UI for translators to add/edit translations
+10. Consider using translation management tools for large projects
+*/
+
+export { };

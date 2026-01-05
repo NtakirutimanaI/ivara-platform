@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: radial-gradient(circle at top right, #fdf4ff, #f3f4f6);
+  --foreground: #0f172a;
+  --primary: #924FC2;
+  --secondary: #ffffff;
+  --accent: #a855f7;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --text-muted: #64748b;
+}
+
+.dark {
+  --background: #050505;
+  --foreground: #ffffff;
+  --primary: #924FC2;
+  --secondary: #121212;
+  --accent: #ff4d4d;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  --text-muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--background);
+  background-attachment: fixed;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+input,
+button {
+  font-family: inherit;
+}
+
+/* Glassmorphism Classes */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+/* Utilities */
+.text-gradient {
+  background: linear-gradient(to right, #ffffff, #888888);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+  background: var(--accent);
+}
+
+.btn-secondary {
+  background: var(--glass);
+  color: white;
+  border: 1px solid var(--glass-border);
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 100%;
+  background: var(--secondary);
+  border: 1px solid var(--glass-border);
+  padding: 16px;
+  border-radius: 12px;
+  color: var(--foreground);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-field::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+  /* Black with opacity for light mode */
+}
+
+.dark .input-field::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  /* White with opacity for dark mode */
+}
+
+.input-field:focus {
+  border-color: var(--primary);
+}
+
+/* --- Premium Dashboard Header & Drawer --- */
+
+.mobile-header-premium {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 4000;
+}
+
+.header-icon-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.header-icon-btn:active {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  transform: scale(0.92);
+}
+
+.header-icon-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+.profile-trigger-mobile {
+  padding-left: 8px;
+  cursor: pointer;
+}
+
+.header-avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--primary);
+  border: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.profile-trigger-mobile:active .header-avatar-circle {
+  transform: scale(0.92);
+  border-color: var(--primary);
+}
+
+/* Quick Add Dropdown */
+.dropdown-menu-mobile {
+  position: absolute;
+  top: 56px;
+  right: -10px;
+  width: 180px;
+  background: var(--secondary);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dropdown-menu-mobile a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #cbd5e1;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+.dropdown-menu-mobile a:active {
+  background: rgba(248, 45, 45, 0.1);
+  color: #f82d2d;
+}
+
+/* Drawer Links */
+.drawer-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  text-decoration: none;
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s;
+}
+
+.drawer-link:active {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  transform: translateX(4px);
+}
+
+.drawer-link svg {
+  color: #64748b;
+}
+
+.drawer-link:active svg {
+  color: var(--primary);
+}
+
+.logout-text {
+  color: #ef4444;
+}
+
+.logout-text svg {
+  color: #ef4444;
+}
+
+/* Margin offset for fixed header */
+main,
+.min-h-screen {
+  padding-top: 64px;
+}

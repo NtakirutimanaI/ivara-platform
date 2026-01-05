@@ -1,0 +1,332 @@
+
+# IVARA Platform - Login Credentials
+# Updated for Technical & Repair and Creative, Lifestyle & Wellness Categories
+
+### 1. Super Admin
+- Email: ivara.superadmin@gmail.com
+- Password: password
+
+---
+
+### 2. Technical & Repair Category Credentials
+*All accounts use password: "password"*
+
+#### Management
+- Admin:        tech.admin@ivara.com
+- Manager:      tech.manager@ivara.com
+- Supervisor:   tech.supervisor@ivara.com
+
+#### Service Providers & Roles
+- Technician:   technician.tech@ivara.com
+- Mechanician:  mechanic.tech@ivara.com
+- Electrician:  electrician.tech@ivara.com
+- Builder:      builder.tech@ivara.com
+- Craftsperson: crafts.tech@ivara.com
+- Tailor:       tailor.tech@ivara.com
+- Business:     business.tech@ivara.com
+- Mediator:     mediator.tech@ivara.com
+
+#### End Users
+- Client:       client.tech@ivara.com
+
+---
+
+### 3. Creative, Lifestyle & Wellness Category Credentials
+*All accounts use password: "password"*
+
+#### Management
+- Admin:        clw.admin@ivara.com
+- Manager:      clw.manager@ivara.com
+- Supervisor:   clw.supervisor@ivara.com
+
+#### Service Providers - Creative
+- Fashion Designer:         fashion.designer@ivara.com
+- Content Creator/Influencer: influencer@ivara.com
+- Musician:                 musician@ivara.com
+- Photographer:             photographer@ivara.com
+- Artist:                   artist@ivara.com
+
+#### Service Providers - Wellness
+- Massage Therapist:        massage.therapist@ivara.com
+- Spa Specialist:           spa.specialist@ivara.com
+- Fitness Trainer:          fitness.trainer@ivara.com
+- Yoga Instructor:          yoga.instructor@ivara.com
+- Wellness Coach:           wellness.coach@ivara.com
+- Life Coach:               life.coach@ivara.com
+- Nutritionist/Dietitian:   nutritionist@ivara.com
+- Therapist/Counselor:      therapist@ivara.com
+
+#### Businessperson (Organizations)
+- Studio/Salon/Gym Owner:   studio.owner@ivara.com
+- Brand/Agency:             brand.agency@ivara.com
+- Event Organizer:          event.organizer@ivara.com
+- Talent Manager:           talent.manager@ivara.com
+
+#### Special Roles
+- Mediator:     mediator.clw@ivara.com
+- Moderator:    moderator.clw@ivara.com
+
+#### End Users
+- Client:       client.clw@ivara.com
+
+---
+
+### IMPORTANT NOTES
+1. All passwords are set to "password" for development.
+2. Login Flow:
+   - Login -> Select Category (Technical & Repair OR Creative, Lifestyle & Wellness) -> User Selection -> Dashboard.
+3. No user can access another user's dashboard.
+4. Each category has isolated user management and workflows.
+
+---
+
+### 4. Transport, Travel & Hospitality Category Credentials
+*All accounts use password: "password"*
+*Dashboard Theme: Light Blue*
+
+#### Management
+- Admin:        tth.admin@ivara.com
+- Manager:      tth.manager@ivara.com
+- Supervisor:   tth.supervisor@ivara.com
+
+#### Service Providers - Transport Services
+- Taxi Driver:      taxi.driver@ivara.com
+- Moto Driver:      moto.driver@ivara.com
+- Bus Driver:       bus.driver@ivara.com
+- Truck Driver:     truck.driver@ivara.com
+- Tour Driver:      tour.driver@ivara.com
+- Delivery Driver:  delivery.driver@ivara.com
+
+#### Service Providers - Special Transport
+- Ambulance Driver:     ambulance.driver@ivara.com
+- Special Needs:        special.transport@ivara.com
+- VIP Driver:           vip.driver@ivara.com
+
+#### Support Providers
+- Vehicle Servicing:    vehicle.servicing@ivara.com
+- Customer Care:        customer.care@ivara.com
+- Roadside Assist:      roadside.assist@ivara.com
+- Safety Officer:       safety.officer@ivara.com
+
+#### Business & Special Roles
+- Businessperson:   tth.business@ivara.com
+- Mediator:         tth.mediator@ivara.com
+- Moderator:        tth.moderator@ivara.com
+
+#### End Users
+- Client:           client.tth@ivara.com
+
+---
+
+### 5. Food, Events & Fashion Category Credentials
+*All accounts use password: "password"*
+*Dashboard Theme: Various (Pink, Orange, Purple, etc.)*
+
+#### Management
+- Admin:        fef.admin@ivara.com
+- Manager:      fef.manager@ivara.com
+- Supervisor:   fef.supervisor@ivara.com
+
+#### Service Providers - Event Planning
+- Event Coordinator:    event.coordinator@ivara.com
+- Wedding Planner:      wedding.planner@ivara.com
+- Corporate Organizer:  corporate.organizer@ivara.com
+- Birthday Organizer:   birthday.organizer@ivara.com
+- Conference Organizer: conference.organizer@ivara.com
+- Exhibition Organizer: exhibition.organizer@ivara.com
+
+#### Service Providers - Party Services
+- Decorator/Stylist:    decorator@ivara.com
+- Lighting & Sound:     lighting.sound@ivara.com
+- Stage Setup:          stage.setup@ivara.com
+- Photographer/Video:   photographer@ivara.com
+- Entertainer/MC:       entertainer@ivara.com
+- DJ Services:          music.dj@ivara.com
+
+#### Service Providers - Food Services
+- Catering Service:     catering@ivara.com
+- Bakery Service:       bakery@ivara.com
+- Beverage Service:     beverage@ivara.com
+- Other Food:           other.food@ivara.com
+
+#### Service Providers - Fashion
+- Clothes Rental:       clothes.rental@ivara.com
+- Event Tailor:         tailor@ivara.com
+
+#### Support Providers
+- Cleanup Crew:         cleanup.crew@ivara.com
+- Euip. Maintenance:    equip.maintenance@ivara.com
+- Catering Feedback:    catering.feedback@ivara.com
+- Customer Loyalty:     customer.loyalty@ivara.com
+
+#### Business & Special Roles
+- Businessperson:   fef.business@ivara.com
+- Mediator:         fef.mediator@ivara.com
+- Moderator:        fef.moderator@ivara.com
+
+#### End Users
+- Client:           fef.client@ivara.com
+
+---
+
+### 6. Education & Knowledge Category Credentials
+*All accounts use password: "password"*
+*Dashboard Theme: Academic Blue/Green*
+
+#### Management
+- Admin:        edu.admin@ivara.com
+- Manager:      edu.manager@ivara.com
+- Supervisor:   edu.supervisor@ivara.com
+
+#### Teaching & Training
+- Instructor/Teacher:   instructor@ivara.com
+- Trainer:              trainer@ivara.com
+- Lecturer:             lecturer@ivara.com
+- Tutor/Mentor:         tutor@ivara.com
+
+#### Content & Knowledge
+- Content Creator:      edu.creator@ivara.com
+- Curriculum Dev:       curriculum.dev@ivara.com
+- Publisher:            publisher@ivara.com
+
+#### Research & Academic
+- Researcher:           researcher@ivara.com
+- Academic Writer:      academic.writer@ivara.com
+
+#### Support Providers
+- Academic Advisor:     academic.advisor@ivara.com
+- Career Guidance:      career.guide@ivara.com
+- Examiner:             examiner@ivara.com
+- Assessor:             assessor@ivara.com
+- Quality Assurance:    qa.officer@ivara.com
+- Moderator:            edu.moderator@ivara.com
+- Compliance Review:    compliance@ivara.com
+
+#### Businessperson
+- School Owner:         school.owner@ivara.com
+- Training Ctr Owner:   training.owner@ivara.com
+- Education Business:   edu.business@ivara.com
+- Publishing Business:  publishing.biz@ivara.com
+
+#### Special Roles
+- Mediator:             edu.mediator@ivara.com
+
+#### End Users
+- Student:              student@ivara.com
+- Parent:               parent@ivara.com
+
+---
+
+### 7. Agriculture, Farming & Environment Category Credentials
+*All accounts use password: "password"*
+*Dashboard Theme: Earth / Nature Green*
+
+#### Management
+- Admin:        agri.admin@ivara.com
+- Manager:      agri.manager@ivara.com
+- Supervisor:   agri.supervisor@ivara.com
+
+#### Service Providers - Crop Farming
+- Crop Followup:        crop.followup@ivara.com
+- Soil Management:      soil.mgmt@ivara.com
+- Irrigation Support:   irrigation@ivara.com
+- Pest Management:      pest.mgmt@ivara.com
+
+#### Service Providers - Livestock Farming
+- Veterinary:           vet@ivara.com
+- Breeding:             breeder@ivara.com
+- Nutritionist:         nutritionist@ivara.com
+- Livestock Monitor:    livestock.monitor@ivara.com
+
+#### Service Providers - Aquaculture
+- Fish Farmer:          fish.farmer@ivara.com
+- Water Quality:        water.quality@ivara.com
+- Harvest Processing:   harvest.proc@ivara.com
+
+#### Service Providers - Apiculture
+- Bee Farmer:           bee.farmer@ivara.com
+- Hive Management:      hive.mgmt@ivara.com
+- Honey Production:     honey.prod@ivara.com
+
+#### Service Providers - Environmental
+- Sustainable Farming:  sustainable.farm@ivara.com
+- Climate Smart:        climate.smart@ivara.com
+- Conservationist:      conservation@ivara.com
+
+#### Support Providers - Extension
+- Farmer Trainer:       farmer.trainer@ivara.com
+- Agri Advisor:         agri.advisor@ivara.com
+- Field Demo:           field.demo@ivara.com
+
+#### Support Providers - Input Supply
+- Seeds & Fertilizer:   seeds.fert@ivara.com
+- Animal Feed:          animal.feed@ivara.com
+- Equipment Tools:      agri.tools@ivara.com
+
+#### Support Providers - M&E
+- Farm Inspector:       farm.inspector@ivara.com
+- Data Reporting:       data.reporter@ivara.com
+
+#### Support Providers - Post Harvest
+- Storage Support:      storage@ivara.com
+- Market Linkage:       market.link@ivara.com
+
+#### Businessperson
+- Agribusiness Owner:   agri.biz.owner@ivara.com
+- Farm Owner:           farm.owner@ivara.com
+- Cooperative Org:      coop@ivara.com
+- Input Supply Biz:     input.biz@ivara.com
+
+#### Special Roles
+- Mediator:             agri.mediator@ivara.com
+- Moderator:            agri.moderator@ivara.com
+
+#### End Users
+- Client:               agri.client@ivara.com
+
+
+---
+
+### 8. Media & Entertainment Category Credentials
+*All accounts use password: "password"*
+*Dashboard Theme: Dark / Cinema*
+
+#### Management
+- Admin:        mediaadmin@ivara.com
+
+#### Service Providers
+- Media Creator:        creator@media.com
+- Media Producer:       producer@media.com
+- Media Advertiser:     advertiser@media.com
+- Media Distributor:    distributor@media.com
+
+#### End Users
+- Media Consumer:       consumer@media.com
+
+---
+
+### 9. Legal & Professional Category Credentials
+*All accounts use password: "password"*
+*Dashboard Theme: Professional Navy*
+
+#### Management
+- Admin:        legaladmin@ivara.com
+
+#### Service Providers
+- Legal Professional:   pro@legal.com
+- Consultant:           consultant@legal.com
+- Legal Firm:           firm@legal.com
+- Regulator:            regulator@legal.com
+
+#### End Users
+- Client:               client@legal.com
+
+---
+
+### 10. Other Services Category Credentials
+*All accounts use password: "password"*
+*Dashboard Theme: Neutral Gray*
+
+#### Management
+- Admin:        other.admin@ivara.com
+- Manager:      other.manager@ivara.com
