@@ -37,6 +37,27 @@ class SuperAdminController extends Controller
         return $this->genericIndex('users', 'super_admin.users.index');
     }
 
+    public function showUser($id)
+    {
+        $user = $this->superAdminService->findUserById($id);
+        return view('super_admin.users.show', compact('user'));
+    }
+
+    public function banUser(Request $request, $id)
+    {
+        $user = $this->superAdminService->updateUserStatus($id, 'banned');
+        
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'User account has been restricted successfully.',
+                'status' => 'banned'
+            ]);
+        }
+
+        return back()->with('success', 'User banned successfully.');
+    }
+
     public function categories()
     {
         $categories = $this->getMockCategories();
@@ -304,18 +325,50 @@ class SuperAdminController extends Controller
 
     // --- Generic Logic for reusable Crud ---
     private function genericIndex($roleKey, $view) {
-        $allUsers = $this->getMockUsers($roleKey);
+        $overview = $this->superAdminService->getSystemOverview();
+        
+        $rolesToFetch = match($roleKey) {
+            'admins' => ['admin'],
+            'managers' => ['manager'],
+            'supervisors' => ['supervisor'],
+            'users' => ['client', 'provider', 'Client', 'Provider'], // Match common variations
+            default => []
+        };
+
+        $realUsers = $this->superAdminService->getUsersByRole($rolesToFetch);
+        
+        if (count($realUsers) > 0) {
+            $allUsers = collect($realUsers)->map(function($u) {
+                // Handle both object and array formats (from API or Eloquent)
+                $u = (object) $u;
+                return [
+                    'id' => $u->id ?? null,
+                    'name' => $u->name ?? 'Unknown',
+                    'email' => $u->email ?? 'no-email@ivara.com',
+                    'role' => ucfirst($u->role ?? 'User'),
+                    'category' => $u->category ?? 'General',
+                    'status' => $u->status ?? 'online',
+                    'tasks' => 0
+                ];
+            })->toArray();
+        } else {
+            // Fallback to mock data if no real users exist for these roles
+            $allUsers = $this->getMockUsers($roleKey);
+        }
+
         $categories = $this->getMockCategories();
         
         $grouped = [];
         foreach($allUsers as $u) {
-            $grouped[$u['category']][] = $u;
+            $cat = $u['category'] ?: 'General';
+            $grouped[$cat][] = $u;
         }
 
         $data = [
             'categories' => $categories,
-            'admins' => $grouped, // Maintain for backward compatibility
-            'users' => $grouped // Add for 'users' view
+            'admins' => $grouped,
+            'users' => $grouped,
+            'overview' => $overview
         ];
 
         return view($view, $data);

@@ -327,7 +327,9 @@ body {
 }
 
 [data-theme="dark"] .pro-input {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(15, 23, 42, 0.6);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .pro-input:focus {
@@ -964,12 +966,17 @@ body {
 
 .header-pill {
     font-size: 0.7rem;
-    background: var(--glass-bg);
+    background: var(--light);
     padding: 4px 12px;
     border-radius: 20px;
     color: var(--secondary);
     font-weight: 700;
     border: 1px solid var(--glass-border);
+}
+
+[data-theme="dark"] .header-pill {
+    background: rgba(30, 41, 59, 0.5);
+    color: #94a3b8;
 }
 
 .view-all-link {
@@ -1073,6 +1080,14 @@ body {
     color: var(--secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] label {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: #64748b !important;
 }
 
 /* =========================================
@@ -1377,6 +1392,7 @@ body {
     min-height: auto !important;
     max-width: 100% !important;
 }
+
 /* Dashboard Layout Grid */
 .main-grid {
     display: grid;
@@ -1392,11 +1408,25 @@ body {
 }
 
 /* Missing Spacing Utilities */
-.mb-1 { margin-bottom: 0.25rem !important; }
-.mb-2 { margin-bottom: 0.5rem !important; }
-.mb-3 { margin-bottom: 1rem !important; }
-.mb-4 { margin-bottom: 1.5rem !important; }
-.mb-5 { margin-bottom: 3rem !important; }
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 3rem !important;
+}
 
 
 /* Premium Button Style */
@@ -1415,15 +1445,18 @@ body {
     text-decoration: none !important;
     letter-spacing: 0.5px;
 }
+
 .btn-premium:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
     color: white !important;
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
 }
+
 .btn-premium:active {
     transform: translateY(0);
 }
+
 .btn-premium i {
     font-size: 1.1em;
 }
@@ -1431,9 +1464,12 @@ body {
 
 /* Premium Secondary Button */
 .btn-secondary-premium {
-    background: rgba(255, 255, 255, 0.05);
-    color: #94a3b8 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #fff;
+    color: #64748b !important;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
     padding: 0.75rem 1.5rem;
     border-radius: 50px;
     font-weight: 600;
@@ -1443,12 +1479,25 @@ body {
     align-items: center;
     letter-spacing: 0.5px;
 }
+
 .btn-secondary-premium:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white !important;
-    border-color: rgba(255, 255, 255, 0.3);
+    background: #f8fafc;
+    color: #1e293b !important;
+    border-color: #cbd5e1;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .btn-secondary-premium {
+    background: rgba(30, 41, 59, 0.5);
+    color: #94a3b8 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .btn-secondary-premium:hover {
+    background: rgba(51, 65, 85, 0.8);
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 
@@ -1474,7 +1523,10 @@ body {
 .metric-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 4px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
     background: linear-gradient(90deg, #6366f1, #8b5cf6);
     opacity: 0;
     transition: opacity 0.3s;
@@ -1482,9 +1534,12 @@ body {
 
 .metric-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
 }
-.metric-card:hover::before { opacity: 1; }
+
+.metric-card:hover::before {
+    opacity: 1;
+}
 
 .metric-title {
     color: #64748b;
@@ -1510,8 +1565,9 @@ body {
     border: 1px solid #e2e8f0;
     border-radius: 16px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
+
 .hover-glass:hover {
     transform: translateY(-5px);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
@@ -1529,20 +1585,10 @@ body {
     margin-bottom: 1rem;
     transition: all 0.3s;
 }
+
 .hover-glass:hover .icon-circle {
     background: #8b5cf6;
     color: white !important;
-}
-
-/* Light Mode Button Fix */
-.btn-secondary-premium {
-    background: white;
-    color: #475569 !important;
-    border: 1px solid #cbd5e1;
-}
-.btn-secondary-premium:hover {
-    background: #f8fafc;
-    color: #0f172a !important;
 }
 
 
@@ -1556,6 +1602,7 @@ body {
     font-weight: 600;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .btn-outline-premium:hover {
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     color: white !important;
@@ -1563,4 +1610,3 @@ body {
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
     transform: translateY(-2px);
 }
-

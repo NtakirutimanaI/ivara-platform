@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             AgricultureUsersSeeder::class,
             MediaEntertainmentUsersSeeder::class,
             LegalProfessionalUsersSeeder::class,
+            UserManagementSeeder::class,
             UpdatesTableSeeder::class,
         ]);
     }

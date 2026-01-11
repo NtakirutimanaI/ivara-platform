@@ -33,8 +33,25 @@ interface SuperAdminRepositoryInterface
     public function deleteAdmin($id);
 
     /**
+     * Get users by specific roles.
+     * @param array $roles
+     * @return mixed
+     */
+    public function getUsersByRole(array $roles);
+
+    /**
      * Get system-wide statistics for the Super Admin dashboard.
      * @return array
      */
     public function getSystemOverview();
+
+    /**
+     * Find a user by ID.
+     */
+    public function findUserById($id);
+
+    /**
+     * Update a user's status.
+     */
+    public function updateUserStatus($id, $status);
 }

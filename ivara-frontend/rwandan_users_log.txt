@@ -1,0 +1,65 @@
+### Rwandan Support Staff Credentials
+
+#### Category: Technical & Repair
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Jean Bosco Niyonsaba | admin | jean.admin1.technicalrepair@ivara.rw | password |
+| Mutoni Alice | manager | mutoni.manager.technicalrepair@ivara.rw | password |
+| Karasira Eric | supervisor | karasira.supervisor.technicalrepair@ivara.rw | password |
+
+#### Category: Creative & Lifestyle
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Uwimana Marie | admin | uwimana.admin.creativelifestyle@ivara.rw | password |
+| Habimana Innocent | manager | habimana.manager.creativelifestyle@ivara.rw | password |
+| Umutoniwase Solange | supervisor | umutoniwase.supervisor.creativelifestyle@ivara.rw | password |
+
+#### Category: Transport & Travel
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Gakuba Benjamin | admin | gakuba.admin.transporttravel@ivara.rw | password |
+| Murekatete Claudine | manager | murekatete.manager.transporttravel@ivara.rw | password |
+| Ishimwe Didier | supervisor | ishimwe.supervisor.transporttravel@ivara.rw | password |
+
+#### Category: Food, Fashion & Events
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Mukansanga Salome | admin | mukansanga.admin.foodfashionevents@ivara.rw | password |
+| Bizimana Jean de Dieu | manager | bizimana.manager.foodfashionevents@ivara.rw | password |
+| Uwera Beatrice | supervisor | uwera.supervisor.foodfashionevents@ivara.rw | password |
+
+#### Category: Education & Knowledge
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Ndayisaba Fabrice | admin | ndayisaba.admin.educationknowledge@ivara.rw | password |
+| Mukandutiye Seraphine | manager | mukandutiye.manager.educationknowledge@ivara.rw | password |
+| Rutayisire David | supervisor | rutayisire.supervisor.educationknowledge@ivara.rw | password |
+
+#### Category: Agriculture & Environment
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Uwizeye Claudine | admin | uwizeye.admin.agricultureenvironment@ivara.rw | password |
+| Kalisa John | manager | kalisa.manager.agricultureenvironment@ivara.rw | password |
+| Mutesi Divine | supervisor | mutesi.supervisor.agricultureenvironment@ivara.rw | password |
+
+#### Category: Media & Entertainment
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Jean Damascene Ntabanganyimana | admin | jean.admin.mediaentertainment@ivara.rw | password |
+| Nyirahabimana Speciose | manager | nyirahabimana.manager.mediaentertainment@ivara.rw | password |
+| Manzi Olivier | supervisor | manzi.supervisor.mediaentertainment@ivara.rw | password |
+
+#### Category: Legal & Professional
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Umubyeyi Diane | admin | umubyeyi.admin.legalprofessional@ivara.rw | password |
+| Nkurunziza Pascal | manager | nkurunziza.manager.legalprofessional@ivara.rw | password |
+| Mugenzi Aimable | supervisor | mugenzi.supervisor.legalprofessional@ivara.rw | password |
+
+#### Category: Other Services
+| Name | Role | Email | Password |
+|------|------|-------|----------|
+| Uwimana Josiane | admin | uwimana.admin.otherservices@ivara.rw | password |
+| Tuyishime Innocent | manager | tuyishime.manager.otherservices@ivara.rw | password |
+| Karasira Benjamin | supervisor | karasira.supervisor.otherservices@ivara.rw | password |
+

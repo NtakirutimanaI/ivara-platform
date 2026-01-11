@@ -69,6 +69,21 @@ class ApiSuperAdminRepository implements SuperAdminRepositoryInterface
         return false;
     }
 
+    public function getUsersByRole(array $roles)
+    {
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->get(str_replace('super-admin', 'auth', $this->getApiUrl()) . '/users-by-roles', [
+                    'roles' => implode(',', $roles)
+                ]);
+            
+            return $response->successful() ? $response->json() : [];
+        } catch (\Exception $e) {
+            Log::error('API Get UsersByRole failed: ' . $e->getMessage());
+            return [];
+        }
+    }
+
     public function getSystemOverview()
     {
         try {

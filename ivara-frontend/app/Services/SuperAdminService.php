@@ -34,8 +34,23 @@ class SuperAdminService
         return $this->repository->deleteAdmin($id);
     }
 
+    public function getUsersByRole(array $roles)
+    {
+        return $this->repository->getUsersByRole($roles);
+    }
+
     public function getSystemOverview()
     {
         return $this->repository->getSystemOverview();
+    }
+
+    public function findUserById($id)
+    {
+        return $this->repository->findUserById($id);
+    }
+
+    public function updateUserStatus($id, $status)
+    {
+        return $this->repository->updateUserStatus($id, $status);
     }
 }

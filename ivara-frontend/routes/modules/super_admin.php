@@ -7,6 +7,8 @@ Route::middleware(['auth', 'admin'])->prefix('super_admin')->name('super_admin.'
     Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('index');
     Route::get('/credentials', [SuperAdminController::class, 'credentials'])->name('credentials');
     Route::get('/users', [SuperAdminController::class, 'users'])->name('users.index');
+    Route::get('/users/{id}', [SuperAdminController::class, 'showUser'])->name('users.show')->where('id', '[0-9]+');
+    Route::post('/users/{id}/ban', [SuperAdminController::class, 'banUser'])->name('users.ban')->where('id', '[0-9]+');
 
     // Sidebar Pages
     Route::get('/marketplace', [SuperAdminController::class, 'marketplace'])->name('marketplace.index');

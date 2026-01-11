@@ -45,7 +45,12 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Bind SuperAdminRepositoryInterface
         $this->app->bind(\App\Contracts\Repositories\SuperAdminRepositoryInterface::class, function ($app) {
-            return $app->make(\App\Repositories\Api\ApiSuperAdminRepository::class);
+            $driver = config('database.default');
+
+            return match ($driver) {
+                'mongodb' => $app->make(\App\Repositories\Api\ApiSuperAdminRepository::class), // Keep API for MongoDB for now if that's the pattern
+                default => $app->make(\App\Repositories\MySQL\MySQLSuperAdminRepository::class),
+            };
         });
     }
 
