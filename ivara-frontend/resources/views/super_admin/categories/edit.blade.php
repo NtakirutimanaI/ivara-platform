@@ -5,39 +5,39 @@
     <header class="pro-header">
         <div>
             <h1>Edit Category</h1>
-            <p>Modify category details for: <span class="text-primary">{{ ucwords(str_replace('-', ' ', $slug)) }}</span></p>
+            <p>Modify category details for: <span class="text-primary">{{ $category['name'] }}</span></p>
         </div>
     </header>
 
     <div class="pro-card glass-panel" style="max-width: 800px; margin: 0 auto;">
-        <form action="#" method="POST">
+        <form action="{{ route('super_admin.categories.update', $category['slug']) }}" method="POST">
             @csrf
-            <!-- Simulated PUT method -->
-            <input type="hidden" name="_method" value="PUT"> 
+            @method('PUT')
             
             <div class="mb-4">
                 <label class="form-label fw-bold">Category Name</label>
-                <input type="text" class="form-control pro-input" value="{{ ucwords(str_replace('-', ' ', $slug)) }}">
+                <input type="text" name="name" class="form-control pro-input" value="{{ $category['name'] }}" required>
             </div>
 
             <div class="mb-4">
                 <label class="form-label fw-bold">Route Slug</label>
-                <input type="text" class="form-control pro-input" value="{{ $slug }}" readonly>
+                <input type="text" class="form-control pro-input" value="{{ $category['slug'] }}" readonly>
                 <small class="text-muted">Slug cannot be changed once created to prevent broken links.</small>
             </div>
 
             <div class="mb-4">
                 <label class="form-label fw-bold">Icon Class (FontAwesome)</label>
-                <input type="text" class="form-control pro-input" value="fas fa-layer-group">
+                <input type="text" name="icon" class="form-control pro-input" value="{{ $category['icon'] ?? 'fas fa-layer-group' }}">
             </div>
 
             <div class="mb-4">
                 <label class="form-label fw-bold">Description</label>
-                <textarea class="form-control pro-input" rows="4">Description for {{ str_replace('-', ' ', $slug) }} goes here...</textarea>
+                <textarea name="description" class="form-control pro-input" rows="4">Description for {{ $category['name'] }} goes here...</textarea>
             </div>
 
             <div class="form-check form-switch mb-4">
-                <input class="form-check-input" type="checkbox" id="isActive" checked>
+                <input type="hidden" name="status" value="Inactive">
+                <input class="form-check-input" type="checkbox" id="isActive" name="status" value="Active" {{ ($category['status'] ?? 'Active') === 'Active' ? 'checked' : '' }}>
                 <label class="form-check-label" for="isActive">Active Status</label>
             </div>
 

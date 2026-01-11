@@ -58,6 +58,22 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- Performance Review Section --- */
+        .performance-card {
+            background: linear-gradient(135deg, #fff 0%, #f9fafb 100%);
+            border-left: 5px solid var(--primary-purple);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            animation: slideIn 0.5s ease;
+        }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .review-rating {
+            background: #924FC2; color: #fff; padding: 5px 12px; border-radius: 12px; font-weight: 700;
+        }
+        @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
         /* --- Header Section --- */
         .welcome-header {
             display: flex;
@@ -361,6 +377,41 @@
                 </div>
             </div>
         </header>
+
+        <!-- Performance Review (Visible if Reviewed) -->
+        @php
+            // Mock fetching review from session for demo purposes, in real app this comes from DB
+            $mockManagers = session('mock_managers', []);
+            // Assume current logged in user ID matches one in mock for demo
+            // In real app: $review = Auth::user()->performanceReview;
+            $myReview = null;
+            if(!empty($mockManagers)) {
+                // Just picking the first one or finding by name for demo
+                // $myReview = collect($mockManagers)->firstWhere('name', Auth::user()->name);
+                // Forcing display for demo if session has any reviewed manager
+                foreach($mockManagers as $m) {
+                    if(isset($m['latest_review'])) {
+                        $myReview = $m;
+                        break;
+                    }
+                }
+            }
+        @endphp
+
+        @if($myReview && isset($myReview['latest_review']))
+        <div class="performance-card">
+            <div class="review-header">
+                <h3 style="color: #1e293b; font-size: 1.1rem;"><i class="fas fa-bullhorn" style="color: var(--primary-purple); margin-right: 10px;"></i> Recent Performance Review</h3>
+                <span class="review-rating">Rating: {{ $myReview['rating'] }}/10</span>
+            </div>
+            <p style="color: #4b5563; line-height: 1.6; font-style: italic;">
+                "{{ $myReview['latest_review'] }}"
+            </p>
+            <div style="margin-top: 10px; font-size: 0.85rem; color: #94a3b8; text-align: right;">
+                Reviewed by Super Admin
+            </div>
+        </div>
+        @endif
 
         <!-- Stats Grid -->
         <div class="stats-grid">

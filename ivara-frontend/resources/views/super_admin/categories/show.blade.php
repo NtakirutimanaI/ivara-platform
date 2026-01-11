@@ -4,7 +4,7 @@
 <div class="dashboard-wrapper">
     <!-- Header Component -->
     <x-admin.header 
-        :title="ucwords(str_replace('-', ' ', $slug))" 
+        :title="$category['name']" 
         subtitle="Control Center & Analytics"
     >
         <a href="{{ route('super_admin.categories.edit', $slug) }}" class="btn-secondary-premium text-decoration-none">
@@ -153,7 +153,7 @@
                     <i class="fas fa-rocket fa-4x"></i>
                 </div>
                 <h5 class="fw-bold position-relative">Growth Campaign</h5>
-                <p class="small opacity-75 position-relative mb-3">Boost visibility for {{ ucwords(str_replace('-', ' ', $slug)) }} services.</p>
+                <p class="small opacity-75 position-relative mb-3">Boost visibility for {{ $category['name'] }} services.</p>
                 <button class="btn btn-light text-primary fw-bold rounded-pill w-100 shadow-sm position-relative" onclick="alert('Campaign started!')">Start Campaign</button>
             </div>
         </div>

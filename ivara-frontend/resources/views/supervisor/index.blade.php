@@ -106,6 +106,40 @@
       <h1>Welcome, Supervisor 👋</h1>
     </div>
 
+    <!-- Performance Review Area -->
+    @php
+        $mockSupervisors = session('mock_supervisors', []);
+        $mySupReview = null;
+        if(!empty($mockSupervisors)) {
+             foreach($mockSupervisors as $s) {
+                 if(isset($s['latest_review'])) {
+                     $mySupReview = $s;
+                     break;
+                 }
+             }
+        }
+    @endphp
+
+    @if($mySupReview && isset($mySupReview['latest_review']))
+    <div style="background: #e8f5e9; border-left: 5px solid #00C853; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 style="color: #2e7d32; margin: 0; font-size: 1.1rem;">
+                <i class="fas fa-clipboard-check" style="margin-right: 8px;"></i> Performance Review
+            </h3>
+            <span style="background: #00C853; color: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+                Score: {{ $mySupReview['rating'] }}/10
+            </span>
+        </div>
+        <p style="color: #1b5e20; font-style: italic; line-height: 1.5;">
+            "{{ $mySupReview['latest_review'] }}"
+        </p>
+        <div style="text-align: right; margin-top: 10px; font-size: 0.8rem; color: #66bb6a; font-weight: 600;">
+            - Super Admin Feedback
+        </div>
+    </div>
+    @endif
+    <!-- End Performance Review -->
+
     <div class="dash-unique-stats">
       <div class="dash-unique-card">
         <h3>Assigned Tasks</h3>

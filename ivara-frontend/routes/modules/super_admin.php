@@ -35,23 +35,41 @@ Route::middleware(['auth', 'admin'])->prefix('super_admin')->name('super_admin.'
     Route::get('/support', [SuperAdminController::class, 'support'])->name('support.index');
     
     // --- New Sidebar Routes ---
-    // Admin Management
+    // --- Team Management ---
+
+    // Admins
     Route::get('/admins', [SuperAdminController::class, 'indexAdmins'])->name('admins.index');
     Route::post('/admins', [SuperAdminController::class, 'storeAdmin'])->name('admins.store');
-    Route::get('/admins/assign', [SuperAdminController::class, 'assignAdmins'])->name('admins.assign');
-    
-    // Admin Actions
-    // Redirect legacy create route to index
-    Route::get('/admins/create', function() {
-        return redirect()->route('super_admin.admins.index');
-    });
-
-    // Admin Actions
+    Route::get('/admins/create', function() { return redirect()->route('super_admin.admins.index'); });
     Route::post('/admins/{id}/message', [SuperAdminController::class, 'messageAdmin'])->name('admins.message')->where('id', '[0-9]+');
     Route::post('/admins/{id}/suspend', [SuperAdminController::class, 'suspendAdmin'])->name('admins.suspend')->where('id', '[0-9]+');
     Route::get('/admins/{id}/edit', [SuperAdminController::class, 'editAdmin'])->name('admins.edit')->where('id', '[0-9]+');
     Route::put('/admins/{id}', [SuperAdminController::class, 'updateAdmin'])->name('admins.update')->where('id', '[0-9]+');
     Route::get('/admins/{id}', [SuperAdminController::class, 'showAdmin'])->name('admins.show')->where('id', '[0-9]+');
+
+    // Managers
+    Route::get('/managers', [SuperAdminController::class, 'indexManagers'])->name('managers.index');
+    Route::post('/managers', [SuperAdminController::class, 'storeManager'])->name('managers.store');
+    Route::get('/managers/{id}/edit', [SuperAdminController::class, 'editManager'])->name('managers.edit')->where('id', '[0-9]+');
+    // Reusing Admin update/show logic or creating new ones. For simplicity, we might reuse or create specific ones. 
+    // Let's create specific to be clean.
+    Route::put('/managers/{id}', [SuperAdminController::class, 'updateManager'])->name('managers.update')->where('id', '[0-9]+');
+    Route::get('/managers/{id}', [SuperAdminController::class, 'showManager'])->name('managers.show')->where('id', '[0-9]+');
+
+    // Supervisors
+    Route::get('/supervisors', [SuperAdminController::class, 'indexSupervisors'])->name('supervisors.index');
+    Route::post('/supervisors', [SuperAdminController::class, 'storeSupervisor'])->name('supervisors.store');
+    Route::get('/supervisors/{id}/edit', [SuperAdminController::class, 'editSupervisor'])->name('supervisors.edit')->where('id', '[0-9]+');
+    Route::put('/supervisors/{id}', [SuperAdminController::class, 'updateSupervisor'])->name('supervisors.update')->where('id', '[0-9]+');
+    Route::get('/supervisors/{id}', [SuperAdminController::class, 'showSupervisor'])->name('supervisors.show')->where('id', '[0-9]+');
+
+    // Performance Matrix
+    Route::prefix('performance')->group(function () {
+        Route::get('/', [SuperAdminController::class, 'performanceMatrix'])->name('performance.index');
+        Route::post('/review/store', [SuperAdminController::class, 'storeReview'])->name('performance.review.store');
+    });
+    // Mapping old assign route to new performance route for safe keeping if needed, else just remove
+    Route::get('/admins/assign', function() { return redirect()->route('super_admin.performance.index'); })->name('admins.assign');
 
     // Category Management
     Route::get('/categories/create', [SuperAdminController::class, 'createCategory'])->name('categories.create');
@@ -59,6 +77,7 @@ Route::middleware(['auth', 'admin'])->prefix('super_admin')->name('super_admin.'
     Route::post('/categories', [SuperAdminController::class, 'storeCategory'])->name('categories.store');
     Route::get('/categories/{slug}/dashboard', [SuperAdminController::class, 'showCategory'])->name('categories.show');
     Route::get('/categories/{slug}/edit', [SuperAdminController::class, 'editCategory'])->name('categories.edit');
+    Route::put('/categories/{slug}', [SuperAdminController::class, 'updateCategory'])->name('categories.update');
     Route::get('/categories/manage', [SuperAdminController::class, 'manageCategories'])->name('categories.manage');
     Route::get('/categories', [SuperAdminController::class, 'categories'])->name('categories.index');
 

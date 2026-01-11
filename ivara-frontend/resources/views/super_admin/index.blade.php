@@ -145,22 +145,7 @@
                 </div>
             </div>
 
-            <!-- User Distribution -->
-            <div class="pro-card glass-panel">
-                <div class="card-header border-bottom-0 pb-0 mb-3">
-                    <h3><i class="fas fa-users-cog text-warning"></i> Role Dist.</h3>
-                </div>
-                <div class="d-flex flex-wrap gap-2">
-                    @forelse($role_counts as $role => $count)
-                    <div class="status-badge status-pending d-inline-flex align-items-center gap-2">
-                        <span>{{ str_replace(['-', '_'], ' ', $role) }}</span>
-                        <span class="bg-white text-dark rounded-circle px-2 py-0 small fw-bold" style="font-size: 10px;">{{ $count }}</span>
-                    </div>
-                    @empty
-                    <p class="text-muted small">No users found</p>
-                    @endforelse
-                </div>
-            </div>
+                <!-- Role Distribution Removed -->
 
         </div>
     </div>

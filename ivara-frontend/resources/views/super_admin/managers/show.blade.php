@@ -3,7 +3,6 @@
 @section('content')
 <div class="dashboard-wrapper">
     <style>
-        /* Scoped Theme Variables */
         .dashboard-wrapper {
             --primary: #4F46E5;
             --secondary: #64748B; 
@@ -52,24 +51,6 @@
         .info-label { color: var(--secondary); font-weight: 500; font-size: 0.9rem; }
         .info-value { color: #1e293b; font-weight: 600; }
 
-        /* Timeline Styles */
-        .timeline-container { position: relative; padding-left: 20px; }
-        .timeline-item { position: relative; padding-left: 30px; margin-bottom: 25px; }
-        .timeline-item::before {
-            content: ''; position: absolute; left: 0; top: 5px; bottom: -25px; width: 2px; background: #e2e8f0;
-        }
-        .timeline-item:last-child::before { display: none; }
-        .timeline-marker {
-            position: absolute; left: -9px; top: 0; width: 14px; height: 14px;
-            border-radius: 50%; border: 2px solid white; background: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-            z-index: 1;
-        }
-        .timeline-content h4 { color: #1e293b; margin-bottom: 5px !important; }
-        body.dark-mode .timeline-content h4 { color: #f3f4f6; }
-        body.dark-mode .timeline-item::before { background: #374151; }
-        body.dark-mode .timeline-marker { border-color: #1f2937; }
-
         /* Dark Mode */
         body.dark-mode .info-row { border-bottom-color: #374151; }
         body.dark-mode .info-label { color: #9ca3af; }
@@ -80,36 +61,37 @@
         body.dark-mode .action-btn.secondary { background: #374151; color: #fff; border: 1px solid #4b5563; }
     </style>
 
-    {{-- Mock Data --}}
+    {{-- Variables from Controller --}}
     @php
-        $mockName = 'Sarah Connor';
-        $mockRole = 'Category Manager';
-        if(is_numeric($id) && $id > 1000) { $mockName = 'Assistant ' . ($id/1000); $mockRole = 'Support Agent'; }
+        $name = $admin['name'] ?? 'Unknown';
+        $role = $admin['role'] ?? 'Manager';
+        $email = $admin['email'] ?? 'N/A';
+        $category = $admin['category'] ?? 'General';
+        $status = $admin['status'] ?? 'offline';
     @endphp
 
-    {{-- Header --}}
     <header class="pro-header">
         <div>
-            <h1>Admin Profile</h1>
-            <p>View administrator details and activity</p>
+            <h1>Manager Profile</h1>
+            <p>View manager details and activity</p>
         </div>
         <div>
-            <a href="{{ route('super_admin.admins.index') }}" class="action-btn secondary">
+            <a href="{{ route('super_admin.managers.index') }}" class="action-btn secondary">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
-            <a href="{{ route('super_admin.admins.edit', $id) }}" class="action-btn btn-primary" style="margin-left: 10px;">
+            <a href="{{ route('super_admin.managers.edit', $id) }}" class="action-btn btn-primary" style="margin-left: 10px;">
                 <i class="fas fa-edit"></i> Edit Profile
             </a>
         </div>
     </header>
 
     <div class="profile-header-card">
-        <img src="https://ui-avatars.com/api/?name={{ urlencode($mockName) }}&background=ffffff&color=4F46E5" class="profile-avatar" alt="Avatar">
+        <img src="https://ui-avatars.com/api/?name={{ urlencode($name) }}&background=ffffff&color=4F46E5" class="profile-avatar" alt="Avatar">
         <div style="flex: 1;">
-            <h2 style="margin: 0; font-size: 2rem; font-weight: 800;">{{ $mockName }}</h2>
+            <h2 style="margin: 0; font-size: 2rem; font-weight: 800;">{{ $name }}</h2>
             <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <span class="stat-badge"><i class="fas fa-id-badge"></i> {{ $mockRole }}</span>
-                <span class="stat-badge"><i class="fas fa-circle" style="color: #4ade80;"></i> Online</span>
+                <span class="stat-badge"><i class="fas fa-id-badge"></i> {{ $role }}</span>
+                <span class="stat-badge"><i class="fas fa-circle" style="color: {{ $status == 'online' ? '#4ade80' : '#ccc' }};"></i> {{ ucfirst($status) }}</span>
                 <span class="stat-badge"><i class="fas fa-clock"></i> Joined Jan 2024</span>
             </div>
         </div>
@@ -125,7 +107,7 @@
             
             <div class="info-row">
                 <span class="info-label">Email</span>
-                <span class="info-value">sarah@ivara.com</span>
+                <span class="info-value">{{ $email }}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Phone</span>
@@ -136,8 +118,8 @@
                 <span class="info-value">Kigali, Rwanda</span>
             </div>
             <div class="info-row">
-                <span class="info-label">Department</span>
-                <span class="info-value">Tech & Repair</span>
+                <span class="info-label">Category</span>
+                <span class="info-value">{{ $category }}</span>
             </div>
         </div>
 
@@ -148,24 +130,18 @@
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
-                        <h4 style="margin: 0; font-size: 1rem;">Resolved Ticket #BOX-921</h4>
+                        <h4 style="margin: 0; font-size: 1rem;">Task Review Completed</h4>
                         <p style="margin: 5px 0 0; color: var(--text-muted); font-size: 0.85rem;">2 hours ago</p>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-marker" style="background: #924FC2;"></div>
                     <div class="timeline-content">
-                        <h4 style="margin: 0; font-size: 1rem;">Approved New Vendor Registration</h4>
+                        <h4 style="margin: 0; font-size: 1rem;">Team Meeting Host</h4>
                         <p style="margin: 5px 0 0; color: var(--text-muted); font-size: 0.85rem;">Yesterday, 4:30 PM</p>
                     </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker" style="background: #10b981;"></div>
-                    <div class="timeline-content">
-                        <h4 style="margin: 0; font-size: 1rem;">System Maintenance Check</h4>
-                        <p style="margin: 5px 0 0; color: var(--text-muted); font-size: 0.85rem;">Jan 08, 2026</p>
-                    </div>
-                </div>
+                <!-- ... -->
             </div>
         </div>
     </div>

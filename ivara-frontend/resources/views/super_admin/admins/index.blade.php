@@ -69,47 +69,24 @@
         }
         .category-separator h3 { font-size: 18px; font-weight: 700; margin: 0; }
         .category-line { flex: 1; height: 1px; background: #e5e7eb; }
+
+        /* Dark Mode Overrides */
+        body.dark-mode .category-separator h3 { color: #e5e7eb !important; }
+        body.dark-mode .category-line { background: #374151 !important; }
+        body.dark-mode .employee-card.glass-panel { background: #1f2937 !important; border: 1px solid #374151; }
+        body.dark-mode .card-profile h4 { color: #f3f4f6 !important; }
+        body.dark-mode .card-details .detail-item { color: #9ca3af !important; }
+        body.dark-mode .card-menu .menu-dots { color: #9ca3af !important; }
+        body.dark-mode .glass-panel { background: #1f2937 !important; border-color: #374151; }
+        body.dark-mode .text-muted { color: #9ca3af !important; }
+        body.dark-mode .card-actions .btn-action { background: #374151 !important; color: #e5e7eb !important; }
+        body.dark-mode .modal-glass { background: #1f2937; color: #fff; }
+        body.dark-mode .glass-input { background: #374151; color: #fff; border-color: #4b5563; }
+        body.dark-mode .btn-close-custom { color: #fff; }
+        body.dark-mode .dropdown-menu-custom { background: #1f2937; border: 1px solid #374151; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        body.dark-mode .dropdown-menu-custom button, body.dark-mode .dropdown-menu-custom a { color: #e5e7eb; }
+        body.dark-mode .dropdown-menu-custom button:hover, body.dark-mode .dropdown-menu-custom a:hover { background: #374151; }
     </style>
-
-    {{-- Mock Data Generation --}}
-    @php
-        $categories = [
-            ['id' => 1, 'name' => 'Technical & Repair', 'color' => '#3498db', 'icon' => 'fas fa-tools'],
-            ['id' => 2, 'name' => 'Creative & Lifestyle', 'color' => '#e91e63', 'icon' => 'fas fa-paint-brush'],
-            ['id' => 3, 'name' => 'Transport & Travel', 'color' => '#f1c40f', 'icon' => 'fas fa-car'],
-            ['id' => 4, 'name' => 'Food, Fashion & Events', 'color' => '#e67e22', 'icon' => 'fas fa-utensils'],
-            ['id' => 5, 'name' => 'Education & Knowledge', 'color' => '#2ecc71', 'icon' => 'fas fa-graduation-cap'],
-            ['id' => 6, 'name' => 'Agriculture & Environment', 'color' => '#27ae60', 'icon' => 'fas fa-leaf'],
-            ['id' => 7, 'name' => 'Media & Entertainment', 'color' => '#9b59b6', 'icon' => 'fas fa-film'],
-            ['id' => 8, 'name' => 'Legal & Professional', 'color' => '#34495e', 'icon' => 'fas fa-balance-scale'],
-            ['id' => 9, 'name' => 'Other Services', 'color' => '#95a5a6', 'icon' => 'fas fa-ellipsis-h'],
-        ];
-
-        // Mock Admins
-        $admins = [];
-        $names = ['Sarah Connor', 'John Doe', 'Emily Zhang', 'Michael Bay', 'Jessica Alba', 'Robert Stark', 'Daenerys T', 'Bruce Wayne', 'Clark Kent'];
-        foreach($categories as $index => $cat) {
-            $admins[$cat['name']][] = [
-                'id' => rand(100, 999),
-                'name' => $names[$index % count($names)],
-                'email' => strtolower(explode(' ', $names[$index % count($names)])[0]) . '@ivara.com',
-                'role' => 'Category Manager',
-                'status' => 'online',
-                'tasks' => rand(2, 15)
-            ];
-            // Add a second admin for some categories
-            if($index % 2 == 0) {
-                 $admins[$cat['name']][] = [
-                    'id' => rand(1000, 9999),
-                    'name' => 'Assistant ' . $index,
-                    'email' => 'assist'.$index.'@ivara.com',
-                    'role' => 'Support Agent',
-                    'status' => 'offline',
-                    'tasks' => rand(0, 5)
-                ];
-            }
-        }
-    @endphp
 
     {{-- Header --}}
     <header class="pro-header">

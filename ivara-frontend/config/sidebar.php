@@ -7,33 +7,19 @@ return [
             ['label' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'route' => 'super_admin.index'],
             
             // Category Management (Enhanced)
-            [
-                'label' => 'Category Management', 
-                'icon' => 'fas fa-layer-group',
-                'dropdown' => true,
-                'items' => [
-                    ['label' => 'Technical & Repair', 'icon' => 'fas fa-tools', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'technical-repair']],
-                    ['label' => 'Creative & Lifestyle', 'icon' => 'fas fa-palette', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'creative-lifestyle']],
-                    ['label' => 'Transport & Travel', 'icon' => 'fas fa-bus', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'transport-travel']],
-                    ['label' => 'Food, Fashion & Events', 'icon' => 'fas fa-utensils', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'food-fashion-events']],
-                    ['label' => 'Education & Knowledge', 'icon' => 'fas fa-graduation-cap', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'education-knowledge']],
-                    ['label' => 'Agriculture & Environment', 'icon' => 'fas fa-leaf', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'agriculture-environment']],
-                    ['label' => 'Media & Entertainment', 'icon' => 'fas fa-film', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'media-entertainment']],
-                    ['label' => 'Legal & Professional', 'icon' => 'fas fa-gavel', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'legal-professional']],
-                    ['label' => 'Other Services', 'icon' => 'fas fa-ellipsis-h', 'route' => 'super_admin.categories.show', 'params' => ['slug' => 'other-services']],
-                    // Manage All Link for fallback
-                    ['label' => 'Manage All Categories', 'icon' => 'fas fa-list', 'route' => 'super_admin.categories.index'],
-                ]
-            ],
+            // Category Management
+            ['label' => 'Manage All Categories', 'icon' => 'fas fa-layer-group', 'route' => 'super_admin.categories.index'],
 
-            // Admin Management (New)
+            // Admin Management (Updated)
             [
-                'label' => 'Admin Management', 
+                'label' => 'Team Management', 
                 'icon' => 'fas fa-users-cog',
                 'dropdown' => true,
                 'items' => [
-                    ['label' => 'Manage Admins', 'icon' => 'fas fa-users', 'route' => 'super_admin.admins.index'],
-                    ['label' => 'Assign Admins', 'icon' => 'fas fa-user-tag', 'route' => 'super_admin.admins.assign'],
+                    ['label' => 'Admins', 'icon' => 'fas fa-user-shield', 'route' => 'super_admin.admins.index'],
+                    ['label' => 'Managers', 'icon' => 'fas fa-user-tie', 'route' => 'super_admin.managers.index'],
+                    ['label' => 'Supervisors', 'icon' => 'fas fa-user-check', 'route' => 'super_admin.supervisors.index'],
+                    ['label' => 'Performance Matrix', 'icon' => 'fas fa-chart-bar', 'route' => 'super_admin.performance.index'],
                 ]
             ],
 
