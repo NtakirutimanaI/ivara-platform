@@ -34,7 +34,7 @@ class SuperAdminController extends Controller
 
     public function users()
     {
-        return view('super_admin.users.index');
+        return $this->genericIndex('users', 'super_admin.users.index');
     }
 
     public function categories()
@@ -147,7 +147,7 @@ class SuperAdminController extends Controller
 
     private function getMockUsers($roleKey = 'admins')
     {
-        $sessionKey = 'mock_' . $roleKey; // mock_admins, mock_managers, mock_supervisors
+        $sessionKey = 'mock_' . $roleKey; // mock_admins, mock_managers, mock_supervisors, mock_users
 
         if (!session()->has($sessionKey)) {
             $users = [];
@@ -158,6 +158,7 @@ class SuperAdminController extends Controller
             $defaultRole = match($roleKey) {
                 'managers' => 'Area Manager',
                 'supervisors' => 'Field Supervisor',
+                'users' => 'Client',
                 default => 'Category Manager'
             };
 
@@ -172,11 +173,17 @@ class SuperAdminController extends Controller
                      $name = "Innocent NTAKIRUTIMANA";
                  }
 
+                 $role = $defaultRole;
+                 if ($roleKey == 'users') {
+                     // Mix of clients and providers for 'users' page
+                     $role = ($index % 2 == 0) ? 'Client' : 'Provider';
+                 }
+
                  $users[] = [
                     'id' => $id,
                     'name' => $name,
                     'email' => strtolower(explode(' ', $name)[0]) . '@ivara.com',
-                    'role' => $defaultRole,
+                    'role' => $role,
                     'category' => $cat['name'],
                     'status' => 'online',
                     'tasks' => rand(2, 15)
@@ -184,11 +191,14 @@ class SuperAdminController extends Controller
 
                  // Secondary
                  if($index % 2 == 0) {
+                     $secRole = 'Support ' . ucfirst(substr($roleKey, 0, -1));
+                     if ($roleKey == 'users') $secRole = 'Provider';
+
                      $users[] = [
                         'id' => rand(2000, 3000),
                         'name' => 'Assistant ' . ($index+1),
                         'email' => 'assist'.($index+1).'@ivara.com',
-                        'role' => 'Support ' . ucfirst(substr($roleKey, 0, -1)),
+                        'role' => $secRole,
                         'category' => $cat['name'],
                         'status' => 'offline',
                         'tasks' => 0
@@ -302,12 +312,10 @@ class SuperAdminController extends Controller
             $grouped[$u['category']][] = $u;
         }
 
-        // View expects variable name to match role usually, but here we can pass generic 'members' or use variable variables
-        // For simplicity, passing everything as 'admins' for the view to reuse or we clone views
-        // Better: Pass 'team' and update views. But to save editing views heavily, let's pass dynamic names
         $data = [
             'categories' => $categories,
-            'admins' => $grouped // Keeping variable name 'admins' for compatibility with existing view structure to save time
+            'admins' => $grouped, // Maintain for backward compatibility
+            'users' => $grouped // Add for 'users' view
         ];
 
         return view($view, $data);
