@@ -3,84 +3,115 @@
 @section('content')
 <div class="dashboard-wrapper" style="padding-top: 40px !important;">
     <style>
-        .dashboard-page .content .dashboard-wrapper {
+        /* Scoped Theme Variables */
+        :root {
             --primary: #4F46E5;
             --secondary: #64748B; 
             --accent: #924FC2;
-            padding-top: 40px !important; 
+            --bg-glass: rgba(255, 255, 255, 0.9);
+            --border-glass: rgba(255, 255, 255, 0.5);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
 
+        [data-theme="dark"] {
+            --bg-glass: #1f2937;
+            --border-glass: #374151;
+            --text-main: #f8fafc;
+            --text-muted: #9ca3af;
+        }
+
+        .dashboard-wrapper { padding-top: 40px !important; }
+
+        /* Modal Styles */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 11000;
+            background: rgba(0,0,0,0.6); z-index: 11000;
             display: none; align-items: center; justify-content: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
         .modal-glass {
-            background: #ffffff; padding: 30px; border-radius: 20px;
+            background: var(--bg-glass); padding: 32px; border-radius: 24px;
             width: 500px; max-width: 90%;
+            border: 1px solid var(--border-glass);
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            animation: zoomIn 0.2s ease;
+            animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .modal-header-custom {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 25px;
         }
-        .modal-header-custom h3 { margin: 0; font-size: 20px; font-weight: 700; }
+        .modal-header-custom h3 { margin: 0; font-size: 20px; font-weight: 700; color: var(--text-main); }
         
         .glass-input {
             width: 100%; padding: 12px; margin-top: 8px;
-            border-radius: 10px; border: 1px solid #e5e7eb;
-            background: #f9fafb;
-            font-size: 14px; outline: none;
+            border-radius: 12px; border: 1px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.5); color: var(--text-main);
+            font-size: 14px; outline: none; transition: 0.3s;
         }
+        [data-theme="dark"] .glass-input { background: rgba(0,0,0,0.2); }
+        .glass-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
         
         @keyframes zoomIn { from{opacity:0; transform:scale(0.95);} to{opacity:1; transform:scale(1);} }
 
+        /* Custom buttons */
         .btn-glass {
-            padding: 10px 20px; border-radius: 12px; font-weight: 600; 
+            padding: 12px 24px; border-radius: 14px; font-weight: 700; 
             border: none; cursor: pointer; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 8px;
         }
-        .btn-glass.primary { background: var(--primary); color: #fff; }
+        .btn-glass.primary { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
 
         .employee-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
         
         .card-menu { position: absolute; top: 15px; right: 15px; }
-        .menu-dots { background: none; border: none; font-size: 14px; color: #6b7280; cursor: pointer; }
+        .menu-dots { background: none; border: none; font-size: 14px; color: var(--text-muted); cursor: pointer; }
         .dropdown-menu-custom {
-            position: absolute; right: 0; top: 20px; background: #fff; 
-            border-radius: 8px; width: 120px; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10;
+            position: absolute; right: 0; top: 20px; background: var(--bg-glass); 
+            border-radius: 12px; width: 140px; display: none; 
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 10;
+            overflow: hidden;
         }
         .card-menu:hover .dropdown-menu-custom { display: block; }
         .dropdown-menu-custom button, .dropdown-menu-custom a {
-            display: block; width: 100%; padding: 8px 12px; text-align: left; background: none; 
-            border: none; font-size: 12px; color: #374151; text-decoration: none; cursor: pointer;
+            display: block; width: 100%; padding: 10px 15px; text-align: left; background: none; 
+            border: none; font-size: 13px; color: var(--text-main); text-decoration: none; cursor: pointer;
+            transition: 0.2s;
         }
-        .dropdown-menu-custom button:hover, .dropdown-menu-custom a:hover { background: #f3f4f6; color: var(--primary); }
+        .dropdown-menu-custom button:hover, .dropdown-menu-custom a:hover { background: rgba(79, 70, 229, 0.1); color: var(--primary); }
 
         .category-separator {
-            grid-column: 1 / -1; margin-top: 20px; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 10px;
+            grid-column: 1 / -1; margin-top: 30px; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 15px;
         }
-        .category-separator h3 { font-size: 18px; font-weight: 700; margin: 0; }
-        .category-line { flex: 1; height: 1px; background: #e5e7eb; }
+        .category-separator h3 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0; }
+        .category-line { flex: 1; height: 1px; background: var(--border-glass); }
 
-        /* Dark Mode */
-        body.dark-mode .category-separator h3 { color: #e5e7eb !important; }
-        body.dark-mode .category-line { background: #374151 !important; }
-        body.dark-mode .employee-card.glass-panel { background: #1f2937 !important; border: 1px solid #374151; }
-        body.dark-mode .card-profile h4 { color: #f3f4f6 !important; }
-        body.dark-mode .card-details .detail-item { color: #9ca3af !important; }
-        body.dark-mode .card-menu .menu-dots { color: #9ca3af !important; }
-        body.dark-mode .glass-panel { background: #1f2937 !important; border-color: #374151; }
-        body.dark-mode .text-muted { color: #9ca3af !important; }
-        body.dark-mode .card-actions .btn-action { background: #374151 !important; color: #e5e7eb !important; }
-        body.dark-mode .modal-glass { background: #1f2937; color: #fff; }
-        body.dark-mode .glass-input { background: #374151; color: #fff; border-color: #4b5563; }
-        body.dark-mode .btn-close-custom { color: #fff; }
-        body.dark-mode .dropdown-menu-custom { background: #1f2937; border: 1px solid #374151; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        body.dark-mode .dropdown-menu-custom button, body.dark-mode .dropdown-menu-custom a { color: #e5e7eb; }
-        body.dark-mode .dropdown-menu-custom button:hover, body.dark-mode .dropdown-menu-custom a:hover { background: #374151; }
+        /* Card Stylings */
+        .employee-card {
+            background: var(--bg-glass); border: 1px solid var(--border-glass);
+            border-radius: 24px; transition: all 0.3s ease;
+        }
+        .employee-card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1); }
+        
+        .card-profile h4 { color: var(--text-main); }
+        .role-badge {
+            font-size: 0.75rem; color: #4F46E5; font-weight: 700; background: #EEF2FF; 
+            padding: 6px 12px; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        [data-theme="dark"] .role-badge { background: rgba(79, 70, 229, 0.2); color: #818cf8; border: 1px solid rgba(79, 70, 229, 0.3); }
+
+        .card-details .detail-item { color: var(--text-muted); font-size: 0.85rem; }
+        .btn-action { 
+            background: rgba(0,0,0,0.05); color: var(--text-muted); 
+            width: 42px; height: 42px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 1px solid var(--border-glass); cursor: pointer; transition: 0.2s;
+        }
+        [data-theme="dark"] .btn-action { background: rgba(255,255,255,0.05); }
+        .btn-action:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: scale(1.1); }
+    </style>
     </style>
 
     {{-- Header --}}
@@ -103,17 +134,16 @@
                 <i class="fas fa-user-check" style="font-size: 1rem;"></i>
             </div>
             <div style="line-height: 1.2;">
-                <h3 class="m-0 fw-bold" style="font-size: 1.2rem;">86</h3>
+                <h3 class="m-0 fw-bold" style="font-size: 1.2rem;">{{ $overview['total_supervisors'] }}</h3>
                 <span class="text-muted" style="font-size: 0.75rem; font-weight: 600;">Total Supervisors</span>
             </div>
         </div>
-        <!-- Other stats... -->
-       <div class="glass-panel d-flex align-items-center gap-2" style="padding: 12px 15px;">
+        <div class="glass-panel d-flex align-items-center gap-2" style="padding: 12px 15px;">
              <div class="metric-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981; width:38px; height:38px; min-width:38px; display:flex; align-items:center; justify-content:center; border-radius:10px;">
                 <i class="fas fa-circle" style="font-size: 0.8rem;"></i>
             </div>
             <div style="line-height: 1.2;">
-                <h3 class="m-0 fw-bold" style="font-size: 1.2rem;">64</h3>
+                <h3 class="m-0 fw-bold" style="font-size: 1.2rem;">{{ $overview['online_supervisors'] }}</h3>
                 <span class="text-muted" style="font-size: 0.75rem; font-weight: 600;">Online Now</span>
             </div>
         </div>
@@ -122,7 +152,7 @@
                 <i class="fas fa-check-double" style="font-size: 0.9rem;"></i>
             </div>
             <div style="line-height: 1.2;">
-                <h3 class="m-0 fw-bold" style="font-size: 1.2rem;">128</h3>
+                <h3 class="m-0 fw-bold" style="font-size: 1.2rem;">{{ $overview['total_orders'] }}</h3>
                 <span class="text-muted" style="font-size: 0.75rem; font-weight: 600;">Tasks Verified</span>
             </div>
         </div>
@@ -174,22 +204,22 @@
                                     <div class="card-profile" style="margin-bottom: 15px;">
                                         <img src="https://ui-avatars.com/api/?name={{ urlencode($item['name']) }}&background=E0E7FF&color=4F46E5&size=128" class="avatar-img" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                                         <h4 style="margin: 10px 0 5px; font-size: 1.1rem; font-weight: 700;">{{ $item['name'] }}</h4>
-                                        <span class="role" style="font-size: 0.85rem; color: #6b7280; font-weight: 500; background: #f3f4f6; padding: 4px 10px; border-radius: 20px;">{{ $item['role'] }}</span>
+                                        <span class="role-badge">{{ $item['role'] }}</span>
                                     </div>
 
                                     <div class="card-details" style="width: 100%; margin-bottom: 20px;">
-                                        <div class="detail-item" style="font-size: 0.9rem; color: #4b5563; margin-bottom: 8px;">
+                                        <div class="detail-item" style="margin-bottom: 8px;">
                                             <i class="far fa-envelope" style="color: #9ca3af; margin-right: 5px;"></i> {{ $item['email'] }}
                                         </div>
-                                        <div class="detail-item" style="font-size: 0.9rem; color: #4b5563; margin-bottom: 8px;">
+                                        <div class="detail-item" style="margin-bottom: 8px;">
                                             <i class="fas fa-circle" style="font-size: 8px; margin-right: 5px; color: {{ $item['status'] == 'online' ? '#10b981' : '#ccc' }}"></i> 
                                             {{ ucfirst($item['status']) }}
                                         </div>
                                     </div>
 
                                     <div class="card-actions" style="display: flex; gap: 10px; justify-content: center; width: 100%;">
-                                        <button class="btn-action" onclick="openMessageModal({{ $item['id'] }}, '{{ $item['name'] }}')" title="Message" style="background: #f3f4f6; color: #4b5563; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: 0.2s;"><i class="far fa-comment-alt"></i></button>
-                                        <a href="{{ route('super_admin.supervisors.edit', $item['id']) }}" class="btn-action" title="Edit" style="background: #f3f4f6; color: #4b5563; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.2s;"><i class="far fa-edit"></i></a>
+                                        <button class="btn-action" onclick="openMessageModal({{ $item['id'] }}, '{{ $item['name'] }}')" title="Message"><i class="far fa-comment-alt"></i></button>
+                                        <a href="{{ route('super_admin.supervisors.edit', $item['id']) }}" class="btn-action" title="Edit"><i class="far fa-edit"></i></a>
                                     </div>
                                 </div>
                                 @endforeach
