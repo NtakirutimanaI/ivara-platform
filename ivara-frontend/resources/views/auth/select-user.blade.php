@@ -1,213 +1,199 @@
-@include('layouts.header')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Profile - IVARA</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #924FC2;
-            --primary-glow: rgba(146, 79, 194, 0.3);
-            --bg-gradient: radial-gradient(circle at top right, #fdf4ff, #f3f4f6);
-            --text-main: #000000;
-            --text-muted: #64748b;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --item-bg: #ffffff;
-            --item-border: #e2e8f0;
-        }
+@extends('layouts.app')
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-gradient: radial-gradient(circle at top right, #0f172a, #020617);
-                --text-main: #f8fafc;
-                --text-muted: #94a3b8;
-                --card-bg: rgba(30, 41, 59, 0.7);
-                --item-bg: rgba(51, 65, 85, 0.4);
-                --item-border: rgba(255, 255, 255, 0.1);
-            }
-        
-        }
+@section('title', 'Select Profile - IVARA Dashboard')
 
-.dark {
-    --bg-gradient: radial-gradient(circle at top right, #0f172a, #020617);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --item-bg: rgba(51, 65, 85, 0.4);
-    --item-border: rgba(255, 255, 255, 0.1);
-}
+@section('styles')
+<style>
+    :root {
+        --primary: #924FC2;
+        --primary-glow: rgba(146, 79, 194, 0.2);
+        --bg-selection: radial-gradient(circle at top right, #fdf4ff, #f3f4f6);
+    }
 
-        body { 
-            margin: 0;
-            background: var(--bg-gradient); 
-            color: var(--text-main); 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            transition: background 0.3s ease;
-        }
+    [data-theme="dark"] {
+        --bg-selection: radial-gradient(circle at top right, #0f172a, #020617);
+    }
 
-        .selection-wrapper { 
-            flex-grow: 1; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 30px 20px; 
-        }
+    .selection-wrapper {
+        min-height: calc(100vh - 72px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        background: var(--bg-selection);
+        transition: background 0.3s ease;
+    }
 
-        .selection-card { 
-            background: var(--card-bg); 
-            backdrop-filter: blur(20px); 
-            border-radius: 20px; 
-            border: 1px solid var(--item-border); 
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); 
-            width: 100%; 
-            max-width: 400px; 
-            padding: 20px; 
-            animation: slideUp 0.5s ease-out; 
-        }
+    .selection-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        border-radius: 35px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 450px;
+        padding: 40px;
+        animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-        .selection-title { 
-            font-size: 26px; 
-            font-weight: 800; 
-            text-align: center; 
-            margin-bottom: 8px; 
-            color: var(--text-main);
-        }
+    .selection-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
 
-        .selection-subtitle { 
-            text-align: center; 
-            color: var(--text-muted); 
-            margin-bottom: 30px; 
-            font-size: 14px;
-        }
+    .selection-title {
+        font-size: 28px;
+        font-weight: 900;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, var(--primary), #6366f1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -1px;
+    }
 
-        .user-list { display: flex; flex-direction: column; gap: 16px; }
+    .selection-subtitle {
+        font-size: 14px;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
 
-        .user-item { 
-            background: var(--item-bg); 
-            border-radius: 20px; 
-            padding: 20px 28px; 
-            border: 1px solid var(--item-border); 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            text-decoration: none; 
-            width: 100%;
-        }
+    .selection-subtitle strong {
+        color: var(--primary);
+    }
 
-        .user-item:hover { 
-            transform: scale(1.02);
-            border-color: var(--primary); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
-            background: rgba(146, 79, 194, 0.05);
-        }
+    .user-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
 
-        .user-meta { display: flex; align-items: center; gap: 20px; }
+    .user-item {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid #e2e8f0;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        width: 100%;
+        text-align: left;
+        position: relative;
+    }
 
-        .user-avatar { 
-            width: 54px; 
-            height: 54px; 
-            border-radius: 14px; 
-            background: var(--primary); 
-            color: #fff; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-weight: 800; 
-            font-size: 20px;
-            box-shadow: 0 4px 10px var(--primary-glow);
-        }
+    [data-theme="dark"] .user-item {
+        background: rgba(30, 41, 59, 0.5);
+        border-color: rgba(255, 255, 255, 0.05);
+    }
 
-        .user-info h4 { 
-            margin: 0 0 4px 0; 
-            font-size: 18px; 
-            color: var(--text-main); 
-            font-weight: 700;
-        }
+    .user-item:hover {
+        transform: scale(1.03);
+        border-color: var(--primary);
+        box-shadow: 0 10px 20px rgba(146, 79, 194, 0.1);
+    }
 
-        .user-info p { 
-            margin: 0; 
-            font-size: 14px; 
-            color: var(--text-muted); 
-        }
+    .user-meta {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex: 1;
+    }
 
-        .btn-enter { 
-            color: var(--primary); 
-            font-size: 20px; 
-            transition: transform 0.3s;
-        }
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--primary), #6366f1);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 18px;
+        flex-shrink: 0;
+        box-shadow: 0 5px 15px var(--primary-glow);
+    }
 
-        .user-item:hover .btn-enter { transform: translateX(5px); }
+    .user-info h4 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--text-main);
+    }
 
-        .back-link { 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 35px; 
-            color: var(--text-muted); 
-            text-decoration: none; 
-            font-size: 15px; 
-            font-weight: 600; 
-            transition: color 0.3s;
-        }
+    .user-info p {
+        margin: 2px 0 0 0;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
-        .back-link:hover { color: var(--primary); }
+    .btn-enter {
+        color: var(--text-muted);
+        font-size: 18px;
+        transition: 0.3s;
+    }
 
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(30px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-    </style>
-</head>
-<body>
-    <button id="theme-toggle" style="position:fixed;top:10px;right:10px;padding:8px;background:var(--primary);color:#fff;border:none;border-radius:4px;cursor:pointer;">Toggle Dark Mode</button>
-    <script>
-        const toggle = document.getElementById('theme-toggle');
-        const root = document.documentElement;
-        if (localStorage.getItem('theme') === 'dark') {
-            root.classList.add('dark');
-        }
-        toggle.addEventListener('click', () => {
-            root.classList.toggle('dark');
-            localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
-        });
-    </script>
-    <div class="selection-wrapper">
-        <div class="selection-card">
+    .user-item:hover .btn-enter {
+        transform: translateX(5px);
+        color: var(--primary);
+    }
+
+    .back-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 30px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+        transition: 0.3s;
+    }
+
+    .back-link:hover {
+        color: var(--primary);
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="selection-wrapper">
+    <div class="selection-card">
+        <div class="selection-header">
             <h1 class="selection-title">Select Profile</h1>
-            <p class="selection-subtitle">Access your <strong>{{ ucwords(str_replace('_', ' ', $category)) }}</strong> workspace</p>
-            
-            <form action="{{ route('auth.enter-dashboard') }}" method="POST" class="user-list">
-                @csrf
-                <input type="hidden" name="category" value="{{ $category }}">
-                
-                @foreach($users as $user)
-                <button type="submit" name="user_id" value="{{ $user->id }}" class="user-item">
-                    <div class="user-meta">
-                        <div class="user-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
-                        <div class="user-info">
-                            <h4>{{ $user->name }}</h4>
-                            <p>{{ ucfirst($user->role) }} Workspace</p>
-                        </div>
-                    </div>
-                    <div class="btn-enter"><i class="fas fa-arrow-right"></i></div>
-                </button>
-                @endforeach
-            </form>
-
-            <a href="{{ route('auth.select-category') }}" class="back-link">
-                <i class="fas fa-chevron-left"></i> Change Category
-            </a>
+            <p class="selection-subtitle">Access your <strong>{{ ucwords(str_replace('-', ' ', $category)) }}</strong> workspace</p>
         </div>
-    </div>
-</body>
-</html>
-@include('layouts.footer')
+        
+        <form action="{{ route('auth.enter-dashboard') }}" method="POST" class="user-list">
+            @csrf
+            <input type="hidden" name="category" value="{{ $category }}">
+            
+            @foreach($users as $user)
+            <button type="submit" name="user_id" value="{{ $user->id }}" class="user-item">
+                <div class="user-meta">
+                    <div class="user-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
+                    <div class="user-info">
+                        <h4>{{ $user->name }}</h4>
+                        <p>{{ str_replace(['-', '_'], ' ', $user->role) }} Workspace</p>
+                    </div>
+                </div>
+                <div class="btn-enter"><i class="fas fa-arrow-right"></i></div>
+            </button>
+            @endforeach
+        </form>
 
+        <a href="{{ route('auth.select-category') }}" class="back-link">
+            <i class="fas fa-chevron-left"></i> Change Category
+        </a>
+    </div>
+</div>
+@endsection

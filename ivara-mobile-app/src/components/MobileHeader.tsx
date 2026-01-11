@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
     Search,
     Plus,
@@ -24,24 +25,34 @@ import {
     Check,
     AlertCircle,
     Eye,
-    EyeOff
+    EyeOff,
+    Menu
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useRouter, usePathname } from 'next/navigation';
 import api from '@/lib/api';
+import MobileSidebar from '@/components/layout/MobileSidebar';
+import AdminSidebar from '@/components/layout/AdminSidebar';
+import { useSearch } from '@/contexts/SearchContext';
 
 export default function MobileHeader() {
+    const { theme, toggleTheme } = useTheme();
+    const router = useRouter();
+    const pathname = usePathname();
+    const { searchQuery, setSearchQuery } = useSearch();
+
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
     const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isChangingPassword, setIsChangingPassword] = useState(false);
     const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-    const [searchQuery, setSearchQuery] = useState('');
     const [user, setUser] = useState<any>(null);
+    const [isMarketplaceOpen, setIsMarketplaceOpen] = useState(false);
 
-    // New states for form handling
+    // Form States
     const [editForm, setEditForm] = useState({ name: '', email: '' });
     const [passwordForm, setPasswordForm] = useState({ current: '', new: '', confirm: '' });
     const [showPasswords, setShowPasswords] = useState({ current: false, new: false, confirm: false });
@@ -49,14 +60,13 @@ export default function MobileHeader() {
     const [uploadPreview, setUploadPreview] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { theme, toggleTheme } = useTheme();
-    const router = useRouter();
-    const pathname = usePathname();
-
     const isLandingPage = pathname === '/';
     const isDashboardPage = pathname === '/dashboard' || pathname === '/select-category';
     const isRootPage = isLandingPage || isDashboardPage;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    // Determine Logic for Admin
+    const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.role === 'Super Admin';
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -180,24 +190,122 @@ export default function MobileHeader() {
 
     return (
         <>
+            {isAdmin ? (
+                <AdminSidebar
+                    isOpen={isSidebarOpen}
+                    onClose={() => setIsSidebarOpen(false)}
+                    user={user}
+                />
+            ) : (
+                <MobileSidebar
+                    isOpen={isSidebarOpen}
+                    onClose={() => setIsSidebarOpen(false)}
+                    isLoggedIn={isLoggedIn}
+                    onOpenMarketplace={() => {
+                        setIsSidebarOpen(false);
+                        setTimeout(() => setIsMarketplaceOpen(true), 200);
+                    }}
+                />
+            )}
+
+            {/* Marketplace Modal */}
+            <AnimatePresence>
+
+                {isMarketplaceOpen && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsMarketplaceOpen(false)}
+                            className="fixed inset-0 bg-black/60 backdrop-blur-md z-[6000]"
+                        />
+                        <div className="fixed inset-0 z-[6001] flex items-center justify-center p-4 pointer-events-none">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8, y: 100 }}
+                                animate={{
+                                    opacity: 1,
+                                    scale: 1,
+                                    y: 0,
+                                    transition: {
+                                        type: "spring",
+                                        damping: 15,
+                                        stiffness: 200,
+                                        mass: 0.8
+                                    }
+                                }}
+                                exit={{ opacity: 0, scale: 0.8, y: 100 }}
+                                className="w-full max-w-sm glass-card !rounded-[32px] p-6 shadow-2xl border border-white/10 pointer-events-auto"
+                            >
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-2xl font-bold text-foreground">Marketplace</h2>
+                                    <button
+                                        onClick={() => setIsMarketplaceOpen(false)}
+                                        className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-muted hover:bg-secondary transition-colors"
+                                    >
+                                        <X size={20} />
+                                    </button>
+                                </div>
+
+                                <div className="grid gap-4">
+                                    <Link
+                                        href="/marketplace"
+                                        onClick={() => setIsMarketplaceOpen(false)}
+                                        className="group relative overflow-hidden rounded-2xl bg-[var(--primary-navy)] p-6 transition-transform active:scale-95"
+                                    >
+                                        <div className="relative z-10 flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-xl bg-[var(--accent-gold)] flex items-center justify-center text-[var(--primary-navy)] shadow-lg shadow-yellow-500/20">
+                                                <Package size={24} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-lg font-bold text-white group-hover:text-[var(--accent-gold)] transition-colors">Public Market</h3>
+                                                <p className="text-sm text-gray-400">Browse items & services</p>
+                                            </div>
+                                        </div>
+                                        <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-[var(--accent-gold)]/10 transition-colors"></div>
+                                    </Link>
+
+                                    <Link
+                                        href="/b2b"
+                                        onClick={() => setIsMarketplaceOpen(false)}
+                                        className="group relative overflow-hidden rounded-2xl bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 p-6 transition-transform active:scale-95"
+                                    >
+                                        <div className="relative z-10 flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500">
+                                                <Users size={24} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-lg font-bold text-foreground">B2B Wholesale</h3>
+                                                <p className="text-sm text-muted">Business bulk buying</p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </>
+                )}
+            </AnimatePresence>
+
             {/* Main Dashboard Header */}
             <header className="mobile-header-premium">
-                {/* Left: Logo/Back */}
+                {/* Left: Hamburger & Logo */}
                 <div className="flex items-center gap-3">
-                    {!isRootPage ? (
-                        <button onClick={() => router.back()} className="header-icon-btn !bg-transparent !shadow-none -ml-2">
-                            <ArrowLeft size={22} className="text-foreground" />
-                        </button>
-                    ) : (
-                        <Link href={isLoggedIn ? "/dashboard" : "/"} className="header-logo-container flex items-center gap-2">
-                            <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-                                <Smartphone size={20} className="text-white" />
-                            </div>
-                            {isLandingPage && (
-                                <span className="text-xl font-bold tracking-tight text-foreground">IVARA</span>
-                            )}
-                        </Link>
-                    )}
+                    <button onClick={() => setIsSidebarOpen(true)} className="header-icon-btn !bg-transparent !shadow-none -ml-2">
+                        <Menu size={24} className="text-foreground" />
+                    </button>
+
+                    <Link href={isLoggedIn ? "/dashboard" : "/"} className="header-logo-container flex items-center gap-2">
+                        <div className="relative w-32 h-10">
+                            <Image
+                                src="/images/IVARAlogo.jpg"
+                                alt="IVARA"
+                                fill
+                                className="object-contain"
+                                priority
+                            />
+                        </div>
+                    </Link>
                 </div>
 
                 {/* Right: Actions */}
@@ -245,7 +353,7 @@ export default function MobileHeader() {
                         {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
 
-                    {isLoggedIn && !isLandingPage && (
+                    {isLoggedIn && user && (
                         <button className="profile-trigger-mobile" onClick={toggleProfileDrawer}>
                             <div className="header-avatar-circle overflow-hidden">
                                 {getProfilePhotoUrl(user?.profile_photo_url || user?.profilePhoto) ? (

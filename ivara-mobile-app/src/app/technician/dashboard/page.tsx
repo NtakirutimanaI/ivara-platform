@@ -7,7 +7,7 @@ import {
     ChevronRight, Calendar, Briefcase, Wrench,
     BarChart3, Users, GraduationCap, Headphones
 } from 'lucide-react';
-import MobileHeader from '@/components/MobileHeader';
+// MobileHeader import removed
 import AuthGuard from '@/components/AuthGuard';
 import api from '@/lib/api';
 import Link from 'next/link';
@@ -103,7 +103,6 @@ export default function TechnicianDashboardPage() {
     return (
         <AuthGuard allowedRoles={['technician', 'admin', 'super-admin', 'manager', 'supervisor']}>
             <div className="min-h-screen bg-background pb-24">
-                <MobileHeader />
 
                 <div className="px-4 pt-4">
                     {/* Header */}

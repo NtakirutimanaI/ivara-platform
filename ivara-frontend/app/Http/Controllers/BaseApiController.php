@@ -15,7 +15,16 @@ class BaseApiController extends Controller
 
     public function __construct()
     {
-        $this->apiBaseUrl = env('BACKEND_API_URL', 'http://localhost:5001') . '/api';
+        $baseUrl = env('BACKEND_API_URL', 'http://localhost:5001');
+        // Ensure no trailing slash
+        $baseUrl = rtrim($baseUrl, '/');
+        
+        // Only append /api if it doesn't already end with it
+        if (!str_ends_with($baseUrl, '/api')) {
+            $baseUrl .= '/api';
+        }
+        
+        $this->apiBaseUrl = $baseUrl;
     }
 
     /**

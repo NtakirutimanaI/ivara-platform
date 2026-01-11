@@ -133,7 +133,7 @@ table th, table td {
                         <button class="bg-blue-500 text-white px-2 rounded">{{ $p->published ? 'Unpublish' : 'Publish' }}</button>
                     </form>
                     {{-- Edit Modal --}}
-                    <button onclick="openEditModal({{ $p->id }}, '{{ $p->title }}','{{ $p->type }}','{{ $p->price }}','{{ $p->description }}','{{ $p->status }}')" class="bg-yellow-500 text-white px-2 rounded">Edit</button>
+                    <button onclick="openEditModal({{ $p->id }}, '{{ $p->title }}','{{ $p->type }}','{{ $p->price }}','{{ $p->description }}','{{ $p->status }}')" class="bg-[#924FC2] text-white px-2 rounded">Edit</button>
                     {{-- Delete --}}
                     <form method="POST" action="{{ route('manager.productsServices.delete') }}">
                         @csrf

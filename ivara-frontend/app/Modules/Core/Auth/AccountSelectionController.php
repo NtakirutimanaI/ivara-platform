@@ -261,9 +261,9 @@ class AccountSelectionController extends Controller
             // Education & Knowledge Specific Redirection
             if ($routeCategory === 'education-knowledge') {
                 $eduRedirects = [
-                    'admin' => 'admin.education_knowledge.index',
-                    'manager' => 'manager.education_knowledge.index',
-                    'supervisor' => 'supervisor.education_knowledge.index',
+                    'admin' => 'admin.education-knowledge.index',
+                    'manager' => 'manager.education-knowledge.index',
+                    'supervisor' => 'supervisor.education-knowledge.index',
                     // Teaching
                     'instructor_teacher' => 'instructor.education_knowledge.index',
                     'trainer' => 'trainer.education_knowledge.index',
@@ -304,9 +304,9 @@ class AccountSelectionController extends Controller
             // Agriculture, Farming & Environment Specific Redirection
             if ($routeCategory === 'agriculture-farming-environment') {
                 $afeRedirects = [
-                    'admin' => 'admin.agriculture_environment.index',
-                    'manager' => 'manager.agriculture_environment.index',
-                    'supervisor' => 'supervisor.agriculture_environment.index',
+                    'admin' => 'admin.agriculture-farming-environment.index',
+                    'manager' => 'manager.agriculture-farming-environment.index',
+                    'supervisor' => 'supervisor.agriculture-farming-environment.index',
                     // Crop
                     'crop_farming_followups' => 'crop_followup.agriculture_environment.index',
                     'soil_management' => 'soil_mgmt.agriculture_environment.index',

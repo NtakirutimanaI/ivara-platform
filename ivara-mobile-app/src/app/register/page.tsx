@@ -8,7 +8,7 @@ import { Mail, Lock, ArrowRight, Smartphone, Eye, EyeOff } from 'lucide-react';
 import api from '@/lib/api';
 import Link from 'next/link';
 
-import MobileHeader from '@/components/MobileHeader';
+// MobileHeader import removed
 
 export default function RegisterPage() {
     const [email, setEmail] = useState('');
@@ -44,8 +44,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col justify-between bg-background pt-[64px]">
-            <MobileHeader />
+        <div className="min-h-screen flex flex-col justify-between bg-background">
 
             <div className="p-6 flex-1 flex flex-col justify-center">
                 {/* Header */}

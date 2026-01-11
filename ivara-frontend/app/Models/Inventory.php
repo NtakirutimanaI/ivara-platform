@@ -10,7 +10,7 @@ class Inventory extends Model
     use HasFactory;
 
     // Specify table name since Laravel's convention would expect 'inventories'
-    protected $table = 'inventory';
+    protected $table = 'inventory_items';
 
     // Fillable fields for mass assignment
     protected $fillable = [

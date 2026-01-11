@@ -1,14 +1,13 @@
 'use client';
 
 import React from 'react';
-import MobileHeader from '@/components/MobileHeader';
+// MobileHeader import removed
 import { motion } from 'framer-motion';
 import { Bell } from 'lucide-react';
 
 export default function NotificationsPage() {
     return (
         <div className="min-h-screen bg-background pb-24">
-            <MobileHeader />
             <div className="p-6 flex flex-col items-center justify-center min-h-[60vh] text-center">
                 <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}

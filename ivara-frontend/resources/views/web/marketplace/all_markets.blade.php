@@ -95,7 +95,7 @@
         box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: 0.3s;
         border: 1px solid transparent;
     }
-    .market-category-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-color: #ffb700; }
+    .market-category-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-color: #924FC2; }
     
     .mc-icon {
         width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -106,6 +106,6 @@
     .market-category-card p { color: #666; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
     
     .mc-link { font-weight: 700; color: #0A1128; font-size: 0.9rem; transition: 0.2s; }
-    .market-category-card:hover .mc-link { color: #ffb700; }
+    .market-category-card:hover .mc-link { color: #924FC2; }
 </style>
 @endsection

@@ -13,8 +13,8 @@
     :root {
         --primary-navy: #0A1128;
         --secondary-navy: #162447;
-        --accent-gold: #ffc107;
-        --accent-gold-hover: #ffca2c;
+        --accent-gold: #924FC2;
+        --accent-gold-hover: #924FC2;
         --text-dark: #333333;
         --text-light: #666666;
         --bg-light: #f8f9fa;
@@ -47,7 +47,7 @@
     }
     .btn-gold {
         background: var(--accent-gold); color: var(--primary-navy);
-        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+        box-shadow: 0 4px 15px rgba(146, 79, 194, 0.4);
     }
     .btn-gold:hover {
         background: var(--accent-gold-hover); transform: translateY(-2px);
@@ -62,15 +62,15 @@
     
     /* New Gold Button Style (Ported from Header) */
     .btn-gold-styled {
-        background: #ffb700; color: #000;
+        background: #924FC2; color: #fff;
         text-decoration: none; padding: 12px 30px;
         border-radius: 50px; font-weight: 700; font-size: 1rem;
-        transition: all 0.3s; text-align: center; border: 2px solid #ffb700;
+        transition: all 0.3s; text-align: center; border: 2px solid #924FC2;
         display: inline-flex; align-items: center; justify-content: center;
     }
     .btn-gold-styled:hover { 
         background: var(--primary-navy); color: #ffffff;
-        border-color: #ffb700; /* Yellow Border on Hover */
+        border-color: #924FC2; /* Purple Border on Hover */
         transform: translateY(-2px); box-shadow: 0 4px 15px rgba(10, 17, 40, 0.3);
     }
 
@@ -80,11 +80,57 @@
     ========================================
     */
     #hero {
-        min-height: 100vh;
+        min-height: calc(100vh - 72px);
         display: flex; align-items: center;
-        padding: 120px 0 60px;
+        padding: 20px 0 40px;
         position: relative; overflow: hidden;
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+        background-color: #f0f4f8;
+        background-image: 
+            /* Geometric diamond/arrow pattern */
+            linear-gradient(135deg, rgba(100, 180, 200, 0.08) 25%, transparent 25%),
+            linear-gradient(225deg, rgba(100, 180, 200, 0.08) 25%, transparent 25%),
+            linear-gradient(45deg, rgba(100, 180, 200, 0.08) 25%, transparent 25%),
+            linear-gradient(315deg, rgba(100, 180, 200, 0.08) 25%, transparent 25%),
+            /* Second layer - larger pattern */
+            linear-gradient(135deg, rgba(80, 160, 180, 0.06) 25%, transparent 25%),
+            linear-gradient(225deg, rgba(80, 160, 180, 0.06) 25%, transparent 25%),
+            linear-gradient(45deg, rgba(80, 160, 180, 0.06) 25%, transparent 25%),
+            linear-gradient(315deg, rgba(80, 160, 180, 0.06) 25%, transparent 25%);
+        background-size: 40px 40px, 40px 40px, 40px 40px, 40px 40px, 80px 80px, 80px 80px, 80px 80px, 80px 80px;
+        background-position: 0 0, 20px 0, 20px -20px, 0 20px, 0 0, 40px 0, 40px -40px, 0 40px;
+        margin-top: 72px; /* Account for fixed header height */
+    }
+    
+    /* Additional decorative pattern overlay */
+    #hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            repeating-linear-gradient(
+                60deg,
+                transparent,
+                transparent 35px,
+                rgba(100, 180, 200, 0.03) 35px,
+                rgba(100, 180, 200, 0.03) 70px
+            ),
+            repeating-linear-gradient(
+                -60deg,
+                transparent,
+                transparent 35px,
+                rgba(100, 180, 200, 0.03) 35px,
+                rgba(100, 180, 200, 0.03) 70px
+            );
+        pointer-events: none;
+        z-index: 0;
+    }
+    
+    #hero > * {
+        position: relative;
+        z-index: 1;
     }
 
     .hero-container {
@@ -106,15 +152,113 @@
     }
 
     .hero-visual {
-        flex: 1; position: relative;
+        flex: 1.4; position: relative;
         display: flex; justify-content: center;
-    }
-    .hero-img {
-        width: 100%; max-width: 600px;
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
-        animation: float 6s ease-in-out infinite;
+        align-items: center;
+        overflow: hidden;
+        min-height: 450px;
     }
 
+    /* Slideshow Image Carousel */
+    .hero-carousel-container {
+        position: relative;
+        width: 100%;
+        max-width: 550px;
+        height: 450px;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+    }
+
+    .hero-carousel-track {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .hero-carousel-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        background: #fff;
+    }
+
+    .hero-carousel-item.active {
+        opacity: 1;
+        transform: translateX(0);
+        z-index: 2;
+    }
+
+    .hero-carousel-item.prev {
+        opacity: 0;
+        transform: translateX(-100%);
+        z-index: 1;
+    }
+
+    .hero-carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Slide indicators */
+    .hero-carousel-indicators {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 10;
+    }
+
+    .hero-carousel-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.5);
+        border: 2px solid rgba(255,255,255,0.8);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .hero-carousel-dot.active {
+        background: #924FC2;
+        border-color: #924FC2;
+        transform: scale(1.2);
+    }
+
+    .hero-carousel-dot:hover {
+        background: rgba(146, 79, 194, 0.7);
+        border-color: #924FC2;
+    }
+
+    /* Progress bar under active slide */
+    .hero-carousel-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #924FC2, #7b3fa8);
+        border-radius: 0 0 20px 20px;
+        z-index: 10;
+        animation: progressBar 5s linear infinite;
+    }
+
+    @keyframes progressBar {
+        0% { width: 0%; }
+        100% { width: 100%; }
+    }
+
+    /* Legacy float animation for other sections */
     @keyframes float {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-20px); }
@@ -153,7 +297,7 @@
     .why-item:hover .why-icon-circle {
         transform: scale(1.05);
         background: var(--accent-gold); /* Ivara Gold on Hover */
-        box-shadow: 0 10px 30px rgba(255, 193, 7, 0.3);
+        box-shadow: 0 10px 30px rgba(146, 79, 194, 0.3);
     }
 
     .why-text h3 {
@@ -210,7 +354,12 @@
     CATEGORIES (Marketplace)
     ========================================
     */
-    #marketplace { padding: 100px 0; background: var(--white); }
+    #marketplace { 
+        padding: 100px 0; 
+        background: var(--white); 
+        position: relative;
+        z-index: 100; /* Increased to ensure it stays on top */
+    }
     
     .section-header { text-align: center; margin-bottom: 60px; }
     .section-header h2 {
@@ -226,6 +375,8 @@
     .cat-grid {
         display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 30px;
+        position: relative; 
+        z-index: 101;
     }
 
     .cat-card {
@@ -235,6 +386,8 @@
         box-shadow: 0 10px 40px rgba(0,0,0,0.05);
         transition: all 0.3s ease;
         border: 1px solid rgba(0,0,0,0.03);
+        position: relative;
+        z-index: 102; /* Ensure individual cards are on top */
     }
     .cat-card:hover {
         transform: translateY(-10px);
@@ -271,6 +424,45 @@
         background: url('{{ asset("images/mobile_bg.png") }}') no-repeat center center / cover;
         color: var(--white);
         overflow: hidden;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Dotted pattern overlay */
+    #mobile-app::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+        background-size: 20px 20px;
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    /* Soft gradient overlay for depth */
+    #mobile-app::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            135deg,
+            rgba(10, 17, 40, 0.3) 0%,
+            rgba(146, 79, 194, 0.1) 50%,
+            rgba(10, 17, 40, 0.3) 100%
+        );
+        pointer-events: none;
+        z-index: 0;
+    }
+    
+    #mobile-app > * {
+        position: relative;
+        z-index: 2;
     }
 
     .mobile-container {
@@ -381,7 +573,7 @@
     .cursor {
         display: inline-block;
         width: 4px;
-        background-color: #ffb700; /* Yellow */
+        background-color: #924FC2; /* Purple */
         animation: blink 1s infinite;
         margin-left: 2px;
         vertical-align: bottom;
@@ -455,7 +647,7 @@
     .bk-input:focus { 
         outline: none; 
         border-color: var(--accent-gold); 
-        box-shadow: 0 0 0 3px rgba(255, 183, 0, 0.15); 
+        box-shadow: 0 0 0 3px rgba(146, 79, 194, 0.15); 
     }
     
     .bk-btn {
@@ -543,20 +735,34 @@
                 </div>
             </div>
         </div>
-        <div class="hero-visual reveal active" style="flex: 1.4; display: flex; justify-content: center; perspective: 2000px; z-index: 10; padding-top: 20px;">
-            <!-- Advanced 3D Tilt Container for Hero Code -->
-            <div class="hero-3d-card" id="heroTiltCard" style="position: relative; transform-style: preserve-3d; transition: transform 0.1s ease-out;">
+        <div class="hero-visual reveal active">
+            <!-- Slideshow Image Carousel -->
+            <div class="hero-carousel-container" id="heroSlideshow">
+                <div class="hero-carousel-track">
+                    <div class="hero-carousel-item active">
+                        <img src="{{ asset('images/carousel_dashboard.png') }}" alt="IVARA Dashboard">
+                    </div>
+                    <div class="hero-carousel-item">
+                        <img src="{{ asset('images/carousel_tech_repair.jpg') }}" alt="IVARA Tech Repair">
+                    </div>
+                    <div class="hero-carousel-item">
+                        <img src="{{ asset('images/carousel_security.jpg') }}" alt="IVARA Security">
+                    </div>
+                    <div class="hero-carousel-item">
+                        <img src="{{ asset('images/carousel_support.png') }}" alt="IVARA Support">
+                    </div>
+                </div>
                 
-                {{-- The Main Image --}}
-                <img src="{{ asset('images/hero-dashboard-3d.png') }}" 
-                     class="hero-img" 
-                     alt="IVARA Dashboard"
-                     style="width: 130%; max-width: none; margin-left: -15%; display: block; filter: drop-shadow(0 50px 100px rgba(0,0,0,0.35)); pointer-events: none;">
+                <!-- Slide Indicators -->
+                <div class="hero-carousel-indicators">
+                    <div class="hero-carousel-dot active" data-slide="0"></div>
+                    <div class="hero-carousel-dot" data-slide="1"></div>
+                    <div class="hero-carousel-dot" data-slide="2"></div>
+                    <div class="hero-carousel-dot" data-slide="3"></div>
+                </div>
                 
-                {{-- Glare Overlay --}}
-                <div class="hero-glare" style="position: absolute; top: 0; left: 0; width: 130%; margin-left: -15%; height: 100%; pointer-events: none; 
-                     background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255, 0.45) 0%, rgba(255,255,255,0) 60%); 
-                     mix-blend-mode: overlay; opacity: 0; transition: opacity 0.3s; border-radius: 20px;"></div>
+                <!-- Progress Bar -->
+                <div class="hero-carousel-progress" id="slideProgress"></div>
             </div>
         </div>
     </div>
@@ -699,44 +905,72 @@
             });
         });
 
-        // --- 2. Advanced Hero 3D Tilt with Glare ---
-        const heroCard = document.getElementById('heroTiltCard');
-        if(heroCard) {
-            const container = heroCard.parentElement; // The .hero-visual container acts as the listener area
-            const glare = heroCard.querySelector('.hero-glare');
+        // --- 2. Hero Slideshow Carousel (5 second intervals) ---
+        const slideshow = document.getElementById('heroSlideshow');
+        if(slideshow) {
+            const slides = slideshow.querySelectorAll('.hero-carousel-item');
+            const dots = slideshow.querySelectorAll('.hero-carousel-dot');
+            const progressBar = document.getElementById('slideProgress');
+            let currentSlide = 0;
+            const slideInterval = 5000; // 5 seconds
+            let slideTimer;
 
-            container.addEventListener('mousemove', (e) => {
-                const rect = heroCard.getBoundingClientRect();
-                // Calculate position relative to the CARD, not the container, for accurate center pivot
-                const x = e.clientX - rect.left; 
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
+            function goToSlide(index) {
+                // Remove active and prev classes from all slides
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active', 'prev');
+                    if(i === currentSlide) {
+                        slide.classList.add('prev');
+                    }
+                });
 
-                // Stronger tilt for "Very Big" feel
-                const rotateX = ((y - centerY) / centerY) * -12; // Inverted Y for natural tilt
-                const rotateY = ((x - centerX) / centerX) * 12;
+                // Update dots
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
 
-                // Apply Tilt
-                heroCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                // Set new active slide
+                currentSlide = index;
+                slides[currentSlide].classList.remove('prev');
+                slides[currentSlide].classList.add('active');
 
-                // Update Glare Position (CSS Variables)
-                // Map x/y to percentage of width/height
-                const xPct = (x / rect.width) * 100;
-                const yPct = (y / rect.height) * 100;
-                
-                heroCard.style.setProperty('--x', `${xPct}%`);
-                heroCard.style.setProperty('--y', `${yPct}%`);
+                // Reset progress bar animation
+                if(progressBar) {
+                    progressBar.style.animation = 'none';
+                    progressBar.offsetHeight; // Trigger reflow
+                    progressBar.style.animation = 'progressBar 5s linear forwards';
+                }
+            }
 
-                // Show Glare
-                if(glare) glare.style.opacity = '1';
+            function nextSlide() {
+                const next = (currentSlide + 1) % slides.length;
+                goToSlide(next);
+            }
+
+            function startSlideshow() {
+                slideTimer = setInterval(nextSlide, slideInterval);
+            }
+
+            function stopSlideshow() {
+                clearInterval(slideTimer);
+            }
+
+            // Click on dots to navigate
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const slideIndex = parseInt(dot.dataset.slide);
+                    stopSlideshow();
+                    goToSlide(slideIndex);
+                    startSlideshow();
+                });
             });
 
-            container.addEventListener('mouseleave', () => {
-                heroCard.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-                if(glare) glare.style.opacity = '0';
-            });
+            // Pause on hover
+            slideshow.addEventListener('mouseenter', stopSlideshow);
+            slideshow.addEventListener('mouseleave', startSlideshow);
+
+            // Start the slideshow
+            startSlideshow();
         }
         
         // Init Scroll Reveal

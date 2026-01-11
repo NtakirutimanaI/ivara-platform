@@ -7,7 +7,7 @@
 <style>
     :root {
         --primary-navy: #0A1128;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --bg-light: #f9f9f9;
         --text-dark: #333;
         --text-muted: #666;
@@ -51,7 +51,7 @@
         display: inline-block;
     }
     .btn-action:hover {
-        background: var(--primary-navy); color: #fff; border-color: #ffb700;
+        background: var(--primary-navy); color: #fff; border-color: #924FC2;
         transform: translateY(-3px);
     }
 
@@ -171,7 +171,7 @@
                     <span style="display: block; font-weight: 600; margin-bottom: 10px;">Select Color</span>
                     <div style="display: flex; gap: 8px; justify-content: center;">
                         <div style="width: 20px; height: 20px; background: #0A1128; border-radius: 50%;"></div>
-                        <div style="width: 20px; height: 20px; background: #ffb700; border-radius: 50%;"></div>
+                        <div style="width: 20px; height: 20px; background: #924FC2; border-radius: 50%;"></div>
                         <div style="width: 20px; height: 20px; background: #e74c3c; border-radius: 50%;"></div>
                         <div style="width: 20px; height: 20px; background: #2ecc71; border-radius: 50%;"></div>
                     </div>

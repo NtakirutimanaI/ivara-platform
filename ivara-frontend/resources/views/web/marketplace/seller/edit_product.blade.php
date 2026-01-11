@@ -47,7 +47,7 @@
     }
     
     .form-control:focus {
-        border-color: var(--accent-gold, #ffb700);
+        border-color: var(--accent-gold, #924FC2);
         outline: none;
         box-shadow: 0 0 0 3px rgba(255, 183, 0, 0.1);
     }

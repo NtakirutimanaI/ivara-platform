@@ -7,7 +7,7 @@
         --nature-green: #2D5A27;
         --earth-brown: #5D4037;
         --leaf-light: #81C784;
-        --sun-yellow: #FFB300;
+        --sun-yellow: #924FC2;
         --bg-cream: #F9FBE7;
         --text-dark: #1B2E1C;
         --text-muted: #546E7A;
@@ -260,7 +260,7 @@
 
         <div class="side-panel">
             <div class="weather-widget">
-                <i class="fas fa-sun fa-4x text-warning"></i>
+                <i class="fas fa-sun fa-4x mb-3" style="color: #924FC2;"></i>
                 <div class="weather-temp">28°C</div>
                 <h5 class="fw-bold">Sunny Skies</h5>
                 <p class="opacity-75 mb-4">Ideal conditions for harvesting in North Valley.</p>

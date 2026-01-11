@@ -169,3 +169,9 @@ Route::prefix('technician')->middleware(['auth'])->group(function () {
         return proxyToMicroservice($request, 'technician/schedule');
     })->name('api.technician.schedule');
 });
+
+// Header Data Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/header/notifications', [\App\Http\Controllers\Api\HeaderApiController::class, 'notifications']);
+    Route::get('/header/messages', [\App\Http\Controllers\Api\HeaderApiController::class, 'messages']);
+});

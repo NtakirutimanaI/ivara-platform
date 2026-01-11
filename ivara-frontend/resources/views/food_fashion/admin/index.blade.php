@@ -158,7 +158,7 @@
         font-weight: 600;
         transition: 0.2s;
     }
-    .action-btn:hover { background: #ffb700; color: #000; transform: translateX(5px); }
+    .action-btn:hover { background: #924FC2; color: #fff; transform: translateX(5px); }
     .action-btn i { font-size: 1.2rem; opacity: 0.8; }
 
     .status-pill { 

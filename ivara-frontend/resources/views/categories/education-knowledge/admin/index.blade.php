@@ -6,7 +6,7 @@
     :root {
         --edu-primary: #1a237e; /* Deep Indigo */
         --edu-secondary: #0d47a1; /* Blue */
-        --edu-accent: #ffd700; /* Gold */
+        --edu-accent: #924FC2; /* Purple */
     }
     .bg-edu-primary { background-color: var(--edu-primary) !important; color: white; }
     .text-edu-primary { color: var(--edu-primary) !important; }

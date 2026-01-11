@@ -19,13 +19,16 @@
     body {
       background: #f5f7fa;
       color: #333;
-      padding: 20px;
-      margin-top: 60px;
+      margin: 0;
+      padding: 0;
     }
 
     .dash-unique-wrapper {
-      margin-left: 270px;
-      width: 80%;
+      margin-left: var(--sidebar-width, 260px);
+      width: calc(100% - var(--sidebar-width, 260px));
+      margin-top: var(--header-height, 72px);
+      padding: 30px;
+      box-sizing: border-box;
     }
 
     .dash-unique-header {

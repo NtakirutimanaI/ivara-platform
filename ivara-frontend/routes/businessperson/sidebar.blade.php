@@ -132,7 +132,7 @@
 .admin-menu-item i.fas {
     font-size: 18px;
     margin-left: 0px;
-    color: #FFB700;
+    color: #924FC2;
     width: 24px;
     text-align: center;
 }

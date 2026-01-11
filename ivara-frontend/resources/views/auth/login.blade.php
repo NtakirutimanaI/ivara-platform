@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #ffb700;
+            --primary: #924FC2;
             --primary-light: #ffc83b;
             --primary-dark: #cc9200;
             --secondary: #1a2a5e;
@@ -251,7 +251,7 @@
         .custom-input:focus {
             background: rgba(255, 255, 255, 0.08);
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255, 183, 0, 0.15);
+            box-shadow: 0 0 0 4px rgba(146, 79, 194, 0.15);
         }
 
         .custom-input:focus + .input-icon {
@@ -337,7 +337,7 @@
         .btn-login:hover {
             transform: translateY(-3px);
             background: white;
-            box-shadow: 0 15px 30px rgba(255, 183, 0, 0.3);
+            box-shadow: 0 15px 30px rgba(146, 79, 194, 0.3);
         }
 
         .btn-login:active {

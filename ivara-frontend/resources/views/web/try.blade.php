@@ -18,7 +18,7 @@
     }
 
     .cta-section p {
-      color: #ffb700;
+      color: #924FC2;
       font-weight: 600;
       font-size: 0.85rem;
       margin-bottom: 1rem;
@@ -33,7 +33,7 @@
     }
 
     .cta-section a {
-      background: #ffb700;
+      background: #924FC2;
       color: #000;
       text-decoration: none;
       font-weight: bold;

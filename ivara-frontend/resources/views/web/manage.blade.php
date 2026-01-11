@@ -94,7 +94,7 @@
 
     .biz-start-button {
       margin-top: 1.5rem;
-      background: #ffb700;
+      background: #924FC2;
       border: none;
       padding: 0.75rem 1.5rem;
       border-radius: 2rem;

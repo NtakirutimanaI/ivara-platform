@@ -65,7 +65,7 @@
         cursor: pointer;
     }
     .btn-primary { background: #924FC2; color: white; }
-    .btn-warning { background: #ffc107; color: black; }
+    .btn-warning { background: #924FC2; color: black; }
     .btn-danger { background: #dc3545; color: white; }
     .btn-success { background: #28a745; color: white; }
     /* Modal */
@@ -256,7 +256,7 @@
             labels: ['North', 'South', 'East', 'West'],
             datasets: [{
                 data: [30, 25, 20, 25],
-                backgroundColor: ['#ff5722','#8bc34a','#924FC2','#ffc107']
+                backgroundColor: ['#ff5722','#8bc34a','#924FC2','#924FC2']
             }]
         }
     });

@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Lock, Mail, ArrowRight, Smartphone, Eye, EyeOff } from 'lucide-react';
 import api from '@/lib/api';
 
-import MobileHeader from '@/components/MobileHeader';
+// MobileHeader import removed
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -29,8 +29,11 @@ export default function LoginPage() {
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
 
-            // Redirect to category selection for mobile
-            router.push('/select-category');
+            if (user.role === 'admin' || user.role === 'super_admin' || user.role === 'Super Admin') {
+                router.push('/superadmin/dashboard');
+            } else {
+                router.push('/select-category');
+            }
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
         } finally {
@@ -39,8 +42,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col justify-between bg-background pt-[64px]">
-            <MobileHeader />
+        <div className="min-h-screen flex flex-col justify-between bg-background">
 
             <div className="p-6 flex-1 flex flex-col justify-center">
                 {/* Top Section */}

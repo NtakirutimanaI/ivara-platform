@@ -7,7 +7,7 @@
     :root {
         --primary-navy: #0A1128;
         --secondary-navy: #162447;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --bg-light: #f8f9fa;
         --text-gray: #666;
     }
@@ -256,6 +256,70 @@
     
     .btn-continue:hover {
         background: #ffc933;
+    }
+
+    /* Dark Mode Overrides */
+    [data-theme="dark"] .cart-items-wrapper,
+    [data-theme="dark"] .cart-summary,
+    [data-theme="dark"] .empty-cart,
+    [data-theme="dark"] .qty-btn {
+        background: #1e293b;
+        color: #f8fafc;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    [data-theme="dark"] .cart-header h1 {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .cart-item,
+    [data-theme="dark"] .summary-title,
+    [data-theme="dark"] .summary-row.total,
+    [data-theme="dark"] .cart-header {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .item-name {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .item-price,
+    [data-theme="dark"] .summary-row {
+        color: #94a3b8;
+    }
+    
+    [data-theme="dark"] .qty-control {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    [data-theme="dark"] .qty-val {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .qty-btn {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .item-image {
+        background: #0f172a;
+    }
+    
+    [data-theme="dark"] .summary-row.total,
+    [data-theme="dark"] .item-total,
+    [data-theme="dark"] .summary-title {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .empty-cart i {
+        color: #334155;
+    }
+    
+    [data-theme="dark"] .empty-cart h2 {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .empty-cart p {
+        color: #94a3b8;
     }
 </style>
 

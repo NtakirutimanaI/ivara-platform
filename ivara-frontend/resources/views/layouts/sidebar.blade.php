@@ -30,7 +30,7 @@
             if ($role === 'supervisor') $prefix = 'supervisor';
             
             $items[0]['route'] = "{$prefix}.{$userCategory}.index";
-            $items[0]['label'] = $meta['label'] . ' Dashboard';
+            $items[0]['label'] = 'Dashboard';
             $items[0]['icon'] = $meta['icon'];
         }
 
@@ -38,13 +38,13 @@
             ['label' => 'Category Management', 'icon' => $meta['icon'], 'dropdown' => true, 'items' => [
                 // Dashboard link is now redundant in dropdown if we replaced the main one, but keeping it for completeness or removing it.
                 // keeping it as "Overview" maybe? Or just keep as is.
-                ['label' => 'Services', 'icon' => 'fas fa-concierge-bell', 'route' => "admin.{$userCategory}.services"],
-                ['label' => 'Bookings', 'icon' => 'fas fa-calendar-check', 'route' => "admin.{$userCategory}.bookings"],
-                ['label' => 'Providers', 'icon' => 'fas fa-users-cog', 'route' => "admin.{$userCategory}.providers"],
-                ['label' => 'Products', 'icon' => 'fas fa-box', 'route' => "admin.{$userCategory}.products"],
-                ['label' => 'Clients', 'icon' => 'fas fa-user-friends', 'route' => "admin.{$userCategory}.clients"],
-                ['label' => 'Reports', 'icon' => 'fas fa-chart-line', 'route' => "admin.{$userCategory}.payments"],
-                ['label' => 'Settings', 'icon' => 'fas fa-sliders-h', 'route' => "admin.{$userCategory}.settings"],
+                ['label' => 'Services', 'icon' => 'fas fa-concierge-bell', 'route' => "{$prefix}.{$userCategory}.services"],
+                ['label' => 'Bookings', 'icon' => 'fas fa-calendar-check', 'route' => "{$prefix}.{$userCategory}.bookings"],
+                ['label' => 'Providers', 'icon' => 'fas fa-users-cog', 'route' => "{$prefix}.{$userCategory}.providers"],
+                ['label' => 'Products', 'icon' => 'fas fa-box', 'route' => "{$prefix}.{$userCategory}.products"],
+                ['label' => 'Clients', 'icon' => 'fas fa-user-friends', 'route' => "{$prefix}.{$userCategory}.clients"],
+                ['label' => 'Reports', 'icon' => 'fas fa-chart-line', 'route' => "{$prefix}.{$userCategory}.payments"],
+                ['label' => 'Settings', 'icon' => 'fas fa-sliders-h', 'route' => "{$prefix}.{$userCategory}.settings"],
             ]]
         ];
         
@@ -76,6 +76,13 @@
 <nav class="sidebar">
     <div class="sidebar-wrapper">
         <ul class="menu">
+            <!-- Sidebar Header / Role Info -->
+            @if($role === 'admin')
+            <li class="sidebar-header-box px-3 mb-4">
+                    <h6 class="text-white fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">ADMIN</h6>
+            </li>
+            @endif
+
             @foreach($items as $item)
                 @php $active = isSidebarItemActive($item) ? 'active' : ''; @endphp
                 
@@ -132,124 +139,116 @@
 
 <style>
     :root {
-        --sidebar-width: 215px;
+        --sidebar-width: 260px;
+        --header-height: 72px;
         --sidebar-bg: #0f172a;
         --sidebar-hover: #1e293b;
         --sidebar-text: #94a3b8;
         --primary-brand: #3b82f6; 
         --accent-red: #ef4444;
+        --submenu-bg: #1e293b;
     }
 
     .sidebar { 
         width: var(--sidebar-width); 
         background: var(--sidebar-bg); 
-        height: calc(100vh - 72px); 
+        height: calc(100vh - var(--header-height)); 
         position: fixed; 
         left: 0; 
-        top: 72px; 
+        top: var(--header-height); 
         z-index: 1000; 
         transition: all 0.3s ease;
         border-right: 1px solid rgba(255,255,255,0.05);
-        overflow: visible; /* Ensure flyouts aren't clipped */
+        display: flex;
+        flex-direction: column;
     }
 
     .sidebar-wrapper { 
-        height: 100%;
-        overflow: visible; 
-        padding: 20px 10px; 
+        flex: 1;
+        overflow-y: auto; 
+        overflow-x: visible; /* Crucial for hover detection, but overflow-y:auto still clips absolute children */
+        padding: 20px 12px;
+        scrollbar-width: thin;
+        scrollbar-color: #334155 transparent;
     }
+    
+    .sidebar-wrapper::-webkit-scrollbar { width: 4px; }
+    .sidebar-wrapper::-webkit-scrollbar-track { background: transparent; }
+    .sidebar-wrapper::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 4px; }
 
-
-    .menu { 
-        list-style: none; 
-        padding: 0; 
-        margin: 0; 
-        display: flex;
-        flex-direction: column;
-        min-height: 100%;
-    }
-
-    .menu-item { margin-bottom: 2px; }
+    .menu { list-style: none; padding: 0; margin: 0; }
+    .menu-item { margin-bottom: 4px; position: relative; }
     
     .menu-link { 
         display: flex; 
         align-items: center; 
         color: var(--sidebar-text); 
         text-decoration: none; 
-        padding: 10px 12px; 
+        padding: 11px 14px; 
         border-radius: 8px; 
         transition: all 0.2s ease; 
-        font-size: 0.82rem; 
+        font-size: 0.88rem; 
         font-weight: 500; 
     }
 
     .icon-box { 
         width: 24px; 
         margin-right: 12px; 
-        font-size: 0.95rem; 
+        font-size: 1rem; 
         display: flex; 
         justify-content: center;
         opacity: 0.8;
     }
 
-    .label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .arrow-icon { margin-left: auto; font-size: 0.65rem; transition: transform 0.3s; }
+    .label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .arrow-icon { font-size: 0.7rem; transition: transform 0.3s; margin-left: 8px; opacity: 0.5; }
 
-    .menu-link:hover { background: var(--sidebar-hover); color: #fff; }
+    .menu-link:hover, .menu-item.hovered > .menu-link { background: var(--sidebar-hover); color: #fff; }
     .menu-link.active { background: var(--primary-brand); color: #fff; }
     .menu-link.active .icon-box { opacity: 1; }
 
-    /* Dropdown Flyout Logic */
-    .menu-item.dropdown {
-        position: relative;
-    }
-
+    /* Flyout Submenu Styles */
     .submenu { 
         display: none; 
-        position: absolute;
-        left: 100%;
-        top: 0;
-        width: 190px;
-        background: var(--sidebar-bg);
+        position: fixed; /* Fixed to viewport to escape sidebar clipping */
+        left: var(--sidebar-width);
+        width: 220px;
+        background: var(--submenu-bg);
         border: 1px solid rgba(255,255,255,0.1);
         border-radius: 12px;
-        box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
-        padding: 8px;
+        box-shadow: 15px 15px 40px rgba(0,0,0,0.4);
+        padding: 10px;
+        z-index: 9999;
         margin-left: 5px;
-        z-index: 1001;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(15px);
     }
     
-    .menu-item.dropdown:hover > .submenu { 
+    /* Show submenu via JS or hover Class */
+    .menu-item.hovered > .submenu { 
         display: block; 
-        animation: flyIn 0.2s ease-out;
+        animation: flyInSub 0.2s ease-out;
     }
 
-    @keyframes flyIn {
+    @keyframes flyInSub {
         from { opacity: 0; transform: translateX(10px); }
         to { opacity: 1; transform: translateX(0); }
     }
 
-    .menu-item.dropdown.active .arrow-icon { transform: rotate(0deg); color: #fff; }
-    .menu-item.dropdown:hover .arrow-icon { transform: rotate(-90deg); }
-
-    .submenu-item { margin-bottom: 2px; }
+    .submenu-item { margin-bottom: 2px; list-style: none; }
     
     .submenu-link {
         display: flex;
         align-items: center;
-        padding: 10px 12px;
+        padding: 9px 12px;
         color: var(--sidebar-text);
         text-decoration: none;
-        font-size: 0.82rem;
-        border-radius: 8px;
+        font-size: 0.85rem;
+        border-radius: 7px;
         transition: 0.2s;
-        white-space: nowrap;
     }
-    .submenu-link i { font-size: 0.75rem; margin-right: 12px; opacity: 0.7; }
-    .submenu-link:hover, .submenu-link.active { color: #fff; background: var(--sidebar-hover); }
-    .submenu-link.active { background: var(--primary-brand); }
-
+    .submenu-link i { font-size: 0.65rem; margin-right: 12px; opacity: 0.6; }
+    .submenu-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    .submenu-link.active { background: var(--primary-brand); color: #fff; }
 
     /* Special Styles */
     .btn-red-style {
@@ -258,14 +257,47 @@
         margin-bottom: 15px;
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
-    .btn-red-style:hover { background: #dc2626 !important; transform: translateY(-1px); }
-
     .btn-logout {
         color: #fca5a5 !important;
-        background: rgba(239, 68, 68, 0.1);
-        border: 1px solid rgba(239, 68, 68, 0.2);
+        background: rgba(239, 68, 68, 0.05);
+        border: 1px solid rgba(239, 68, 68, 0.15);
     }
     .btn-logout:hover { background: var(--accent-red); color: white !important; }
-
-    .border-top { border-top: 1px solid rgba(255,255,255,0.1) !important; }
+    .border-top { border-top: 1px solid rgba(255,255,255,0.08) !important; }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownItems = document.querySelectorAll('.menu-item.dropdown');
+        
+        dropdownItems.forEach(item => {
+            const link = item.querySelector('.menu-link');
+            const submenu = item.querySelector('.submenu');
+
+            item.addEventListener('mouseenter', function() {
+                const rect = link.getBoundingClientRect();
+                
+                // Position the submenu exactly to the right of the link
+                submenu.style.top = rect.top + 'px';
+                submenu.style.left = rect.right + 'px';
+                
+                // Check if submenu goes off screen at bottom
+                const submenuHeight = submenu.offsetHeight;
+                const windowHeight = window.innerHeight;
+                
+                if (rect.top + submenuHeight > windowHeight) {
+                    submenu.style.top = (windowHeight - submenuHeight - 10) + 'px';
+                }
+
+                item.classList.add('hovered');
+            });
+
+            item.addEventListener('mouseleave', function() {
+                item.classList.remove('hovered');
+            });
+        });
+
+        // Handle Active states (Optional: keep submenu open for active section if desired)
+        // For hover-only menus, we usually don't keep them open permanent to avoid covering content.
+    });
+</script>

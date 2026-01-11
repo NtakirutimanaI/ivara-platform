@@ -11,7 +11,7 @@ h1 { text-align:center; margin-bottom: 20px; color:#071839; font-size:1.8rem; }
 form div { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:30px; }
 form input, form button { padding:6px 10px; border-radius:5px; border:1px solid #ccc; font-size:13px; }
 form button { background:#071839; color:#fff; cursor:pointer; transition:0.3s; }
-form button:hover { background:#ffc107; color:#071839; }
+form button:hover { background:#924FC2; color:#071839; }
 
 /* Table Styling */
 table { width:100%; border-collapse: collapse; margin-bottom:30px; font-size:13px; }

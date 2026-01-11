@@ -41,7 +41,7 @@
     }
     
     .sitemap-section h3 {
-        color: #ffb700;
+        color: #924FC2;
         font-weight: 700;
         margin-bottom: 20px;
         font-size: 1.3rem;
@@ -66,7 +66,7 @@
     }
     
     .sitemap-section a:hover {
-        color: #ffb700;
+        color: #924FC2;
         padding-left: 10px;
     }
 </style>

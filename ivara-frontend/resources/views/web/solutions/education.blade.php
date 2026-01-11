@@ -7,7 +7,7 @@
 <style>
     :root {
         --primary-navy: #0A1128;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --edu-blue: #2980b9; /* Academic Blue */
         --bg-light: #f4f6fa;
         --text-dark: #333;
@@ -36,7 +36,7 @@
         font-weight: 700; font-size: 1.1rem; border: 2px solid var(--accent-gold);
         transition: 0.3s; box-shadow: 0 5px 15px rgba(255,183,0,0.3); display: inline-block;
     }
-    .btn-action:hover { background: var(--primary-navy); color: #fff; border-color: #ffb700; transform: translateY(-3px); }
+    .btn-action:hover { background: var(--primary-navy); color: #fff; border-color: #924FC2; transform: translateY(-3px); }
 
     .hero-visual { flex: 1.2; position: relative; }
     

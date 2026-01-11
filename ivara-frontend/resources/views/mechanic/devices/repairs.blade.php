@@ -15,7 +15,7 @@ body { background: #f9fafb; font-size: 0.9rem; }
 
 /* Badges */
 .badge-status-Pending { background-color: #6c757d; }
-.badge-status-InProgress { background-color: #ffc107; color: #000; }
+.badge-status-InProgress { background-color: #924FC2; color: #000; }
 .badge-status-Completed { background-color: #4f46e5; }
 
 /* Table */
@@ -31,7 +31,7 @@ body { background: #f9fafb; font-size: 0.9rem; }
 .payment-modal .modal-header { border-bottom:none; }
 .payment-modal .modal-footer { border-top:none; }
 .cash { background:#198754; }
-.mtn_momo { background:#FFCC00; color:#000; }
+.mtn_momo { background:#924FC2; color:#fff; }
 .airtel_money { background:#FF0000; }
 .card { background:#0d6efd; }
 .payment-field { margin-bottom:10px; }

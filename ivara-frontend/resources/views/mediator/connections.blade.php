@@ -326,7 +326,7 @@ function openPaymentInterface(clientId, method){
     piFields.innerHTML = ""; // reset
 
     if(method==='mtn_momo'){
-        piFields.innerHTML = `<label>MTN MoMo Phone Number:</label><input type="text" name="payment_contact" placeholder="Enter MTN MoMo number" required style="border:1px solid #FFD700;">`;
+        piFields.innerHTML = `<label>MTN MoMo Phone Number:</label><input type="text" name="payment_contact" placeholder="Enter MTN MoMo number" required style="border:1px solid #924FC2;">`;
         document.getElementById('paymentInterface').style.backgroundColor='#FFF9E5';
     } else if(method==='airtel_money'){
         piFields.innerHTML = `<label>Airtel Money Number:</label><input type="text" name="payment_contact" placeholder="Enter Airtel Money number" required style="border:1px solid #FF4D4F;">`;

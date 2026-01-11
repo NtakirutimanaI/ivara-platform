@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { User, CheckCircle, ArrowLeft, Search } from 'lucide-react';
@@ -17,7 +17,7 @@ const roleMap: Record<string, string[]> = {
     legal_professional: ['Legal Client', 'Legal Pro', 'Professional Consultant', 'Legal Firm', 'Legal Regulator', 'Legal Admin'],
 };
 
-export default function UserSelectionPage() {
+function UserSelectionContent() {
     const searchParams = useSearchParams();
     const category = searchParams.get('category') || 'other_services';
     const router = useRouter();
@@ -92,5 +92,13 @@ export default function UserSelectionPage() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function UserSelectionPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <UserSelectionContent />
+        </Suspense>
     );
 }

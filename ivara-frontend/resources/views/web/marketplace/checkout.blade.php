@@ -7,7 +7,7 @@
     :root {
         --primary-navy: #0A1128;
         --secondary-navy: #162447;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --bg-light: #f8f9fa;
         --text-gray: #666;
     }
@@ -171,7 +171,7 @@
 
     .btn-place-order:hover {
         transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(255, 183, 0, 0.3);
+        box-shadow: 0 10px 20px rgba(146, 79, 194, 0.3);
         background: #ffc933;
     }
 
@@ -184,6 +184,82 @@
         color: #27ae60;
         font-weight: 600;
         font-size: 0.9rem;
+    }
+
+    /* Dark Mode Overrides */
+    [data-theme="dark"] .section-card {
+        background: #1e293b; /* Dark Slate to match other cards */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] .section-title {
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] label {
+        color: #ccc; /* Lighter grey for labels */
+    }
+
+    [data-theme="dark"] input, 
+    [data-theme="dark"] select, 
+    [data-theme="dark"] textarea {
+        background: #0f172a; /* Very dark blue/slate for inputs */
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] input:focus {
+        border-color: var(--accent-gold);
+    }
+
+    [data-theme="dark"] .summary-item {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    [data-theme="dark"] .summary-name {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .summary-meta {
+        color: #94a3b8;
+    }
+    
+    [data-theme="dark"] .summary-img {
+        background: #0f172a;
+    }
+    
+    /* Payment Method Radio Labels */
+    [data-theme="dark"] .payment-options label {
+          border-color: rgba(255, 255, 255, 0.1) !important;
+          background: rgba(255, 255, 255, 0.02);
+          color: #f8fafc;
+    }
+
+    /* Subtotal/Total rows inside Total Card handled by card text color but usually total card has own background */
+    [data-theme="dark"] .total-card {
+        background: #0f172a; /* Slightly darker than card for contrast */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    [data-theme="dark"] .section-title i {
+         color: var(--accent-gold); /* Keep icons gold */
+    }
+
+    [data-theme="dark"] .secure-badge {
+         color: #2ecc71; /* Brighter green for dark mode */
+    }
+
+    /* SweetAlert2 Dark Mode Overrides */
+    [data-theme="dark"] .swal2-popup {
+        background: #1e293b !important;
+        color: #f8fafc !important;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    [data-theme="dark"] .swal2-title,
+    [data-theme="dark"] .swal2-html-container {
+        color: #f8fafc !important;
     }
 </style>
 

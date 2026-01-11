@@ -83,21 +83,21 @@
       color: white;
     }
     .link-button-indigo:hover {
-      background-color: #FFB700;
+      background-color: #924FC2;
     }
     .link-button-blue-light {
       background-color: #bfdbfe;
       color: #1e40af;
     }
     .link-button-blue-light:hover {
-      background-color: #FFB700;
+      background-color: #924FC2;
     }
     .link-button-green {
       background-color: #22c55e;
       color: white;
     }
     .link-button-green:hover {
-      background-color: #FFB700;
+      background-color: #924FC2;
     }
   </style>
 </head>

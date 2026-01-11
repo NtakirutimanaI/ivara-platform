@@ -49,3 +49,50 @@ export const getPlatformOverview = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Failed to fetch platform metrics' });
     }
 };
+
+export const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await User.find().select('-password').sort({ createdAt: -1 });
+        res.json(users);
+    } catch (err) {
+        console.error('Fetch all users error:', err);
+        res.status(500).json({ error: 'Failed to fetch users' });
+    }
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+
+        // Prevent password update through this endpoint for safety
+        delete updates.password;
+
+        const user = await User.findByIdAndUpdate(id, updates, { new: true }).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (err) {
+        console.error('Update user error:', err);
+        res.status(500).json({ error: 'Failed to update user' });
+    }
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findByIdAndDelete(id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ message: 'User deleted successfully' });
+    } catch (err) {
+        console.error('Delete user error:', err);
+        res.status(500).json({ error: 'Failed to delete user' });
+    }
+};

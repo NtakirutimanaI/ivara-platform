@@ -160,7 +160,7 @@
                     }
                 }
             @endphp
-            <div class="stat-value" style="color: #ffc107;">{{ $pendingCount }}</div>
+            <div class="stat-value" style="color: #924FC2;">{{ $pendingCount }}</div>
         </div>
     </div>
     

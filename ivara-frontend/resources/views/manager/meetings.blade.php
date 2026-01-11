@@ -74,7 +74,7 @@ button:hover { opacity: 0.9; }
 
 button.bg-blue { background-color: #4f46e5; color: #fff; width:45px; }
 button.bg-green { background-color: #10b981; color: #fff; }
-button.bg-yellow { background-color: #f59e0b; color: #fff; }
+button.bg-yellow { background-color: #924FC2; color: #fff; }
 button.bg-red { background-color: #ef4444; color: #fff; margin-top:13px; }
 button.bg-gray { background-color: #6b7280; color: #fff;margin-top:13px; }
 button.bg-teal { background-color: #14b8a6; color: #fff; }

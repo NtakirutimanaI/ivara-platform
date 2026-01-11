@@ -1,3 +1,17 @@
+@php
+    // Detect if current route is a public/landing page
+    $publicRoutes = [
+        'home', 'index', 
+        'aboutus', 'support', 'contact.index', 'contact.send', 
+        'products', 'team', 
+        'privacy_policy', 'terms', 'web.privacy-policy', 'web.terms', 'web.updates',
+        'login', 'register', 'password.request', 'password.reset', 'verification.notice', 'verification.verify',
+        'quick.access', 'subscribe',
+        'market.*', 'resource.*', 'solutions.*',
+        'auth.select-category', 'auth.select-user'
+    ];
+    $isPublic = !Auth::check() || Request::routeIs($publicRoutes);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,53 +20,16 @@
     <title>@yield('title', 'IVARA')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Unified Design System -->
+    <link rel="stylesheet" href="{{ asset('css/dashboard-pro.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+    
     @section('styles')
-    <style>
-        * { box-sizing: border-box; }
-        body { margin:0; font-family: 'Inter', Arial, sans-serif; }
-        
-        /* Sidebar default styles (can be overridden by sidebar.blade.php include) */
-        .sidebar { width:210px; background:#0f172a; color:#fff; position:fixed; left:0; top:72px; height:calc(100vh - 72px); padding:10px; overflow-y:auto; z-index: 1000; }
-        
-        /* Default Content Wrapper (Dashboard Mode) */
-        .content { 
-            margin-left: 210px; 
-            width: calc(100% - 210px);
-            padding: 0 20px 20px 20px; 
-            min-height: calc(100vh - 72px);
-            transition: all 0.3s ease;
-            background: #f3f4f6;
-        }
-
-        /* Public / Landing Page Mode */
-        .content-public {
-            margin-left: 0 !important;
-            width: 100% !important;
-            padding: 0 !important;
-            margin-top: 0 !important; /* Managed by page CSS */
-            background: transparent !important;
-        }
-    </style>
     @show
 </head>
-<body>
+<body class="{{ !$isPublic && Auth::check() ? 'dashboard-page' : 'public-page' }}">
 
 @include('layouts.header')
-
-@php
-    // Detect if current route is a public/landing page
-    // You can extend this list as needed
-    $publicRoutes = [
-        'home', 'index', 
-        'aboutus', 'support', 'contact.index', 'contact.send', 
-        'products', 'team', 
-        'privacy_policy', 'terms', 'web.privacy-policy', 'web.terms', 'web.updates',
-        'login', 'register', 'password.request', 'password.reset', 'verification.notice', 'verification.verify',
-        'quick.access', 'subscribe',
-        'market.*', 'resource.*', 'solutions.*'
-    ];
-    $isPublic = !Auth::check() || Request::routeIs($publicRoutes);
-@endphp
 
 <main>
     {{-- Only include sidebar if NOT public page and User IS logged in --}}

@@ -43,7 +43,7 @@
 
     </div>
 
-    <a href="{{ route('web.updates') }}" style="display:inline-block; background-color:#ffb700; color:#071839; padding:0.75rem 1.5rem; border-radius:2rem; font-weight:bold; text-decoration:none; transition:background 0.3s;">
+    <a href="{{ route('web.updates') }}" style="display:inline-block; background-color:#924FC2; color:#071839; padding:0.75rem 1.5rem; border-radius:2rem; font-weight:bold; text-decoration:none; transition:background 0.3s;">
       Get Coming Updates →
     </a>
 

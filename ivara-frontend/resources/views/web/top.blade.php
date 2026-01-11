@@ -102,7 +102,7 @@
     }
 
     .dot.active {
-      background-color: #FFB700;
+      background-color: #924FC2;
       transform: scale(1.2);
     }
 

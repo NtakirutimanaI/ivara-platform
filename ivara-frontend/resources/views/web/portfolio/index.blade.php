@@ -8,7 +8,7 @@
     :root {
         --navy-dark: #0A1128;
         --navy-light: #1c2744;
-        --gold: #ffb700;
+        --gold: #924FC2;
         --text-grey: #94a3b8;
         --blue-accent: #3b82f6;
         --green-accent: #10b981;
@@ -87,7 +87,7 @@
         font-weight: 700;
         font-size: 0.9rem;
         margin-bottom: 20px;
-        border: 1px solid rgba(255, 183, 0, 0.3);
+        border: 1px solid rgba(146, 79, 194, 0.3);
     }
     
     .section-title {
@@ -140,7 +140,7 @@
     
     .stat-card:hover {
         transform: translateY(-10px);
-        border-color: rgba(255, 183, 0, 0.3);
+        border-color: rgba(146, 79, 194, 0.3);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
     
@@ -233,12 +233,12 @@
         display: inline-block;
         padding: 6px 18px;
         border-radius: 50px;
-        background: rgba(255, 183, 0, 0.15);
+        background: rgba(146, 79, 194, 0.15);
         color: var(--gold);
         font-weight: 700;
         font-size: 0.85rem;
         margin-bottom: 20px;
-        border: 1px solid rgba(255, 183, 0, 0.3);
+        border: 1px solid rgba(146, 79, 194, 0.3);
     }
     
     .project-title {
@@ -284,7 +284,7 @@
         border-radius: 12px;
         text-decoration: none;
         transition: all 0.3s ease;
-        box-shadow: 0 10px 30px rgba(255, 183, 0, 0.3);
+        box-shadow: 0 10px 30px rgba(146, 79, 194, 0.3);
     }
     
     .btn-project:hover {
@@ -323,7 +323,7 @@
     
     .testimonial-card:hover {
         transform: translateY(-8px);
-        border-color: rgba(255, 183, 0, 0.3);
+        border-color: rgba(146, 79, 194, 0.3);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
     
@@ -359,7 +359,7 @@
         height: 56px;
         border-radius: 50%;
         border: 3px solid var(--gold);
-        box-shadow: 0 4px 12px rgba(255, 183, 0, 0.3);
+        box-shadow: 0 4px 12px rgba(146, 79, 194, 0.3);
     }
     
     .testimonial-name {

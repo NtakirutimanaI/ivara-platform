@@ -97,7 +97,7 @@
                         <td class="py-2 px-4">
                             <div class="flex space-x-2 text-xs">
                                 <button onclick='openViewUser(@json($user, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT))' class="text-blue-600 hover:underline">View</button>
-                                <button onclick='openEditUser(@json($user, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT), "{{ route('admin.users.update', $user->id) }}")' class="text-yellow-600 hover:underline">Edit</button>
+                                <button onclick='openEditUser(@json($user, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT), "{{ route('admin.users.update', $user->id) }}")' class="text-[#924FC2] hover:underline">Edit</button>
                                 <button onclick='openChangeRole("{{ route('admin.users.role', $user->id) }}", "{{ $user->getRoleNames()->first() }}")' class="text-purple-600 hover:underline">Change Role</button>
                                 <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('Delete this user?')">
                                     @csrf
@@ -176,7 +176,7 @@
             </div>
             <div class="mt-6 flex justify-end gap-3">
                 <button type="button" onclick="document.getElementById('editUserModal').classList.add('hidden')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg">Cancel</button>
-                <button type="submit" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg">Update</button>
+                <button type="submit" class="px-4 py-2 bg-[#924FC2] hover:bg-[#7a3b9e] text-white rounded-lg">Update</button>
             </div>
         </form>
     </div>

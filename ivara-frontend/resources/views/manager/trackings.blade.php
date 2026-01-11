@@ -117,7 +117,7 @@
                     <td>{{ $device->client ? $device->client->name : 'Not Assigned' }}</td>
                     <td class="space-x-1 flex flex-wrap gap-1">
                         <button onclick="trackDevice({{ $device->id }})" class="bg-blue-500 text-white rounded hover:bg-blue-600 px-2 py-0.5 text-xs">Track</button>
-                        <button onclick="updateDevice({{ $device->id }})" class="bg-yellow-500 text-white rounded hover:bg-yellow-600 px-2 py-0.5 text-xs">Update</button>
+                        <button onclick="updateDevice({{ $device->id }})" class="bg-[#924FC2] text-white rounded hover:bg-[#7a3b9e] px-2 py-0.5 text-xs">Update</button>
                         <button onclick="reportStolen({{ $device->id }})" class="bg-red-500 text-white rounded hover:bg-red-600 px-2 py-0.5 text-xs">Report Stolen</button>
                         <button onclick="getData({{ $device->id }})" class="bg-green-500 text-white rounded hover:bg-green-600 px-2 py-0.5 text-xs">Get Data</button>
                         <button onclick="changeStatus({{ $device->id }})" class="bg-purple-500 text-white rounded hover:bg-purple-600 px-2 py-0.5 text-xs">Change Status</button>

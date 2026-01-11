@@ -182,11 +182,47 @@
 
     <style>
         .ivara-web-footer {
-            background-color: #151b27;
+            background-color: #233848;
             color: #b0b0b0;
             padding: 60px 20px 30px 20px;
             font-family: 'Poppins', sans-serif;
             font-size: 14px;
+            position: relative;
+        }
+        
+        /* Zigzag wave pattern at top of footer */
+        .ivara-web-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: 
+                linear-gradient(135deg, #233848 25%, transparent 25%) -10px 0,
+                linear-gradient(225deg, #233848 25%, transparent 25%) -10px 0,
+                linear-gradient(315deg, #233848 25%, transparent 25%),
+                linear-gradient(45deg, #233848 25%, transparent 25%);
+            background-size: 20px 20px;
+            background-color: transparent;
+            transform: translateY(-100%);
+        }
+        
+        /* Additional zigzag wave overlay at top */
+        .ivara-web-footer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 8px,
+                rgba(255, 255, 255, 0.15) 8px,
+                rgba(255, 255, 255, 0.15) 16px
+            );
         }
 
         .footer-container {
@@ -204,7 +240,7 @@
             grid-template-columns: 1.2fr 1fr;
             gap: 60px;
             padding-bottom: 50px;
-            border-bottom: 1px solid #2a3240;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             margin-bottom: 40px;
         }
 
@@ -232,12 +268,12 @@
             border-radius: 50px;
             overflow: hidden;
             background: #1f2631;
-            border: 2px solid #2a3240;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             transition: border-color 0.3s;
         }
 
         .newsletter-input-group:focus-within {
-            border-color: #ffb700;
+            border-color: #924FC2;
         }
 
         .newsletter-input-group input {
@@ -259,7 +295,7 @@
         }
 
         .newsletter-input-group button {
-            background: #ffb700;
+            background: #924FC2;
             border: none;
             padding: 0 25px;
             cursor: pointer;
@@ -280,7 +316,7 @@
             gap: 40px;
             padding-bottom: 40px;
             margin-bottom: 30px;
-            border-bottom: 1px solid #2a3240;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .footer-col h4 {
@@ -310,7 +346,7 @@
         }
 
         .footer-col ul li a:hover {
-            color: #ffb700;
+            color: #924FC2;
             padding-left: 5px;
         }
 
@@ -336,7 +372,7 @@
             font-size: 13px;
             transition: color 0.3s;
         }
-        .bottom-links a:hover { color: #ffb700; }
+        .bottom-links a:hover { color: #924FC2; }
 
         .social-icons {
             display: flex;
@@ -356,7 +392,7 @@
         }
         .social-icons a:hover {
              color: #0A1128;
-             background: #ffb700;
+             background: #924FC2;
              transform: translateY(-3px);
         }
 
@@ -379,7 +415,7 @@
         }
 
         .powered-by a:hover {
-            color: #ffb700;
+            color: #924FC2;
         }
 
         @media (max-width: 1024px) {

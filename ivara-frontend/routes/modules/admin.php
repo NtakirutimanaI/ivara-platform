@@ -96,6 +96,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/logs/activity', fn() => 'Activity Logs')->name('logs.activity');
     Route::get('/logs/audit', fn() => 'Audit Logs')->name('logs.audit');
 
+    // Additional Technical & Repair Admin Routes
+    Route::get('/profile', fn() => 'Business Profile')->name('profile');
+    Route::get('/suppliers', fn() => 'Suppliers')->name('suppliers.index');
+    Route::get('/sales/products', fn() => 'Product Sales')->name('sales.products');
+    Route::get('/sales/parts', fn() => 'Spare Parts Sales')->name('sales.parts');
+    Route::get('/services', fn() => 'Services Registry')->name('services.index');
+    Route::get('/finance/expenses', fn() => 'Expenses')->name('expenses.index');
+    Route::get('/finance/income', fn() => 'Income')->name('income.index');
+    Route::get('/courses', fn() => 'Courses & Training')->name('courses.index');
+    Route::get('/subscriptions', fn() => 'Subscriptions & Licenses')->name('subscriptions.index');
+
     // Settings
     Route::get('/settings/category', fn() => 'Category Settings')->name('settings.category');
     Route::get('/settings/roles-permissions', fn() => 'Roles & Permissions')->name('settings.roles_permissions');

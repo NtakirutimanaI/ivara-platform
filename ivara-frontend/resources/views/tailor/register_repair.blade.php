@@ -25,7 +25,7 @@
   }
   .link-button i { margin-right: 0.4rem; }
   .link-button-indigo { background-color: #4f46e5; color: white; }
-  .link-button-indigo:hover { background-color: #FFB700; }
+  .link-button-indigo:hover { background-color: #924FC2; }
   .link-button-green { background-color: #10b981; color: white; }
   .link-button-green:hover { background-color: #059669; }
   .link-button-red { background-color: #ef4444; color: white; }

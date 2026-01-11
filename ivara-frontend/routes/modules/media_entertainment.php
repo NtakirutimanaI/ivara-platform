@@ -9,15 +9,20 @@ use App\Modules\MediaEntertainment\MediaDashboardController;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'ivara_role:admin,manager,supervisor', 'category_access:media-entertainment'])->prefix('admin/media-entertainment')->name('admin.media-entertainment.')->group(function () {
+// --- Management (Shared - Dashed Names) ---
+Route::middleware(['auth', 'ivara_role:admin', 'category_access:media-entertainment'])
+    ->prefix('admin/media-entertainment')->name('admin.media-entertainment.')->group(function () {
     Route::get('/', [MediaDashboardController::class, 'index'])->name('index');
-    Route::get('/services', [MediaDashboardController::class, 'generic'])->name('services');
-    Route::get('/bookings', [MediaDashboardController::class, 'generic'])->name('bookings');
-    Route::get('/providers', [MediaDashboardController::class, 'generic'])->name('providers');
-    Route::get('/products', [MediaDashboardController::class, 'generic'])->name('products');
-    Route::get('/clients', [MediaDashboardController::class, 'generic'])->name('clients');
-    Route::get('/payments', [MediaDashboardController::class, 'generic'])->name('payments');
-    Route::get('/settings', [MediaDashboardController::class, 'generic'])->name('settings');
+});
+
+Route::middleware(['auth', 'ivara_role:manager', 'category_access:media-entertainment'])
+    ->prefix('manager/media-entertainment')->name('manager.media-entertainment.')->group(function () {
+    Route::get('/', [MediaDashboardController::class, 'index'])->name('index');
+});
+
+Route::middleware(['auth', 'ivara_role:supervisor', 'category_access:media-entertainment'])
+    ->prefix('supervisor/media-entertainment')->name('supervisor.media-entertainment.')->group(function () {
+    Route::get('/', [MediaDashboardController::class, 'index'])->name('index');
 });
 
 

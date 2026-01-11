@@ -1,11 +1,6 @@
 {{-- Language Selector Component --}}
-<div class="language-selector-wrapper">
-    <button class="language-selector-btn" id="languageSelectorBtn" title="{{ __('messages.select_language') }}">
-        <i class="fas fa-globe"></i>
-        <span class="current-lang" id="currentLangDisplay">{{ strtoupper(app()->getLocale()) }}</span>
-        <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i>
-    </button>
-    <div class="language-dropdown" id="languageDropdown">
+@if(isset($mode) && $mode === 'list')
+    <div class="language-list-container">
         <div class="lang-option {{ app()->getLocale() === 'en' ? 'active' : '' }}" data-locale="en">
             <span class="lang-flag">🇬🇧</span>
             <span class="lang-name">English</span>
@@ -23,7 +18,33 @@
             <span class="lang-name">Français</span>
         </div>
     </div>
-</div>
+@else
+    <div class="language-selector-wrapper">
+        <button class="language-selector-btn" id="languageSelectorBtn" title="{{ __('messages.select_language') }}">
+            <i class="fas fa-globe"></i>
+            <span class="current-lang" id="currentLangDisplay">{{ strtoupper(app()->getLocale()) }}</span>
+            <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i>
+        </button>
+        <div class="language-dropdown" id="languageDropdown">
+            <div class="lang-option {{ app()->getLocale() === 'en' ? 'active' : '' }}" data-locale="en">
+                <span class="lang-flag">🇬🇧</span>
+                <span class="lang-name">English</span>
+            </div>
+            <div class="lang-option {{ app()->getLocale() === 'rw' ? 'active' : '' }}" data-locale="rw">
+                <span class="lang-flag">🇷🇼</span>
+                <span class="lang-name">Kinyarwanda</span>
+            </div>
+            <div class="lang-option {{ app()->getLocale() === 'sw' ? 'active' : '' }}" data-locale="sw">
+                <span class="lang-flag">🇹🇿</span>
+                <span class="lang-name">Kiswahili</span>
+            </div>
+            <div class="lang-option {{ app()->getLocale() === 'fr' ? 'active' : '' }}" data-locale="fr">
+                <span class="lang-flag">🇫🇷</span>
+                <span class="lang-name">Français</span>
+            </div>
+        </div>
+    </div>
+@endif
 
 <style>
     /* Language Selector Styles */
@@ -48,13 +69,13 @@
 
     .language-selector-btn:hover {
         background: rgba(255, 255, 255, 0.1);
-        border-color: #FFB600;
+        border-color: #924FC2;
         transform: translateY(-2px);
     }
 
     .language-selector-btn .fa-globe {
         font-size: 16px;
-        color: #FFB600;
+        color: #924FC2;
     }
 
     .current-lang {
@@ -100,7 +121,7 @@
     }
 
     .lang-option.active {
-        background: linear-gradient(135deg, #FFB600 0%, #FFA000 100%);
+        background: linear-gradient(135deg, #924FC2 0%, #6366f1 100%);
         color: #fff;
     }
 
@@ -121,25 +142,30 @@
     }
 
     /* Dark mode support */
-    body.dark-theme .language-selector-btn {
+    body.dark-theme .language-selector-btn,
+    [data-theme="dark"] .language-selector-btn {
         color: #f1f5f9;
         border-color: rgba(255, 255, 255, 0.1);
     }
 
-    body.dark-theme .language-selector-btn:hover {
+    body.dark-theme .language-selector-btn:hover,
+    [data-theme="dark"] .language-selector-btn:hover {
         background: rgba(255, 255, 255, 0.05);
     }
 
-    body.dark-theme .language-dropdown {
+    body.dark-theme .language-dropdown,
+    [data-theme="dark"] .language-dropdown {
         background: #1e293b;
         border-color: rgba(255, 255, 255, 0.1);
     }
 
-    body.dark-theme .lang-option:hover {
+    body.dark-theme .lang-option:hover,
+    [data-theme="dark"] .lang-option:hover {
         background: rgba(255, 255, 255, 0.05);
     }
 
-    body.dark-theme .lang-option:not(.active) .lang-name {
+    body.dark-theme .lang-option:not(.active) .lang-name,
+    [data-theme="dark"] .lang-option:not(.active) .lang-name {
         color: #cbd5e1;
     }
 

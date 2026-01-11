@@ -7,7 +7,7 @@
     :root {
         --primary-navy: #0A1128;
         --secondary-navy: #162447;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --bg-light: #f8f9fa;
         --text-gray: #666;
     }

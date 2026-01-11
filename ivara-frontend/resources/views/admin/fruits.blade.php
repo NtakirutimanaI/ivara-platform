@@ -42,7 +42,7 @@
 
     .green-overlay-shape {
       position: absolute;
-      background:rgba(255, 183, 0, 0.15);
+      background:rgba(146, 79, 194, 0.15);
       border: 2px solid rgba(128, 98, 0, 0.3);
       border-radius: 50%;
       z-index: 1;

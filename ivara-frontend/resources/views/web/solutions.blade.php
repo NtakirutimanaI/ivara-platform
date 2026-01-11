@@ -7,14 +7,14 @@
     
     <!-- Label -->
     <div style="margin-bottom: 1rem;">
-      <span style="background:#ffb700; color:#071839; font-weight:600; font-size:0.8rem; padding:0.25rem 0.9rem; border-radius: 12px; font-family:'Poppins', sans-serif;">
+      <span style="background:#924FC2; color:#071839; font-weight:600; font-size:0.8rem; padding:0.25rem 0.9rem; border-radius: 12px; font-family:'Poppins', sans-serif;">
         New
       </span>
     </div>
 
     <!-- Heading -->
     <h2 style="font-size: 2.4rem; font-weight: 700; margin-bottom: 0.75rem; font-family:'Poppins', sans-serif;">
-      In-Built IVARA <span style="color:#ffb700;">Program</span>
+      In-Built IVARA <span style="color:#924FC2;">Program</span>
     </h2>
 
     <!-- Intro Text -->
@@ -36,10 +36,10 @@
 
       <!-- Box 1 -->
       <div style="flex: 1 1 300px;">
-        <div style="background:#ffb700; width: 42px; height: 42px; border-radius: 50%; color:#071839; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 0.6rem; font-size:1.1rem;">
+        <div style="background:#924FC2; width: 42px; height: 42px; border-radius: 50%; color:#071839; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 0.6rem; font-size:1.1rem;">
           <i class="fa fa-shield-alt"></i>
         </div>
-        <h4 style="color:#ffb700; margin-bottom: 0.35rem; font-family:'Poppins', sans-serif; font-size:1.15rem; font-weight:600;">
+        <h4 style="color:#924FC2; margin-bottom: 0.35rem; font-family:'Poppins', sans-serif; font-size:1.15rem; font-weight:600;">
           Community Protection
         </h4>
         <p style="font-size: 0.95rem; line-height:1.5; color: #ddd;">
@@ -49,10 +49,10 @@
 
       <!-- Box 2 -->
       <div style="flex: 1 1 300px;">
-        <div style="background:#ffb700; width: 42px; height: 42px; border-radius: 50%; color:#071839; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 0.6rem; font-size:1.1rem;">
+        <div style="background:#924FC2; width: 42px; height: 42px; border-radius: 50%; color:#071839; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 0.6rem; font-size:1.1rem;">
           <i class="fa fa-location-arrow"></i>
         </div>
-        <h4 style="color:#ffb700; margin-bottom: 0.35rem; font-family:'Poppins', sans-serif; font-size:1.15rem; font-weight:600;">
+        <h4 style="color:#924FC2; margin-bottom: 0.35rem; font-family:'Poppins', sans-serif; font-size:1.15rem; font-weight:600;">
           Data Tracking
         </h4>
         <p style="font-size: 0.95rem; line-height:1.5; color: #ddd;">
@@ -62,10 +62,10 @@
 
       <!-- Box 3 -->
       <div style="flex: 1 1 300px;">
-        <div style="background:#ffb700; width: 42px; height: 42px; border-radius: 50%; color:#071839; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 0.6rem; font-size:1.1rem;">
+        <div style="background:#924FC2; width: 42px; height: 42px; border-radius: 50%; color:#071839; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 0.6rem; font-size:1.1rem;">
          <i class="fa fa-handshake"></i>
         </div>
-        <h4 style="color:#ffb700; margin-bottom: 0.35rem; font-family:'Poppins', sans-serif; font-size:1.15rem; font-weight:600;">
+        <h4 style="color:#924FC2; margin-bottom: 0.35rem; font-family:'Poppins', sans-serif; font-size:1.15rem; font-weight:600;">
           Partnerships
         </h4>
         <p style="font-size: 0.95rem; line-height:1.5; color: #ddd;">
@@ -75,10 +75,10 @@
 
       <!-- Box 4 -->
       <div style="flex: 1 1 300px;">
-        <div style="background:#ffb700; width: 42px; height: 42px; border-radius: 50%; color:#071839; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 0.6rem; font-size:1.1rem;">
+        <div style="background:#924FC2; width: 42px; height: 42px; border-radius: 50%; color:#071839; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 0.6rem; font-size:1.1rem;">
           <i class="fa fa-leaf"></i>
         </div>
-        <h4 style="color:#ffb700; margin-bottom: 0.35rem; font-family:'Poppins', sans-serif; font-size:1.15rem; font-weight:600;">
+        <h4 style="color:#924FC2; margin-bottom: 0.35rem; font-family:'Poppins', sans-serif; font-size:1.15rem; font-weight:600;">
           Sustainable Growth
         </h4>
         <p style="font-size: 0.95rem; line-height:1.5; color: #ddd;">

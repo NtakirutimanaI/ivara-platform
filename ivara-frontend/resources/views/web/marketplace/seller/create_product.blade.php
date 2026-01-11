@@ -58,7 +58,7 @@
     }
     
     .form-control:focus {
-        border-color: var(--accent-gold, #ffb700);
+        border-color: var(--accent-gold, #924FC2);
         outline: none;
         box-shadow: 0 0 0 3px rgba(255, 183, 0, 0.1);
     }
@@ -220,7 +220,7 @@
                         <a href="{{ route('product.show', $product['_id']) }}" target="_blank" style="color: #007bff; margin-right: 10px;" title="View">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="{{ route('seller.products.edit', $product['_id']) }}" style="color: #ffc107; margin-right: 10px;" title="Edit">
+                        <a href="{{ route('seller.products.edit', $product['_id']) }}" style="color: #924FC2; margin-right: 10px;" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                         <form action="{{ route('seller.products.delete', $product['_id']) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this product?');">

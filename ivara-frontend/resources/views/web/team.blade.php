@@ -6,7 +6,7 @@
     a { text-decoration: none; color: inherit; }
     .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 40px 0; }
 
-    .about-header { text-align: center; padding: 40px 20px; background: linear-gradient(to right, #071839, #ffc107); color: #fff; border-radius: 12px; margin-bottom: 40px; animation: fadeInDown 1s ease forwards; }
+    .about-header { text-align: center; padding: 40px 20px; background: linear-gradient(to right, #071839, #924FC2); color: #fff; border-radius: 12px; margin-bottom: 40px; animation: fadeInDown 1s ease forwards; }
     .about-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
     .about-header p { font-size: 1.2rem; }
 
@@ -18,7 +18,7 @@
     .team-card p { font-size: 0.9rem; margin-bottom: 5px; color: #555; }
     .social-icons { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
     .social-icons a { color: #071839; font-size: 1.2rem; transition: color 0.3s; }
-    .social-icons a:hover { color: #ffc107; }
+    .social-icons a:hover { color: #924FC2; }
 
     .about-content { text-align: center; margin-bottom: 50px; }
     .about-content h2 { font-size: 2rem; margin-bottom: 20px; color: #071839; }

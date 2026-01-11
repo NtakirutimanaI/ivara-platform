@@ -70,6 +70,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/switch-account/{role}', [SwitchAccountController::class, 'switchAccount'])->name('switch-account');
     Route::get('/admin/switch-account', [SwitchAccountController::class, 'showSwitchPage'])->name('admin.switch-account');
+
+    // Global Search
+    Route::get('/global-search', [App\Http\Controllers\Web\GlobalSearchController::class, 'search'])->name('global.search');
 });
 
 // Admin User Management

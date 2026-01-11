@@ -1,553 +1,549 @@
-@include('layouts.header')
-@include('layouts.sidebar')
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Settings - IVARA Platform</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+@section('title', 'Platform Settings - IVARA Admin')
+
+@section('styles')
 <style>
     :root {
-        --primary: #924FC2;
-        --primary-hover: #7a3fa3;
-        --bg-gradient: radial-gradient(circle at top right, #fdf4ff, #f3f4f6);
-        --text-main: #1e293b;
-        --text-muted: #64748b;
-        --card-bg: rgba(255,255,255,0.9);
-        --sidebar-bg: rgba(255,255,255,0.95);
-        --item-bg: #ffffff;
-        --item-border: #e2e8f0;
-        --danger: #ef4444;
-        --success: #10b981;
-        --glass-shadow: 0 8px 30px rgba(0,0,0,0.05);
-        --radius-lg: 16px;
-        --radius-md: 10px;
-    }
-    
-    body.dark-theme {
-        --bg-gradient: radial-gradient(circle at top right, #0f172a, #020617);
-        --text-main: #f8fafc;
-        --text-muted: #94a3b8;
-        --card-bg: rgba(30,41,59,0.7);
-        --sidebar-bg: rgba(15,23,42,0.8);
-        --item-bg: rgba(51,65,85,0.4);
-        --item-border: rgba(255,255,255,0.1);
-        --glass-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        --settings-sidebar-w: 260px;
+        --card-radius: 16px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    body {
-        margin: 0;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background: var(--bg-gradient);
-        color: var(--text-main);
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
-
-    .settings-layout {
+    /* Layout Wrapper */
+    .settings-wrapper {
         display: flex;
-        width: 80%;
-        margin-left: 222px;
-        margin-top: 20px;
-        margin-bottom: 40px;
         gap: 30px;
-        padding: 80px 30px 0; /* Top padding for header */
-        min-height: calc(100vh - 100px);
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 40px 30px;
+        min-height: calc(100vh - 80px); /* Adjust for header */
+        animation: fadeIn 0.5s ease-out;
     }
-
-    /* Sidebar Navigation container */
-    .settings-sidebar-container {
-        width: 280px;
-        flex-shrink: 0;
-    }
-
-    .settings-sidebar {
-        background: var(--sidebar-bg);
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--item-border);
-        border-radius: var(--radius-lg);
-        padding: 20px;
-        position: sticky;
-        top: 100px; 
-        box-shadow: var(--glass-shadow);
-    }
-
-    .settings-nav-title {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: var(--text-muted);
-        margin: 0 0 10px 10px;
-        font-weight: 700;
-        opacity: 0.8;
-    }
-
-    .settings-nav-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        color: var(--text-muted);
-        text-decoration: none;
-        border-radius: var(--radius-md);
-        margin-bottom: 5px;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        cursor: pointer;
-        border: 1px solid transparent;
-    }
-
-    .settings-nav-item:hover {
-        background: var(--item-bg);
-        color: var(--primary);
-        border-color: var(--item-border);
-    }
-
-    .settings-nav-item.active {
-        background: var(--primary);
-        color: #fff;
-        box-shadow: 0 4px 12px rgba(146, 79, 194, 0.3);
-        border-color: transparent;
-    }
-
-    .settings-nav-item i {
-        width: 20px;
-        text-align: center;
-    }
-
-    /* Main Content Area */
-    .settings-content {
-        flex: 1;
-        background: var(--card-bg);
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--item-border);
-        border-radius: var(--radius-lg);
-        padding: 40px;
-        box-shadow: var(--glass-shadow);
-        position: relative;
-        min-height: 600px;
-    }
-
-    .settings-header {
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid var(--item-border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-
-    .settings-title {
-        font-size: 1.75rem;
-        font-weight: 800;
-        margin: 0;
-        color: var(--text-main);
-        letter-spacing: -0.5px;
-    }
-
-    .settings-subtitle {
-        color: var(--text-muted);
-        margin-top: 5px;
-        font-size: 0.95rem;
-    }
-
-    /* Form Styles */
-    .form-section {
-        display: none;
-        animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .form-section.active { display: block; }
 
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Inner Sidebar (Settings Nav) */
+    .settings-nav {
+        width: var(--settings-sidebar-w);
+        flex-shrink: 0;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: var(--card-radius);
+        padding: 24px;
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .nav-group-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #94a3b8;
+        font-weight: 700;
+        margin: 24px 0 12px 12px;
+    }
+
+    .nav-group-title:first-child {
+        margin-top: 0;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        margin-bottom: 4px;
+        border-radius: 12px;
+        color: #64748b;
+        font-weight: 500;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        border: 1px solid transparent;
+    }
+
+    .nav-item:hover {
+        background: rgba(146, 79, 194, 0.05); /* Brand Primary Tint */
+        color: #924FC2;
+    }
+
+    .nav-item.active {
+        background: linear-gradient(135deg, #924FC2 0%, #7a3fa3 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(146, 79, 194, 0.25);
+    }
+
+    .nav-item i {
+        width: 20px;
+        text-align: center;
+        font-size: 1.1em;
+    }
+
+    /* Main Configuration Area */
+    .settings-main {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: var(--card-radius);
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Header */
+    .settings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 40px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .page-title h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1e293b;
+        letter-spacing: -0.02em;
+        margin: 0;
+        background: linear-gradient(45deg, #1e293b, #475569);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .page-title p {
+        color: #64748b;
+        margin-top: 8px;
+        font-size: 1rem;
+    }
+
+    /* Action Button */
+    .btn-save-master {
+        background: #10b981; /* Success Green */
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-save-master:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-save-master:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    /* Form Content */
+    .settings-panel {
+        display: none;
+        animation: slideUp 0.4s ease-out;
+    }
+    
+    .settings-panel.active {
+        display: block;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 24px;
+        padding-left: 10px;
+        border-left: 4px solid #924FC2;
+    }
+
     .form-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 24px;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
     }
 
     .form-group {
-        margin-bottom: 24px;
+        position: relative;
     }
 
-    .form-label {
+    .form-group label {
         display: block;
-        margin-bottom: 8px;
+        font-size: 0.85rem;
         font-weight: 600;
-        color: var(--text-main);
-        font-size: 0.9rem;
+        color: #64748b;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
     }
 
     .form-control {
         width: 100%;
-        padding: 12px 16px;
-        background: var(--item-bg);
-        border: 1px solid var(--item-border);
-        border-radius: var(--radius-md);
-        color: var(--text-main);
-        font-size: 0.95rem;
-        transition: all 0.2s;
-        box-sizing: border-box;
+        padding: 14px 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        color: #1e293b;
+        transition: var(--transition);
     }
 
     .form-control:focus {
-        outline: none;
-        border-color: var(--primary);
+        background: white;
+        border-color: #924FC2;
         box-shadow: 0 0 0 4px rgba(146, 79, 194, 0.1);
+        outline: none;
     }
 
-    .section-heading {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 20px;
-        color: var(--primary);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .btn-save {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        border-radius: var(--radius-md);
+    select.form-control {
         cursor: pointer;
-        transition: all 0.3s;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+        -webkit-appearance: none;
+        appearance: none;
     }
 
-    .btn-save:hover {
-        background: var(--primary-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(146, 79, 194, 0.3);
+    /* Dark Mode Overrides */
+    [data-theme="dark"] .settings-wrapper {
+         /* Background handled by main layout */
     }
 
-    .btn-save:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-        transform: none;
+    [data-theme="dark"] .settings-nav,
+    [data-theme="dark"] .settings-main {
+        background: #1e293b; /* Dark Slate */
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="dark"] .page-title h1 {
+        background: none;
+        -webkit-text-fill-color: initial;
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] .page-title p,
+    [data-theme="dark"] .nav-group-title,
+    [data-theme="dark"] .form-group label {
+        color: #94a3b8;
+    }
+
+    [data-theme="dark"] .settings-header {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .nav-item {
+        color: #cbd5e1;
+    }
+
+    [data-theme="dark"] .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+    }
+
+    [data-theme="dark"] .nav-item.active {
+        background: linear-gradient(135deg, #924FC2 0%, #7a3fa3 100%); /* Maintain Brand Color */
+        color: white;
+    }
+
+    [data-theme="dark"] .form-control {
+        background: #0f172a; /* Very Dark Blue */
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] .form-control:focus {
+        border-color: #924FC2;
+        background: #0f172a;
+    }
+    
+    [data-theme="dark"] .section-label {
+        color: #f8fafc;
     }
 
     /* Responsive */
-    @media (max-width: 992px) {
-        .settings-layout {
+    @media (max-width: 1024px) {
+        .settings-wrapper {
             flex-direction: column;
-            padding: 80px 15px 20px;
+            padding: 20px;
         }
-        .settings-sidebar-container {
+        
+        .settings-nav {
             width: 100%;
-        }
-        .settings-sidebar {
-            position: relative;
-            top: 0;
             display: flex;
             overflow-x: auto;
-            padding: 10px;
-            gap: 10px;
+            position: relative;
+            top: 0;
+            padding: 16px;
+            gap: 12px;
+            mask-image: linear-gradient(to right, black 90%, transparent 100%);
         }
-        .settings-nav-title { display: none; }
-        .settings-nav-item { 
-            flex-shrink: 0; 
-            white-space: nowrap; 
-            margin-bottom: 0;
-            padding: 10px 14px;
-            font-size: 0.9rem;
+
+        .nav-group-title {
+            display: none;
         }
-        .settings-content {
-            padding: 25px;
+
+        .nav-item {
+            flex-shrink: 0;
+            white-space: nowrap;
+            margin: 0;
         }
     }
 </style>
-</head>
-<body>
+@endsection
 
-<div class="settings-layout">
-    <!-- Sidebar -->
-    <div class="settings-sidebar-container">
-        <aside class="settings-sidebar">
-            <div class="settings-nav-title">General</div>
-            <a class="settings-nav-item active" onclick="switchTab('profile')">
-                <i class="fas fa-user-circle"></i> Profile & Roles
-            </a>
-            <a class="settings-nav-item" onclick="switchTab('subscription')">
-                <i class="fas fa-credit-card"></i> Subscription
-            </a>
-            <a class="settings-nav-item" onclick="switchTab('business')">
-                <i class="fas fa-briefcase"></i> Business Info
-            </a>
+@section('content')
+<div class="settings-wrapper">
+    <!-- Secondary Sidebar Navigation -->
+    <nav class="settings-nav">
+        <div class="nav-group-title">Account</div>
+        <a class="nav-item active" onclick="showPanel('profile', this)">
+            <i class="fas fa-user-circle"></i> Profile
+        </a>
+        <a class="nav-item" onclick="showPanel('subscription', this)">
+            <i class="fas fa-crown"></i> Subscription
+        </a>
+        <a class="nav-item" onclick="showPanel('business', this)">
+            <i class="fas fa-building"></i> Business Info
+        </a>
 
-            <div class="settings-nav-title" style="margin-top: 20px;">Configuration</div>
-            <a class="settings-nav-item" onclick="switchTab('services')">
-                <i class="fas fa-tools"></i> Services & Repairs
-            </a>
-            <a class="settings-nav-item" onclick="switchTab('inventory')">
-                <i class="fas fa-box-open"></i> Inventory & Stock
-            </a>
-            <a class="settings-nav-item" onclick="switchTab('modules')">
-                <i class="fas fa-cubes"></i> Features & Modules
-            </a>
-            
-            <div class="settings-nav-title" style="margin-top: 20px;">System</div>
-            <a class="settings-nav-item" onclick="switchTab('notifications')">
-                <i class="fas fa-bell"></i> Notifications
-            </a>
-            <a class="settings-nav-item" onclick="switchTab('security')">
-                <i class="fas fa-shield-alt"></i> Account Security
-            </a>
-             <a class="settings-nav-item" onclick="switchTab('feedback')">
-                <i class="fas fa-comment-dots"></i> User Feedback
-            </a>
-        </aside>
-    </div>
+        <div class="nav-group-title">System</div>
+        <a class="nav-item" onclick="showPanel('services', this)">
+            <i class="fas fa-cogs"></i> Configuration
+        </a>
+        <a class="nav-item" onclick="showPanel('inventory', this)">
+            <i class="fas fa-warehouse"></i> Inventory
+        </a>
+        <a class="nav-item" onclick="showPanel('notifications', this)">
+            <i class="fas fa-bell"></i> Notifications
+        </a>
+        <a class="nav-item" onclick="showPanel('security', this)">
+            <i class="fas fa-shield-alt"></i> Security
+        </a>
+    </nav>
 
-    <!-- Content -->
-    <main class="settings-content">
+    <!-- Main Content Area -->
+    <main class="settings-main">
         <form id="settingsForm" method="POST" action="{{ route('admin.settings.update') }}">
             @csrf
             
-            <!-- Header -->
             <div class="settings-header">
-                <div>
-                    <h1 class="settings-title">Settings</h1>
-                    <p class="settings-subtitle">Manage platform configurations and preferences.</p>
+                <div class="page-title">
+                    <h1>Settings</h1>
+                    <p>Manage your platform preferences and configurations.</p>
                 </div>
-                <button type="submit" class="btn-save">
+                <button type="submit" class="btn-save-master">
                     <i class="fas fa-save"></i> Save Changes
                 </button>
             </div>
 
-            <!-- Profile Section -->
-            <div id="profile" class="form-section active">
-                <div class="section-heading"><i class="fas fa-user-circle"></i> User Profile & Roles</div>
+            <!-- Profile Panel -->
+            <div id="profile" class="settings-panel active">
+                <div class="section-label">Profile Information</div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Full Name</label>
+                        <label>Full Name</label>
                         <input type="text" name="name" class="form-control" value="{{ old('name', $settings['name'] ?? '') }}" placeholder="Enter full name">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">System Role</label>
+                        <label>Email Address</label>
+                        <input type="email" name="email" class="form-control" value="{{ old('email', $settings['email'] ?? '') }}" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" class="form-control" value="{{ old('phone', $settings['phone'] ?? '') }}" placeholder="+250 7...">
+                    </div>
+                    <div class="form-group">
+                        <label>System Role</label>
                         <select name="role" class="form-control">
-                            @foreach(['Admin','Manager','Supervisor','Technician','Mechanician','Businessperson','Craftsperson','Mediator','Tailor','Client'] as $role)
+                            @foreach(['Admin','Manager','Supervisor','Technician','Businessperson'] as $role)
                                 <option value="{{ $role }}" {{ (old('role', $settings['role'] ?? '') == $role) ? 'selected' : '' }}>{{ $role }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email', $settings['email'] ?? '') }}" placeholder="name@ivara.com">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="text" name="phone" class="form-control" value="{{ old('phone', $settings['phone'] ?? '') }}" placeholder="+250...">
-                    </div>
                 </div>
             </div>
 
-            <!-- Subscription Section -->
-            <div id="subscription" class="form-section">
-                <div class="section-heading"><i class="fas fa-credit-card"></i> Subscription & Billing</div>
+            <!-- Subscription Panel -->
+            <div id="subscription" class="settings-panel">
+                <div class="section-label">Plan & Billing</div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Subscription Tier</label>
+                        <label>Current Plan</label>
                         <select name="subscription_type" class="form-control">
                             <option value="monthly" {{ (old('subscription_type', $settings['subscription_type'] ?? '') == 'monthly') ? 'selected' : '' }}>Monthly Standard</option>
                             <option value="yearly" {{ (old('subscription_type', $settings['subscription_type'] ?? '') == 'yearly') ? 'selected' : '' }}>Yearly Premium</option>
-                            <option value="custom" {{ (old('subscription_type', $settings['subscription_type'] ?? '') == 'custom') ? 'selected' : '' }}>Enterprise Custom</option>
+                            <option value="enterprise" {{ (old('subscription_type', $settings['subscription_type'] ?? '') == 'enterprise') ? 'selected' : '' }}>Enterprise</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Payment Status</label>
+                        <label>Status</label>
                         <select name="payment_status" class="form-control">
                             <option value="active" {{ (old('payment_status', $settings['payment_status'] ?? '') == 'active') ? 'selected' : '' }}>Active</option>
-                            <option value="pending" {{ (old('payment_status', $settings['payment_status'] ?? '') == 'pending') ? 'selected' : '' }}>Pending</option>
+                            <option value="pending" {{ (old('payment_status', $settings['payment_status'] ?? '') == 'pending') ? 'selected' : '' }}>Pending Payment</option>
                             <option value="expired" {{ (old('payment_status', $settings['payment_status'] ?? '') == 'expired') ? 'selected' : '' }}>Expired</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <!-- Business Section -->
-            <div id="business" class="form-section">
-                <div class="section-heading"><i class="fas fa-building"></i> Business Details</div>
+            <!-- Business Info -->
+            <div id="business" class="settings-panel">
+                <div class="section-label">Company Details</div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Business / Company Name</label>
-                        <input type="text" name="business_name" class="form-control" value="{{ old('business_name', $settings['business_name'] ?? '') }}" placeholder="e.g. Acme Corp">
+                        <label>Company Name</label>
+                        <input type="text" name="business_name" class="form-control" value="{{ old('business_name', $settings['business_name'] ?? '') }}">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Team Size</label>
-                        <input type="number" name="team_members" class="form-control" value="{{ old('team_members', $settings['team_members'] ?? '') }}" placeholder="e.g. 10">
+                        <label>Team Size</label>
+                        <input type="number" name="team_members" class="form-control" value="{{ old('team_members', $settings['team_members'] ?? '') }}">
                     </div>
                     <div class="form-group">
-                         <label class="form-label">Mediator Commission (%)</label>
-                        <input type="number" step="0.1" name="mediator_commission" class="form-control" value="{{ old('mediator_commission', $settings['mediator_commission'] ?? '') }}" placeholder="e.g. 5.5">
+                        <label>Platform Commission (%)</label>
+                        <input type="number" step="0.1" name="mediator_commission" class="form-control" value="{{ old('mediator_commission', $settings['mediator_commission'] ?? '') }}">
                     </div>
                 </div>
             </div>
 
-             <!-- Services Section -->
-             <div id="services" class="form-section">
-                <div class="section-heading"><i class="fas fa-tools"></i> Service Configuration</div>
-                <div class="form-grid">
+            <!-- Configuration -->
+            <div id="services" class="settings-panel">
+                 <div class="section-label">Service Configuration</div>
+                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Track Stolen Devices</label>
+                        <label>Device Tracking</label>
                         <select name="track_stolen" class="form-control">
                             <option value="enabled" {{ (old('track_stolen', $settings['track_stolen'] ?? '') == 'enabled') ? 'selected' : '' }}>Enabled</option>
                             <option value="disabled" {{ (old('track_stolen', $settings['track_stolen'] ?? '') == 'disabled') ? 'selected' : '' }}>Disabled</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Repair Tracking System</label>
+                        <label>Repair Tracking</label>
                         <select name="repair_tracking" class="form-control">
                             <option value="yes" {{ (old('repair_tracking', $settings['repair_tracking'] ?? '') == 'yes') ? 'selected' : '' }}>Active</option>
                             <option value="no" {{ (old('repair_tracking', $settings['repair_tracking'] ?? '') == 'no') ? 'selected' : '' }}>Inactive</option>
                         </select>
                     </div>
                      <div class="form-group">
-                        <label class="form-label">Meeting Reminder Time</label>
+                        <label>Meeting Reminder Time</label>
                         <input type="time" name="meeting_alert" class="form-control" value="{{ old('meeting_alert', $settings['meeting_alert'] ?? '') }}">
                     </div>
-                </div>
-            </div>
-
-             <!-- Inventory Section -->
-             <div id="inventory" class="form-section">
-                <div class="section-heading"><i class="fas fa-box-open"></i> Inventory Controls</div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Stock Level Alerts</label>
-                        <select name="stock_alerts" class="form-control">
-                             <option value="yes" {{ (old('stock_alerts', $settings['stock_alerts'] ?? '') == 'yes') ? 'selected' : '' }}>Enable Alerts</option>
-                            <option value="no" {{ (old('stock_alerts', $settings['stock_alerts'] ?? '') == 'no') ? 'selected' : '' }}>Disable Alerts</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modules (Generic) -->
-            <div id="modules" class="form-section">
-                <div class="section-heading"><i class="fas fa-cubes"></i> Module Features</div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">E-Learning Module</label>
+                     <div class="form-group">
+                        <label>E-Learning Module</label>
                         <select name="elearning" class="form-control">
                             <option value="yes" {{ (old('elearning', $settings['elearning'] ?? '') == 'yes') ? 'selected' : '' }}>Enabled</option>
                             <option value="no" {{ (old('elearning', $settings['elearning'] ?? '') == 'no') ? 'selected' : '' }}>Disabled</option>
                         </select>
                     </div>
-                </div>
+                 </div>
+            </div>
+
+            <!-- Inventory -->
+            <div id="inventory" class="settings-panel">
+                 <div class="section-label">Inventory Logic</div>
+                 <div class="form-grid">
+                     <div class="form-group">
+                        <label>Low Stock Alerts</label>
+                         <select name="stock_alerts" class="form-control">
+                             <option value="yes" {{ (old('stock_alerts', $settings['stock_alerts'] ?? '') == 'yes') ? 'selected' : '' }}>Enabled</option>
+                             <option value="no" {{ (old('stock_alerts', $settings['stock_alerts'] ?? '') == 'no') ? 'selected' : '' }}>Disabled</option>
+                         </select>
+                     </div>
+                 </div>
             </div>
 
             <!-- Notifications -->
-            <div id="notifications" class="form-section">
-                <div class="section-heading"><i class="fas fa-bell"></i> Notification Preferences</div>
+            <div id="notifications" class="settings-panel">
+                <div class="section-label">Notification Channels</div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Preferred Channels</label>
-                        <select name="notification_type" class="form-control">
-                            <option value="all" {{ (old('notification_type', $settings['notification_type'] ?? '') == 'all') ? 'selected' : '' }}>All (Email, SMS, App)</option>
+                        <label>Preferred Method</label>
+                         <select name="notification_type" class="form-control">
+                            <option value="all" {{ (old('notification_type', $settings['notification_type'] ?? '') == 'all') ? 'selected' : '' }}>All Channels</option>
                             <option value="email" {{ (old('notification_type', $settings['notification_type'] ?? '') == 'email') ? 'selected' : '' }}>Email Only</option>
                             <option value="sms" {{ (old('notification_type', $settings['notification_type'] ?? '') == 'sms') ? 'selected' : '' }}>SMS Only</option>
-                            <option value="in-app" {{ (old('notification_type', $settings['notification_type'] ?? '') == 'in-app') ? 'selected' : '' }}>In-App Only</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Automated Report Frequency</label>
+                        <label>Report Frequency</label>
                         <select name="report_frequency" class="form-control">
-                            <option value="daily" {{ (old('report_frequency', $settings['report_frequency'] ?? '') == 'daily') ? 'selected' : '' }}>Daily</option>
-                            <option value="monthly" {{ (old('report_frequency', $settings['report_frequency'] ?? '') == 'monthly') ? 'selected' : '' }}>Monthly</option>
-                            <option value="custom" {{ (old('report_frequency', $settings['report_frequency'] ?? '') == 'custom') ? 'selected' : '' }}>Custom / On Demand</option>
+                            <option value="daily" {{ (old('report_frequency', $settings['report_frequency'] ?? '') == 'daily') ? 'selected' : '' }}>Daily Reports</option>
+                            <option value="monthly" {{ (old('report_frequency', $settings['report_frequency'] ?? '') == 'monthly') ? 'selected' : '' }}>Monthly Summary</option>
+                            <option value="custom" {{ (old('report_frequency', $settings['report_frequency'] ?? '') == 'custom') ? 'selected' : '' }}>On Demand</option>
                         </select>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Security -->
-            <div id="security" class="form-section">
-                <div class="section-heading"><i class="fas fa-shield-alt"></i> Security Settings</div>
-                <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Auto-Deactivate Inactive Users (Days)</label>
-                        <input type="number" name="deactivate_days" class="form-control" value="{{ old('deactivate_days', $settings['deactivate_days'] ?? '') }}" placeholder="e.g. 90">
+                        <label>User Feedback Collection</label>
+                         <select name="feedback_enabled" class="form-control">
+                            <option value="yes" {{ (old('feedback_enabled', $settings['feedback_enabled'] ?? '') == 'yes') ? 'selected' : '' }}>Enabled</option>
+                            <option value="no" {{ (old('feedback_enabled', $settings['feedback_enabled'] ?? '') == 'no') ? 'selected' : '' }}>Disabled</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-             <!-- Feedback -->
-            <div id="feedback" class="form-section">
-                <div class="section-heading"><i class="fas fa-comment-dots"></i> Feedback</div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Collect User Feedback</label>
-                         <select name="feedback_enabled" class="form-control">
-                            <option value="yes" {{ (old('feedback_enabled', $settings['feedback_enabled'] ?? '') == 'yes') ? 'selected' : '' }}>Yes, Enable Collection</option>
-                            <option value="no" {{ (old('feedback_enabled', $settings['feedback_enabled'] ?? '') == 'no') ? 'selected' : '' }}>No, Disable Collection</option>
-                        </select>
-                    </div>
-                </div>
+            <!-- Security -->
+            <div id="security" class="settings-panel">
+                 <div class="section-label">System Security</div>
+                 <div class="form-grid">
+                      <div class="form-group">
+                        <label>Auto-Logout Timer (Minutes)</label>
+                        <input type="number" name="auto_logout" class="form-control" value="{{ old('auto_logout', $settings['auto_logout'] ?? '30') }}">
+                      </div>
+                 </div>
             </div>
 
         </form>
     </main>
 </div>
+@endsection
 
-<!-- Toastr & Jquery -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+@section('scripts')
 <script>
-    // Tab Switching Logic
-    function switchTab(tabId) {
-        // Remove active class from all nav items
-        document.querySelectorAll('.settings-nav-item').forEach(el => {
-            el.classList.remove('active');
-        });
-        
-        // Add active to clicked item (if event exists)
-        if (event && event.currentTarget) {
-            event.currentTarget.classList.add('active');
-        } else {
-            // Fallback finding the link that calls this function
-            const activeLink = Array.from(document.querySelectorAll('.settings-nav-item')).find(el => el.getAttribute('onclick').includes(tabId));
-            if(activeLink) activeLink.classList.add('active');
-        }
+    function showPanel(panelId, navItem) {
+        // Update Nav
+        document.querySelectorAll('.settings-nav .nav-item').forEach(el => el.classList.remove('active'));
+        navItem.classList.add('active');
 
-        // Hide all sections
-        document.querySelectorAll('.form-section').forEach(el => {
-            el.classList.remove('active');
-        });
-
-        // Show target section
-        const target = document.getElementById(tabId);
+        // Update Panel
+        document.querySelectorAll('.settings-panel').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById(panelId);
         if(target) target.classList.add('active');
     }
 
-    // Toastr Config
-    toastr.options = {
-        "closeButton": true,
-        "progressBar": true,
-        "positionClass": "toast-bottom-right",
-        "timeOut": "4000"
-    };
-
-    // AJAX Submission
+    // AJAX Form Submission
     document.getElementById('settingsForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const btn = this.querySelector('.btn-save');
+        const btn = this.querySelector('.btn-save-master');
         const originalContent = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         btn.disabled = true;
@@ -573,13 +569,19 @@
             }
         } catch (error) {
             console.error(error);
-            toastr.error('An error occurred. Check console.');
+            toastr.error('Connection error. Please try again.');
         } finally {
             btn.innerHTML = originalContent;
             btn.disabled = false;
         }
     });
-</script>
 
-</body>
-</html>
+    @if(session('success'))
+        toastr.success("{{ session('success') }}");
+    @endif
+    
+    @if(session('error'))
+        toastr.error("{{ session('error') }}");
+    @endif
+</script>
+@endsection

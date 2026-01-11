@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { User, Mail, Shield, ArrowLeft, Camera, LogOut } from 'lucide-react';
-import MobileHeader from '@/components/MobileHeader';
+// MobileHeader import removed
 import { useEffect, useState } from 'react';
 
 export default function ProfilePage() {
@@ -44,7 +44,6 @@ export default function ProfilePage() {
 
     return (
         <div className="min-h-screen bg-background pb-24">
-            <MobileHeader />
 
             <div className="p-6">
                 <motion.div

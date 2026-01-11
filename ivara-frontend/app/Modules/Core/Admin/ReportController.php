@@ -27,7 +27,7 @@ class ReportController extends Controller
         $totalOrders         = DB::table('orders')->count();
         $tasksCompleted      = DB::table('tasks')->where('status', 'completed')->count();
         $activeSubscriptions = Subscription::where('status', 'active')->count();
-        $totalSales          = DB::table('sales')->sum('quantity');
+        $totalSales          = DB::table('sales')->sum('units_sold');
 
         $devices       = Device::with(['client', 'technician'])->latest()->take(10)->get();
         $employees     = User::all();
@@ -47,7 +47,7 @@ class ReportController extends Controller
         $totalOrders         = DB::table('orders')->count();
         $tasksCompleted      = DB::table('tasks')->where('status', 'completed')->count();
         $activeSubscriptions = Subscription::where('status', 'active')->count();
-        $totalSales          = DB::table('sales')->sum('quantity');
+        $totalSales          = DB::table('sales')->sum('units_sold');
 
         $devices       = Device::with(['client', 'technician'])->get();
         $employees     = User::all();

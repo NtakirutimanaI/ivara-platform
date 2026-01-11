@@ -9,15 +9,20 @@ use App\Modules\LegalProfessional\LegalDashboardController;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'ivara_role:admin,manager,supervisor', 'category_access:legal-professional'])->prefix('admin/legal-professional')->name('admin.legal-professional.')->group(function () {
+// --- Management (Shared - Dashed Names) ---
+Route::middleware(['auth', 'ivara_role:admin', 'category_access:legal-professional'])
+    ->prefix('admin/legal-professional')->name('admin.legal-professional.')->group(function () {
     Route::get('/', [LegalDashboardController::class, 'index'])->name('index');
-    Route::get('/services', [LegalDashboardController::class, 'generic'])->name('services');
-    Route::get('/bookings', [LegalDashboardController::class, 'generic'])->name('bookings');
-    Route::get('/providers', [LegalDashboardController::class, 'generic'])->name('providers');
-    Route::get('/products', [LegalDashboardController::class, 'generic'])->name('products');
-    Route::get('/clients', [LegalDashboardController::class, 'generic'])->name('clients');
-    Route::get('/payments', [LegalDashboardController::class, 'generic'])->name('payments');
-    Route::get('/settings', [LegalDashboardController::class, 'generic'])->name('settings');
+});
+
+Route::middleware(['auth', 'ivara_role:manager', 'category_access:legal-professional'])
+    ->prefix('manager/legal-professional')->name('manager.legal-professional.')->group(function () {
+    Route::get('/', [LegalDashboardController::class, 'index'])->name('index');
+});
+
+Route::middleware(['auth', 'ivara_role:supervisor', 'category_access:legal-professional'])
+    ->prefix('supervisor/legal-professional')->name('supervisor.legal-professional.')->group(function () {
+    Route::get('/', [LegalDashboardController::class, 'index'])->name('index');
 });
 
 

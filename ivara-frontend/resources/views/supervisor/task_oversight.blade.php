@@ -26,7 +26,7 @@
         .table-hover tbody tr:hover { background-color: #f1f5ff; }
         .badge { font-size: 12px; padding: 6px 10px; border-radius: 12px; font-weight: 500; }
         .badge.bg-success { background-color: #28a745 !important; }
-        .badge.bg-warning { background-color: #ffc107 !important; color: #000; }
+        .badge.bg-warning { background-color: #924FC2 !important; color: #000; }
         .badge.bg-danger { background-color: #dc3545 !important; }
         .badge.bg-info { background-color: #17a2b8 !important; }
         .btn { border-radius: 6px; font-size: 13px; padding: 6px 12px; transition: all 0.25s ease-in-out; }

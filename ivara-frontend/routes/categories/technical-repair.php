@@ -13,7 +13,7 @@ use App\Http\Controllers\Categories\TechnicalRepair\Admin\ReviewController;
 use App\Http\Controllers\Categories\TechnicalRepair\Admin\SettingController;
 
 // Clients (Shared with roles)
-use App\Http\Controllers\Categories\TechnicalRepair\Client\ClientController;
+use App\Modules\TechnicalRepair\ClientController;
 
 // Asset Manager (Shared)
 use App\Http\Controllers\Categories\TechnicalRepair\Shared\AssetController;
@@ -36,10 +36,30 @@ use App\Http\Controllers\Categories\TechnicalRepair\ChatController;
 // Chat Routes (Public/Guest accessible)
 Route::post('/chat/messages', [ChatController::class, 'store'])->name('chat.messages.store');
 
-Route::middleware(['auth', 'ivara_role:admin,manager,supervisor', 'category_access:technical-repair'])->prefix('admin/technical-repair')->name('admin.technical-repair.')->group(function () {
-    // Dashboard / index route
+// Management Routes
+Route::middleware(['auth', 'ivara_role:admin', 'category_access:technical-repair'])
+    ->prefix('admin/technical-repair')->name('admin.technical-repair.')->group(function () {
     Route::get('/', [ServiceController::class, 'dashboard'])->name('index');
+});
 
+Route::middleware(['auth', 'ivara_role:manager', 'category_access:technical-repair'])
+    ->prefix('manager/technical-repair')->name('manager.technical-repair.')->group(function () {
+    Route::get('/', function() {
+        return view('admin.categories.technical-repair.index');
+    })->name('index');
+});
+
+Route::middleware(['auth', 'ivara_role:supervisor', 'category_access:technical-repair'])
+    ->prefix('supervisor/technical-repair')->name('supervisor.technical-repair.')->group(function () {
+    Route::get('/', function() {
+        return view('admin.categories.technical-repair.index');
+    })->name('index');
+});
+
+// Admin Sub-routes
+Route::middleware(['auth', 'ivara_role:admin', 'category_access:technical-repair'])->prefix('admin/technical-repair')->name('admin.technical-repair.')->group(function () {
+    // Note: index route is already defined above
+    
     // Services
     Route::get('/services', [ServiceController::class, 'index'])->name('services');
     Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
@@ -116,14 +136,26 @@ Route::middleware(['auth', 'ivara_role:admin,manager,supervisor', 'category_acce
 
 // Manager
 Route::middleware(['auth', 'ivara_role:manager', 'category_access:technical-repair'])->prefix('manager/technical-repair')->name('manager.technical-repair.')->group(function () {
-    Route::get('/', [ServiceController::class, 'dashboard'])->name('index'); // Reuse Dashboard for now
-    // Add manager specific routes here
+    Route::get('/', [ServiceController::class, 'dashboard'])->name('index');
+    Route::get('/services', [ServiceController::class, 'index'])->name('services');
+    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings');
+    Route::get('/providers', [ProviderController::class, 'index'])->name('providers');
+    Route::get('/products', [ProductController::class, 'index'])->name('products');
+    Route::get('/clients', [ClientController::class, 'index'])->name('clients');
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
 });
 
 // Supervisor
 Route::middleware(['auth', 'ivara_role:supervisor', 'category_access:technical-repair'])->prefix('supervisor/technical-repair')->name('supervisor.technical-repair.')->group(function () {
-    Route::get('/', [ServiceController::class, 'dashboard'])->name('index'); // Reuse Dashboard for now
-    // Add supervisor specific routes here
+    Route::get('/', [ServiceController::class, 'dashboard'])->name('index');
+    Route::get('/services', [ServiceController::class, 'index'])->name('services');
+    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings');
+    Route::get('/providers', [ProviderController::class, 'index'])->name('providers');
+    Route::get('/products', [ProductController::class, 'index'])->name('products');
+    Route::get('/clients', [ClientController::class, 'index'])->name('clients');
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
 });
 
 // --- Role Specific Dashboards for Technical & Repair ---

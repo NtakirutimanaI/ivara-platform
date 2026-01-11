@@ -34,10 +34,14 @@ import orderRouter from './routes/order.routes';
 import contactRouter from './routes/contact.routes';
 import uploadRouter from './routes/upload.routes';
 import deviceRouter from './routes/device.routes';
+import technicalServiceRouter from './routes/technicalService.routes';
+
+import { setupSwagger } from './config/swagger';
 
 dotenv.config();
 
 const app = express();
+setupSwagger(app);
 const PORT = process.env.PORT || 5001;
 
 app.use(cors());
@@ -70,6 +74,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/activities', activityRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/health', healthRouter);
+app.use('/api/technical-repair/services', technicalServiceRouter);
 app.use('/api/technical-repair', technicalRepairRouter);
 app.use('/api/transport-travel', transportTravelRouter);
 app.use('/api/creative-lifestyle', creativeLifestyleRouter);

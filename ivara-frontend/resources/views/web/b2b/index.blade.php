@@ -7,7 +7,7 @@
     :root {
         --primary-navy: #0A1128;
         --secondary-navy: #162447;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --bg-light: #f8f9fa;
     }
 
@@ -39,6 +39,17 @@
     @keyframes movePattern {
         0% { transform: translateX(0) translateY(0); }
         100% { transform: translateX(100px) translateY(100px); }
+    }
+
+    .b2b-hero-wave {
+        position: absolute;
+        top: 20px;
+        left: 0;
+        width: 400px;
+        height: auto;
+        z-index: 2;
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        opacity: 0.9;
     }
 
     .b2b-hero-content {
@@ -143,12 +154,19 @@
     /* Features Section */
     .b2b-features {
         padding: 80px 20px;
-        background: var(--bg-light);
+        background-color: var(--bg-light);
+        background-image: url('{{ asset("images/network-bg.png") }}');
+        background-position: right center;
+        background-repeat: no-repeat;
+        background-size: auto 100%;
+        position: relative;
     }
 
     .features-container {
         max-width: 1200px;
         margin: 0 auto;
+        position: relative;
+        z-index: 2;
     }
 
     .section-title {
@@ -288,7 +306,9 @@
 
 <div class="b2b-container">
     <!-- Hero Section -->
+
     <section class="b2b-hero">
+        <img src="{{ asset('images/header-wave.png') }}" alt="Decorative Wave" class="b2b-hero-wave">
         <div class="b2b-hero-content">
             <h1>Welcome to <span class="highlight">IVARA B2B</span> Wholesale Marketplace</h1>
             <p>Connect with verified suppliers and buyers. Trade in bulk. Grow your business.</p>

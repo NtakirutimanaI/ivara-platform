@@ -42,7 +42,7 @@ th, td {
 th { background: #0f1e36; }
 tr:hover { background: #22395e; }
 button { background: #FFB600; border: none; padding: 6px 12px; color: black; border-radius: 4px; cursor: pointer; margin:2px; }
-button:hover { background: #e0a800; }
+button:hover { background: #7b3fa8; }
 select, input { padding: 6px; border-radius: 4px; border: none; }
 
 /* Modal Styles */

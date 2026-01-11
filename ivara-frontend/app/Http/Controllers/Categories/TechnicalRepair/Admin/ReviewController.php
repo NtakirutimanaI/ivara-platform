@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Modules\TechnicalRepair\Controllers;
+namespace App\Http\Controllers\Categories\TechnicalRepair\Admin;
+
 
 use App\Http\Controllers\Controller;
 use App\Modules\TechnicalRepair\Models\Review;

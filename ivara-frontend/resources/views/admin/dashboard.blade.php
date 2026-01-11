@@ -14,7 +14,7 @@
         :root {
             --admin-purple: #924FC2;
             --admin-pink: #FF1B6B;
-            --admin-gold: #FFD700;
+            --admin-gold: #924FC2;
             --bg-glass: rgba(255, 255, 255, 0.7);
             --border-glass: rgba(255, 255, 255, 0.3);
             --shadow-premium: 0 10px 40px -10px rgba(0,0,0,0.1);
@@ -42,16 +42,27 @@
             background: var(--page-bg) !important;
             color: var(--page-text) !important;
             min-height: 100vh;
-            padding-top: 40px;
+            margin: 0;
+            padding: 0;
             overflow-x: hidden;
             transition: background 0.3s, color 0.3s;
         }
 
         .admin-wrapper {
-            margin-left: 250px;
-            margin-right: 20px;
-            padding: 0 40px 40px 40px;
+            margin-left: var(--sidebar-width, 260px);
+            width: calc(100% - var(--sidebar-width, 260px));
+            padding: 40px;
+            margin-top: var(--header-height, 72px);
+            box-sizing: border-box;
             animation: slideUp 0.7s ease-out;
+        }
+
+        @media (max-width: 1024px) {
+            .admin-wrapper {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
         }
 
         @keyframes slideUp {

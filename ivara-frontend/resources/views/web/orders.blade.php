@@ -120,8 +120,8 @@ thead { background: #007bff; color: white; }
 th, td { padding: 6px 8px; text-align: left; white-space: nowrap; }
 tr:nth-child(even) { background: #f2f2f2; }
 .btn { padding: 4px 8px; border-radius: 4px; font-size:11px; display: inline-block; cursor: pointer; border: none; }
-.btn-edit { background: #ffc107; color: black; }
-.btn-edit:hover { background: #e0a800; }
+.btn-edit { background: #924FC2; color: black; }
+.btn-edit:hover { background: #7b3fa8; }
 .btn-delete { background: #dc3545; color: white; }
 .btn-delete:hover { background: #c82333; }
 .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; }

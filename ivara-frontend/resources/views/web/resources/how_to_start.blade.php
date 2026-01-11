@@ -53,7 +53,7 @@
     .res-card-body { padding: 25px; display: flex; flex-direction: column; flex: 1; }
     
     .res-tag { 
-        font-size: 0.75rem; font-weight: 700; color: #ffb700; text-transform: uppercase; margin-bottom: 10px; 
+        font-size: 0.75rem; font-weight: 700; color: #924FC2; text-transform: uppercase; margin-bottom: 10px; 
     }
     .resource-card h3 { color: #0A1128; font-size: 1.25rem; font-weight: 700; margin-bottom: 15px; }
     .resource-card p { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; flex: 1; }

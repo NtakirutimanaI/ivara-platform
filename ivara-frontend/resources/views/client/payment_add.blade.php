@@ -176,7 +176,7 @@ h2 { font-weight: 700; }
 .payment-card input { border-radius: 0.5rem; }
 
 /* MTN MoMo */
-.mtn-card { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #fff; }
+.mtn-card { background: linear-gradient(135deg, #924FC2, #924FC2); color: #fff; }
 /* Airtel Money */
 .airtel-card { background: linear-gradient(135deg, #ff0033, #ff6666); color: #fff; }
 /* Bank card */

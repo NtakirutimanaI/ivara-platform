@@ -32,7 +32,7 @@
     .payment-box { padding:15px; border-radius:8px; background:#f9f9f9; margin-top:10px; display:none; }
     .cash-box { border:2px dashed #28a745; color:#155724; background:#e6ffed; }
     .card-box { border:2px solid #0d6efd; background:#eaf2ff; }
-    .momo-box { border:2px solid #ffcc00; background:#fff7e6; }
+    .momo-box { border:2px solid #924FC2; background:#fff7e6; }
     .airtel-box { border:2px solid #e60000; background:#ffe6e6; }
     .bank-box { border:2px solid #6c757d; background:#f8f9fa; }
     .credit-card-input { width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc; }

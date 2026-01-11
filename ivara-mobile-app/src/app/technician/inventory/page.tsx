@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Package, Search, Plus, Filter } from 'lucide-react';
-import MobileHeader from '@/components/MobileHeader';
+// MobileHeader import removed
 import api from '@/lib/api';
 
 export default function TechnicianInventoryPage() {
@@ -26,7 +26,6 @@ export default function TechnicianInventoryPage() {
 
     return (
         <div className="min-h-screen bg-background pb-20">
-            <MobileHeader />
 
             <div className="p-6">
                 <header className="mb-6 mt-4">

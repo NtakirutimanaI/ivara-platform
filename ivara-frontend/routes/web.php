@@ -125,7 +125,7 @@ require __DIR__.'/modules/creative_lifestyle.php';
 require __DIR__.'/modules/transport_travel.php';
 require __DIR__.'/modules/food_events_fashion.php';
 require __DIR__.'/modules/food_fashion.php';
-require __DIR__.'/modules/agriculture_environment.php';
+require __DIR__.'/modules/education_knowledge.php';
 require __DIR__.'/modules/agriculture_environment.php';
 require __DIR__.'/modules/media_entertainment.php';
 require __DIR__.'/modules/legal_professional.php';

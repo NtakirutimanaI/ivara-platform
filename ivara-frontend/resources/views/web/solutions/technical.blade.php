@@ -7,7 +7,7 @@
 <style>
     :root {
         --primary-navy: #0A1128;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --tech-blue: #00f2ff; /* Tech specific accent */
         --bg-light: #f4f8fb;
         --text-dark: #333;
@@ -51,7 +51,7 @@
         display: inline-block;
     }
     .btn-action:hover {
-        background: var(--primary-navy); color: #fff; border-color: #ffb700;
+        background: var(--primary-navy); color: #fff; border-color: #924FC2;
         transform: translateY(-3px);
     }
 

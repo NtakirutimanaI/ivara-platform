@@ -1,224 +1,274 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {
-  ArrowRight, Smartphone, Shield, Zap, Globe,
-  CheckCircle, LayoutGrid, Users, Briefcase,
-  MessageSquare, Download, Layers, Star,
-  Menu, Search, Bell, Plus, User
-} from 'lucide-react';
+import { Search, Bell, User, Wrench, Palette, Truck, GraduationCap, Gavel, Radio, Leaf, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
-// Animation Variants
-const fadeIn = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-};
+import { useSearch } from '@/contexts/SearchContext';
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
+export default function Home() {
+  const [activeTab, setActiveTab] = useState('home');
+  const { searchQuery, setSearchQuery } = useSearch();
+
+  const [pricingPlans, setPricingPlans] = useState<any[]>([
+    {
+      name: 'Starter',
+      price: 'Free',
+      period: '',
+      features: [{ text: '1 Service Category' }, { text: 'Basic Dashboard' }, { text: 'Community Support' }],
+      buttonText: 'Get Started',
+      buttonStyle: 'outline'
+    },
+    {
+      name: 'Professional',
+      price: '29,000 FRW',
+      period: '/mo',
+      isPopular: true,
+      features: [{ text: '3 Service Categories' }, { text: 'Advanced Analytics' }, { text: 'Priority Support' }, { text: 'Marketing Tools' }],
+      buttonText: 'Sign Up Now',
+      buttonStyle: 'primary'
+    },
+    {
+      name: 'Enterprise',
+      price: 'Custom',
+      period: '',
+      features: [{ text: 'Unlimited Categories' }, { text: 'Dedicated Manager' }, { text: 'API Access' }, { text: 'Custom Reporting' }],
+      buttonText: 'Contact Sales',
+      buttonStyle: 'outline'
     }
-  }
-};
+  ]);
 
-import MobileHeader from '@/components/MobileHeader';
+  useEffect(() => {
+    // Attempt to fetch dynamic pricing
+    const fetchPricing = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/api/pricing');
+        if (response.ok) {
+          const data = await response.json();
+          if (data && Array.isArray(data) && data.length > 0) {
+            setPricingPlans(data);
+          }
+        }
+      } catch (err) {
+        console.log('Using default pricing plans');
+      }
+    };
 
-export default function LandingPage() {
-  const router = useRouter();
+    fetchPricing();
+  }, []);
+
+  const categories = [
+    { id: 'technical', name: 'Technical', icon: Wrench, color: 'bg-blue-100 text-blue-600' },
+    { id: 'creative', name: 'Creative', icon: Palette, color: 'bg-purple-100 text-purple-600' },
+    { id: 'transport', name: 'Transport', icon: Truck, color: 'bg-orange-100 text-orange-600' },
+    { id: 'education', name: 'Education', icon: GraduationCap, color: 'bg-green-100 text-green-600' },
+    { id: 'legal', name: 'Legal', icon: Gavel, color: 'bg-red-100 text-red-600' },
+    { id: 'media', name: 'Media', icon: Radio, color: 'bg-pink-100 text-pink-600' },
+    { id: 'agriculture', name: 'Agri', icon: Leaf, color: 'bg-emerald-100 text-emerald-600' },
+    { id: 'other', name: 'More', icon: MoreHorizontal, color: 'bg-gray-100 text-gray-600' },
+  ];
+
+  // Search Logic
+  const query = searchQuery.toLowerCase();
+
+  const filteredCategories = categories.filter(cat =>
+    cat.name.toLowerCase().includes(query)
+  );
+
+  const filteredPricing = pricingPlans.filter(plan =>
+    plan.name.toLowerCase().includes(query) ||
+    plan.price.toLowerCase().includes(query)
+  );
+
+  const whyContent = "IVARA.com is a premier platform for service seekers and providers. Referrals, ads, promotions. Backend dashboard.";
+  const showWhySection = query === '' || whyContent.toLowerCase().includes(query) || "why choose ivara".includes(query);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen pb-24 relative bg-gray-50 dark:bg-[#0A1128]">
 
-      <MobileHeader />
+      {/* Header */}
+      {/* Header removed - using global MobileHeader */}
 
-      {/* Main Content Area (Added padding-top to account for fixed header) */}
-      <div className="pt-[64px]">
+      {/* Hero Section */}
+      <section className="px-6 pt-6 pb-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-3xl bg-[var(--primary-navy)] p-6 text-white shadow-xl shadow-blue-900/20 relative overflow-hidden"
+        >
+          {/* Abstract Background Design */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent-gold)]/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl -ml-10 -mb-10"></div>
 
-        {/* 1. HERO SECTION (web.top) */}
-        <section className="relative min-h-[90vh] flex flex-col justify-center items-center px-6 pt-10 pb-10 overflow-hidden">
-          {/* Background Ambience */}
-          <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[50%] bg-primary/20 blur-[100px] rounded-full sm:blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[40%] bg-blue-600/10 blur-[80px] rounded-full" />
+          <p className="text-indigo-200 mb-1 text-sm font-medium">Welcome Back,</p>
+          <h2 className="text-2xl font-bold mb-6">Find the perfect<br />service provider</h2>
 
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            className="mb-8 relative z-10"
-          >
-            <div className="w-24 h-24 bg-gradient-to-tr from-primary to-blue-600 rounded-3xl rotate-3 flex items-center justify-center shadow-[0_0_30px_rgba(146,79,194,0.4)]">
-              <Smartphone size={48} className="text-white" />
-            </div>
-          </motion.div>
-
-          <motion.h1
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-5xl font-black mb-4 tracking-tighter text-center leading-tight z-10"
-          >
-            IVARA<span className="text-primary">.</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-lg text-muted text-center max-w-xs mb-8 leading-relaxed z-10"
-          >
-            The ultimate ecosystem for managing services, repairs, and business growth.
-          </motion.p>
-
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="w-full z-10"
-          >
-            <Link href="/login" className="block w-full">
-              <button className="w-full btn-primary h-14 text-lg font-bold flex items-center justify-center gap-3 shadow-lg shadow-primary/25">
-                Get Started <ArrowRight size={20} />
-              </button>
-            </Link>
-          </motion.div>
-
-          {/* Floating Icons Background (Visual) */}
-          <div className="absolute inset-0 pointer-events-none opacity-20">
-            <LayoutGrid className="absolute top-20 left-10 animate-bounce" size={32} />
-            <Users className="absolute bottom-40 right-10 animate-pulse" size={32} />
-            <Briefcase className="absolute top-1/2 left-[-10px] animate-spin-slow" size={40} />
+          <div className="relative group">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="What are you looking for?"
+              className="w-full h-12 rounded-xl pl-12 pr-4 bg-white/10 border border-white/10 backdrop-blur-md text-white placeholder-white/60 outline-none focus:bg-white/20 transition-all font-medium"
+            />
+            <Search className="absolute left-4 top-3.5 text-white/70 w-5 h-5 group-focus-within:text-[var(--accent-gold)] transition-colors" />
           </div>
-        </section>
+        </motion.div>
+      </section>
 
-
-        {/* 2. PARTNERS / TRUST (web.partners) */}
-        <section className="py-8 border-y border-white/5 bg-white/2">
-          <p className="text-center text-xs text-gray-500 uppercase tracking-widest mb-6">Trusted by Industry Leaders</p>
-          <div className="flex justify-center gap-8 opacity-50 grayscale">
-            <div className="flex items-center gap-2"><Globe size={20} /><span className="font-bold">GlobalTech</span></div>
-            <div className="flex items-center gap-2"><Shield size={20} /><span className="font-bold">SecureNet</span></div>
-            <div className="flex items-center gap-2"><Zap size={20} /><span className="font-bold">FastFix</span></div>
+      {/* Categories Grid */}
+      {filteredCategories.length > 0 && (
+        <section className="px-6 py-6">
+          <div className="flex justify-between items-end mb-4">
+            <h3 className="text-lg font-bold text-[var(--primary-navy)] dark:text-white">Categories</h3>
+            <Link href="/marketplace" className="text-xs text-[var(--accent-gold)] font-bold uppercase tracking-wide">View All</Link>
           </div>
-        </section>
 
-
-        {/* 3. ABOUT & SOLUTIONS (web.about, web.solutions) */}
-        <section id="solutions" className="py-20 px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeIn}
-            className="mb-12"
-          >
-            <h2 className="text-3xl font-bold mb-4 text-foreground">One Platform,<br /><span className="text-primary">Endless Solutions.</span></h2>
-            <p className="text-muted">IVARA bridges the gap between service providers and clients with a suite of powerful tools.</p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 gap-4"
-          >
-            {[
-              { title: 'Technical Repairs', icon: CheckCircle, desc: 'Track repairs, manage tickets, and update clients instantly.' },
-              { title: 'Inventory Management', icon: Layers, desc: 'Real-time stock tracking with automated low-stock alerts.' },
-              { title: 'Business Analytics', icon: Star, desc: 'Insightful reports on sales, commissions, and growth.' },
-            ].map((item, i) => (
-              <motion.div key={i} variants={fadeIn} className="glass-card p-6 flex flex-col gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <item.icon size={20} />
+          <div className="grid grid-cols-4 gap-4">
+            {filteredCategories.map((cat, i) => (
+              <motion.div
+                key={cat.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05 }}
+                className="flex flex-col items-center gap-2"
+              >
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm ${cat.color} bg-white dark:bg-white/5`}>
+                  <cat.icon className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-lg text-foreground">{item.title}</h3>
-                <p className="text-sm text-muted">{item.desc}</p>
+                <span className="text-[10px] font-medium text-gray-600 dark:text-gray-300">{cat.name}</span>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </section>
+      )}
 
+      {/* Why IVARA Section */}
+      {showWhySection && (
+        <section id="why" className="px-6 py-10 mb-6">
+          <div className="flex flex-col items-center gap-8">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative w-full"
+            >
+              <div className="absolute inset-0 bg-[var(--accent-gold)]/20 blur-3xl rounded-full"></div>
+              <img
+                src="/images/ivara_phone_mockup_clean.png"
+                alt="IVARA App Interface"
+                className="relative z-10 w-full h-auto object-contain drop-shadow-2xl rotate-[-5deg] hover:rotate-0 transition-transform duration-500"
+              />
+            </motion.div>
 
-        {/* 4. WHY US (web.why) */}
-        <section id="why" className="py-20 px-6 bg-gradient-to-b from-transparent to-primary/5">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="space-y-4 text-left"
+            >
+              <h3 className="text-2xl font-bold text-[var(--primary-navy)] dark:text-white mb-2">
+                Why Choose <span className="text-[var(--accent-gold)]">IVARA?</span>
+              </h3>
+
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                <strong className="text-[var(--primary-navy)] dark:text-white">IVARA.com</strong> is a premier platform for service seekers and providers, offering the fastest signup in the industry. We skip the lengthy downloads. Our app allows customers to book technical repairs, logistics, and professional services instantly with flexible membership plans.
+              </p>
+
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                Referrals, ads, promotions, campaigns, and messaging are all integrated. Our <strong>backend dashboard</strong> gives you total control to make the app work best for you and your customers.
+              </p>
+
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                Designed with a robust set of features by industry experts to streamline service operations and increase revenue.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Featured Service / Promo */}
+      <section className="px-6 pb-6">
+        <Link href="/register">
           <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeIn}
-            className="text-center mb-12"
+            whileTap={{ scale: 0.98 }}
+            className="rounded-2xl bg-gradient-to-r from-[var(--accent-gold)] to-orange-400 p-1 shadow-lg shadow-orange-500/20 cursor-pointer"
           >
-            <div className="inline-block px-4 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
-              Why Choose Us
+            <div className="bg-white dark:bg-[var(--primary-navy)] rounded-xl p-5 flex items-center gap-4">
+              <div className="flex-1">
+                <span className="px-2 py-1 rounded-md bg-orange-100 text-orange-600 text-[10px] font-bold uppercase mb-2 inline-block">Premium</span>
+                <h4 className="font-bold text-[var(--primary-navy)] dark:text-white mb-1">Get Verified Today</h4>
+                <p className="text-xs text-muted-foreground">Boost your visibility and trust score.</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center">
+                <span className="text-xl">🌟</span>
+              </div>
             </div>
-            <h2 className="text-3xl font-bold">Built for <span className="text-white">Success</span></h2>
           </motion.div>
+        </Link>
+      </section>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="glass p-5 rounded-2xl text-center">
-              <Shield className="mx-auto mb-3 text-blue-400" size={32} />
-              <h4 className="font-bold">Secure</h4>
-              <p className="text-xs text-gray-400 mt-1">Bank-grade data protection</p>
-            </div>
-            <div className="glass p-5 rounded-2xl text-center">
-              <Zap className="mx-auto mb-3 text-yellow-400" size={32} />
-              <h4 className="font-bold">Fast</h4>
-              <p className="text-xs text-gray-400 mt-1">Lightweight & responsive</p>
-            </div>
-            <div className="glass p-5 rounded-2xl text-center">
-              <Globe className="mx-auto mb-3 text-green-400" size={32} />
-              <h4 className="font-bold">Global</h4>
-              <p className="text-xs text-gray-400 mt-1">Multi-language support</p>
-            </div>
-            <div className="glass p-5 rounded-2xl text-center">
-              <Smartphone className="mx-auto mb-3 text-purple-400" size={32} />
-              <h4 className="font-bold">Mobile</h4>
-              <p className="text-xs text-gray-400 mt-1">Accessibility on any device</p>
-            </div>
+      {/* Pricing Section */}
+      {filteredPricing.length > 0 && (
+        <section className="px-6 pb-24" id="pricing">
+          <h3 className="text-2xl font-bold text-[var(--primary-navy)] dark:text-white mb-2 text-center">Pricing Plans</h3>
+          <p className="text-sm text-center text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
+            Choose the best plan for your service needs. Flexible options for everyone.
+          </p>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredPricing.map((plan, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className={`relative p-6 rounded-3xl border transition-all duration-300 ${plan.isPopular
+                  ? 'bg-white dark:bg-[#162447] border-[var(--accent-gold)] shadow-xl shadow-yellow-500/10 scale-105 z-10'
+                  : 'bg-white dark:bg-[#162447] border-gray-100 dark:border-white/5 shadow-sm'
+                  }`}
+              >
+                {plan.isPopular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--accent-gold)] text-[var(--primary-navy)] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    Most Popular
+                  </div>
+                )}
+
+                <h4 className="text-lg font-bold text-[var(--primary-navy)] dark:text-white text-center mb-2">{plan.name}</h4>
+
+                <div className="text-center mb-6">
+                  <span className="text-4xl font-extrabold text-[var(--primary-navy)] dark:text-white">{plan.price}</span>
+                  {plan.period && <span className="text-sm text-gray-500 font-medium">{plan.period}</span>}
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature: any, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                      <div className="w-5 h-5 rounded-full bg-green-100 dark:bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="text-green-600 dark:text-green-400 text-[10px]">✔</span>
+                      </div>
+                      {feature.text || feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href={plan.buttonLink || '/register'}
+                  className={`w-full py-4 rounded-xl flex items-center justify-center font-bold text-sm transition-transform active:scale-95 ${plan.buttonStyle === 'primary' || plan.isPopular
+                    ? 'bg-[var(--primary-navy)] text-white shadow-lg shadow-blue-900/20'
+                    : 'border border-[var(--primary-navy)] text-[var(--primary-navy)] dark:border-white dark:text-white bg-transparent'
+                    }`}
+                >
+                  {plan.buttonText || 'Get Started'}
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </section>
+      )}
 
-
-        {/* 5. DOWNLOAD APP (web.down) */}
-        <section id="download" className="py-20 px-6 relative overflow-hidden">
-          <div className="absolute inset-0 bg-primary opacity-10 blur-[100px] rounded-full" />
-
-          <div className="glass-card p-8 text-center relative z-10 border-primary/30">
-            <Download className="mx-auto mb-4 text-white" size={48} />
-            <h2 className="text-2xl font-bold mb-4">Get the Mobile App</h2>
-            <p className="text-sm text-gray-300 mb-6">Experience the full power of Ivara on your device. Available for iOS and Android.</p>
-            <button className="btn-primary w-full flex items-center justify-center gap-2">
-              Download Now
-            </button>
-          </div>
-        </section>
-
-
-        {/* 6. CONTACT & FOOTER (web.contact, layouts.footer) */}
-        <section id="contact" className="py-12 px-6 bg-black text-center border-t border-white/10">
-          <h3 className="text-xl font-bold mb-6">Need Help?</h3>
-          <div className="flex flex-col gap-4 mb-10">
-            <a href="mailto:support@ivara.com" className="glass p-4 rounded-xl flex items-center justify-center gap-3">
-              <MessageSquare size={20} /> Chat with Support
-            </a>
-          </div>
-
-          <div className="text-gray-600 text-sm">
-            <p className="mb-2">© 2025 IVARA Platform. All rights reserved.</p>
-            <div className="flex justify-center gap-4 text-xs">
-              <Link href="#">Privacy Policy</Link>
-              <Link href="#">Terms of Service</Link>
-            </div>
-          </div>
-        </section>
-
-      </div>
     </div>
   );
 }

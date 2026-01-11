@@ -7,7 +7,7 @@
     :root {
         --primary-navy: #0A1128;
         --secondary-navy: #162447;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --bg-light: #f8f9fa;
     }
 
@@ -189,7 +189,7 @@
     }
 
     .stock-status.low-stock {
-        color: #ffc107;
+        color: #924FC2;
     }
 
     .stock-status.out-of-stock {
@@ -277,6 +277,39 @@
         .products-grid {
             grid-template-columns: 1fr;
         }
+    }
+
+    /* Dark Mode Overrides */
+    [data-theme="dark"] .product-card {
+        background: #1e293b;
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+
+    [data-theme="dark"] .product-name {
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] .product-description {
+        color: #94a3b8;
+    }
+
+    [data-theme="dark"] .marketplace-header h1 {
+        background: none;
+        -webkit-text-fill-color: initial;
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] .marketplace-header p {
+        color: #94a3b8;
+    }
+    
+    [data-theme="dark"] .empty-state h3 {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .empty-state p {
+        color: #94a3b8;
     }
 </style>
 
@@ -488,7 +521,7 @@ function addToCart(productId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Product added to cart successfully!');
+            toastr.success('Product added to cart successfully!');
             
             // Update cart badge
             const badge = document.getElementById('authCartCount');
@@ -500,12 +533,12 @@ function addToCart(productId) {
                 badge.style.justifyContent = 'center';
             }
         } else {
-            alert(data.message || 'Failed to add to cart');
+            toastr.error(data.message || 'Failed to add to cart');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Failed to add to cart');
+        toastr.error('Failed to add to cart');
     });
 }
 </script>

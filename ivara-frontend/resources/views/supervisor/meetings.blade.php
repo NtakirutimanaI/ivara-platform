@@ -69,7 +69,7 @@ button:hover { opacity: 0.9; }
 
 button.bg-blue-600 { background-color: #4f46e5; color: #fff; width:45px; }
 button.bg-green-600 { background-color: #10b981; color: #fff; }
-button.bg-yellow-600 { background-color: #f59e0b; color: #fff; }
+button.bg-yellow-600 { background-color: #924FC2; color: #fff; }
 button.bg-red-600 { background-color: #ef4444; color: #fff; margin-top:13px; }
 button.bg-gray-600 { background-color: #6b7280; color: #fff;margin-top:13px; }
 button.bg-teal-600 { background-color: #14b8a6; color: #fff; }

@@ -17,13 +17,20 @@ import {
     Wrench
 } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
-import MobileHeader from '@/components/MobileHeader';
+// MobileHeader import removed
 import Link from 'next/link';
 
 export default function MobileDashboard() {
-    const role = typeof window !== 'undefined' ? sessionStorage.getItem('active_role') : 'Professional';
-    const category = typeof window !== 'undefined' ? sessionStorage.getItem('selected_category') : 'General';
+    const [role, setRole] = React.useState('Professional');
+    const [category, setCategory] = React.useState('General');
     const { settings } = useSettings();
+
+    React.useEffect(() => {
+        const storedRole = sessionStorage.getItem('active_role');
+        const storedCategory = sessionStorage.getItem('selected_category');
+        if (storedRole) setRole(storedRole);
+        if (storedCategory) setCategory(storedCategory);
+    }, []);
 
     // Base actions
     let quickActions: any[] = [
@@ -47,7 +54,6 @@ export default function MobileDashboard() {
 
     return (
         <div className="min-h-screen bg-background pb-24">
-            <MobileHeader />
 
             <div className="px-6 pt-6">
                 {/* Role Badge */}

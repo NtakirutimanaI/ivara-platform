@@ -14,7 +14,7 @@ th,td{padding:10px;border-bottom:1px solid #4f46e5;text-align:left;font-size:13p
 th{background:#f1f1f1;}
 .btn{background:#4f46e5;color:#fff;padding:6px 12px;border:none;border-radius:5px;cursor:pointer;margin-top:5px;text-decoration:none;display:inline-block;}
 .btn:hover{background:#4338ca;}
-#btn_delete{background:yellow;}
+#btn_delete{background:#924FC2;}
 #btn_delete:hover{color:green;}
 .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.6);}
 .modal-content{background:#fff;margin:5% auto;padding:20px;border-radius:10px;width:80%;max-width:500px;box-shadow:0 4px 8px rgba(0,0,0,0.3);}

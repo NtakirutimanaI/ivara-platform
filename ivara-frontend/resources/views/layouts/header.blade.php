@@ -9,411 +9,162 @@
     } catch(\Exception $e){}
 @endphp
 @if(Auth::check() && !Route::is('index') && !Route::is('home') && !Route::is('aboutus') && !Route::is('support') && !Route::is('products') && !Route::is('team') && !Route::is('privacy_policy') && !Route::is('terms'))
-    {{-- Unified Dashboard Header (Premium Glassmorphism) --}}
-    <header class="ivara-header shadow-sm" id="mainHeader">
-        <div class="iv-header-container">
-            {{-- Left: Branding & Search --}}
-            <div class="iv-header-left">
-                <a href="{{ route('dashboard') }}" class="iv-header-logo">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="IVARA">
-                    <span class="logo-text">IVARA</span>
-                </a>
-                <div class="iv-header-search">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" placeholder="Search resources, clients, or orders..." id="globalSearch">
-                    <span class="search-key">/</span>
+    {{-- Unified Dashboard Header (Premium Pro System v4.0) --}}
+    <header class="topbar">
+        {{-- Left: Brand & Search --}}
+        <div class="topbar-left" style="flex: 1; display: flex; align-items: center; gap: 20px;">
+            <a href="{{ route('dashboard') }}" class="topbar-logo" style="flex-shrink: 0;">
+                <img src="{{ asset('images/logo.jpg') }}" alt="IVARA">
+            </a>
+            
+            {{-- Mega Search (Wide & Global) --}}
+            <div class="mega-search-container" style="width: 100%; max-width: 500px;">
+                <div class="mega-search" style="width: 100%;">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search everywhere..." class="search-input" id="globalSearch" style="width: 100%;">
+                    <span class="search-kdb">/</span>
+                </div>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+        </div>
+
+        {{-- Right: Actions & Profile --}}
+        <div class="topbar-right">
+            {{-- Quick Create (+) Moved Here --}}
+            <div class="dropdown-wrapper">
+                <button class="icon-btn plus-btn" id="plusDropdownBtn" title="Quick Actions" style="width: 35px; height: 35px; border-radius: 50%;">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div class="dropdown-menu" id="plusDropdownContent" style="margin-top: 10px;">
+                    <div class="dropdown-header"><span>Quick Actions</span></div>
+                    <a href="{{ route('manager.create_products.index') }}" class="dropdown-item"><i class="fas fa-box"></i> New Product</a>
+                    <a href="{{ route('manager.clients.index') }}" class="dropdown-item"><i class="fas fa-user-plus"></i> New Client</a>
+                    <a href="{{ route('manager.devices.index') }}" class="dropdown-item"><i class="fas fa-tools"></i> New Repair</a>
                 </div>
             </div>
 
-            {{-- Right: Actions & Profile --}}
-            <div class="iv-header-right">
-                {{-- Quick Add --}}
-                <div class="dropdown">
-                    <button class="iv-nav-icon-btn btn-primary-glow" id="addDropdownBtn" title="Quick Add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" id="addDropdownContent">
-                        <h6 class="dropdown-header">{{ __("messages.quick_actions") }}</h6>
-                        <a href="{{ route('manager.create_products.index') }}" class="dropdown-item"><i class="fas fa-box"></i> New Product</a>
-                        <a href="{{ route('manager.clients.index') }}" class="dropdown-item"><i class="fas fa-user-plus"></i> New Client</a>
-                        <a href="{{ route('manager.devices.index') }}" class="dropdown-item"><i class="fas fa-tool"></i> New Repair</a>
-                    </div>
-                </div>
+            {{-- Dark Mode Toggle --}}
+            <button class="icon-btn theme-toggle" id="themeToggle" title="Toggle Theme">
+                <i class="fas fa-moon moon-icon"></i>
+                <i class="fas fa-sun sun-icon" style="display:none; color: #924FC2;"></i>
+            </button>
+            
+            {{-- ... other icons ... --}}
 
-                {{-- Dark Mode Toggle --}}
-                <button class="nav-icon-btn" id="themeToggle" title="Toggle Theme">
-                    <i class="fas fa-moon moon-icon"></i>
-                    <i class="fas fa-sun sun-icon"></i>
+            {{-- Orders Icon --}}
+            <a href="{{ route('orders.index') }}" class="icon-btn" title="Orders">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="badge" id="authOrderCount" style="display:none;">0</span>
+            </a>
+
+            {{-- Cart Icon --}}
+            <a href="{{ route('cart.index') }}" class="icon-btn" title="Cart">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge" id="authCartCount" style="display:none;">0</span>
+            </a>
+
+            {{-- Inbox Messages --}}
+            <div class="dropdown-wrapper">
+                <button class="icon-btn" id="msgDropdownBtn" title="Messages">
+                    <i class="fas fa-envelope"></i>
+                    <span class="badge"></span>
                 </button>
-
-                {{-- Messages --}}
-                <div class="dropdown">
-                    <button class="iv-nav-icon-btn" id="msgDropdownBtn">
-                        <i class="fas fa-envelope"></i>
-                        <span class="badge-dot"></span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="msgDropdownContent">
-                        <div class="dropdown-header">{{ __("messages.messages") }}</div>
-                        <div class="dropdown-scroll">
-                            <a href="#" class="dropdown-item py-3">
-                                <div class="d-flex align-items-middle">
-                                    <div class="avatar-sm mr-3">T</div>
-                                    <div>
-                                        <p class="mb-0 text-dark font-weight-bold">Technician #4</p>
-                                        <small class="text-muted">Repair order #124 is completed...</small>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <a href="#" class="dropdown-footer">{{ __("messages.view_all_messages") }}</a>
+                <div class="dropdown-menu" id="msgDropdownContent">
+                    <div class="dropdown-header">
+                        <span>Messages</span>
+                        <a href="#">View All</a>
+                    </div>
+                    <div class="dropdown-body empty-state">
+                        <i class="fas fa-envelope-open"></i>
+                        <p>No new messages</p>
                     </div>
                 </div>
+            </div>
 
-                {{-- Orders --}}
-                <a href="{{ route('orders.index') }}" class="iv-nav-icon-btn" id="ordersBtn" title="My Orders">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span class="badge-count" id="authOrderCount" style="display:none; background: #10b981; color: #fff;">0</span>
-                </a>
-
-                {{-- Cart --}}
-                <a href="{{ route('cart.index') }}" class="iv-nav-icon-btn" id="cartBtn" title="My Cart">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="badge-count" id="authCartCount" style="display:none; background: #ffb700; color: #000;">0</span>
-                </a>
-
-                {{-- Language Selector --}}
-                @include('components.language-selector')
-
-                {{-- Notifications --}}
-                <div class="dropdown">
-                    <button class="iv-nav-icon-btn" id="notifDropdownBtn">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge-count">3</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notifDropdownContent">
-                        <div class="dropdown-header">{{ __("messages.notifications") }}</div>
-                        <div class="dropdown-scroll">
-                            <a href="#" class="dropdown-item d-active">
-                                <i class="fas fa-check-circle text-success mr-2"></i>
-                                <span>Order #293 Approved</span>
-                                <small class="d-block text-muted">2 mins ago</small>
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-exclamation-triangle text-amber mr-2"></i>
-                                <span>Low stock alert: Battery...</span>
-                                <small class="d-block text-muted">1 hour ago</small>
-                            </a>
+            {{-- Notifications --}}
+            <div class="dropdown-wrapper">
+                <button class="icon-btn" id="notifDropdownBtn" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="dropdown-menu" id="notifDropdownContent">
+                    <div class="dropdown-header">
+                        <span>Notifications</span>
+                        <a href="{{ route('notifications.index') }}">View All</a>
+                    </div>
+                    <div class="notif-item unread">
+                        <div class="notif-icon bg-soft-primary"><i class="fas fa-info-circle"></i></div>
+                        <div class="notif-text">
+                            <strong>System Update</strong>
+                            <p>Version 4.0 is now live!</p>
+                            <small>Just now</small>
                         </div>
-                        <a href="{{ route('notifications.index') }}" class="dropdown-footer">{{ __("messages.notifications_center") }}</a>
                     </div>
                 </div>
+            </div>
 
-                {{-- Profile --}}
-                <div class="dropdown">
-                    <div class="profile-trigger" id="profileDropdownBtn">
-                        <div class="profile-text text-right d-none d-md-block">
-                            <span class="d-block profile-name">{{ Auth::user()->name }}</span>
-                            <span class="d-block profile-role">{{ ucfirst(Auth::user()->role) }}</span>
-                        </div>
-                        @php
-                            $profilePhoto = Auth::user()->profile_photo;
-                            if ($profilePhoto && !str_starts_with($profilePhoto, 'http')) {
-                                $backendUrl = rtrim(env('BACKEND_API_URL', 'http://localhost:5001'), '/');
-                                if (str_ends_with($backendUrl, '/api')) {
-                                    $backendUrl = substr($backendUrl, 0, -4);
+            {{-- Languages --}}
+            <div class="dropdown-wrapper">
+                <button class="icon-btn" id="langDropdownBtn" title="Language">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div class="dropdown-menu lang-dropdown" id="langDropdownContent" style="width: 200px;">
+                    <div class="dropdown-header"><span>Select Language</span></div>
+                    <div class="p-3">
+                        @include('components.language-selector', ['mode' => 'list'])
+                    </div>
+                </div>
+            </div>
+
+            <div class="v-divider"></div>
+
+            {{-- User Profile --}}
+            <div class="dropdown-wrapper">
+                <div class="profile-trigger" id="profileDropdownBtn">
+                    <div class="role-avatar-box">
+                        <span class="role-initial">{{ strtoupper(substr(auth()->user()->role, 0, 1)) }}</span>
+                        <div class="avatar-img-wrap">
+                            @php
+                                $profilePhoto = Auth::user()->profile_photo;
+                                if ($profilePhoto && !str_starts_with($profilePhoto, 'http')) {
+                                    $backendUrl = rtrim(env('BACKEND_API_URL', 'http://localhost:5001'), '/');
+                                    if (str_ends_with($backendUrl, '/api')) { $backendUrl = substr($backendUrl, 0, -4); }
+                                    $profilePhoto = $backendUrl . '/' . ltrim($profilePhoto, '/');
                                 }
-                                $profilePhoto = $backendUrl . '/' . ltrim($profilePhoto, '/');
-                            }
-                        @endphp
-                        @if($profilePhoto)
-                            <img src="{{ $profilePhoto }}" alt="Avatar" class="header-avatar">
-                        @else
-                            <div class="header-avatar-initial">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
-                        @endif
+                            @endphp
+                            @if($profilePhoto)
+                                <img src="{{ $profilePhoto }}" alt="Avatar">
+                            @endif
+                        </div>
                     </div>
-                    <div class="dropdown-menu dropdown-menu-right p-2" id="profileDropdownContent">
-                        <a href="{{ route('profile.show') }}" class="dropdown-item rounded-lg mb-1"><i class="fas fa-user-circle"></i> My Profile</a>
-                        <a href="{{ route('orders.index') }}" class="dropdown-item rounded-lg mb-1"><i class="fas fa-shopping-bag"></i> My Orders</a>
-                        <a href="{{ route('seller.dashboard') }}" class="dropdown-item rounded-lg mb-1"><i class="fas fa-store"></i> Seller Dashboard</a>
-                        <a href="{{ route('admin.settings') }}" class="dropdown-item rounded-lg mb-1"><i class="fas fa-cog"></i> Settings</a>
-                        <div class="dropdown-divider"></div>
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="dropdown-item text-danger rounded-lg"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-                        </form>
-                    </div>
+                    <i class="fas fa-chevron-down u-arrow" style="margin-left: 5px;"></i>
+                </div>
+                
+                <div class="dropdown-menu" id="profileDropdownContent" style="right: 0; min-width: 200px;">
+                    <a href="{{ route('profile.show') }}" class="dropdown-item"><i class="fas fa-user-circle"></i> Profile</a>
+                    <a href="{{ route('admin.settings') }}" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                    <div class="menu-divider"></div>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </header>
 
-    <style>
-        :root {
-            /* Header Variables */
-            --h-bg: rgba(255, 255, 255, 0.9);
-            --h-text: #1e293b;
-            --h-primary: #924FC2;
-            --h-border: rgba(226, 232, 240, 0.8);
-            --h-glass-blur: 15px;
-            
-            /* Global Light Mode Defaults */
-            --page-bg: radial-gradient(circle at top right, #fdf4ff, #f3f4f6);
-            --page-text: #2d3748;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --border-color: rgba(255, 255, 255, 0.3);
-            --input-bg: #fff;
-        }
 
-        /* Dark Theme Variables - Applied to Body */
-        body.dark-theme {
-            /* Header Dark overrides */
-            --h-bg: rgba(15, 23, 42, 0.9);
-            --h-text: #f1f5f9;
-            --h-border: rgba(51, 65, 85, 0.5);
-            
-            /* Dashboard / Global Dark overrides */
-            --bg-glass: rgba(30, 41, 59, 0.7); /* Matching dashboard var name */
-            --border-glass: rgba(255, 255, 255, 0.08); /* Matching dashboard var name */
-            --shadow-premium: 0 10px 40px -10px rgba(0,0,0,0.5);
-            
-            /* Global Colors */
-            --page-bg: radial-gradient(circle at top right, #1e1b4b, #0f172a);
-            --page-text: #cbd5e1;
-            --card-bg: rgba(30, 41, 59, 0.6);
-            --border-color: rgba(255, 255, 255, 0.05);
-            --input-bg: #1e293b;
-            
-            /* Specific text overrides */
-            color: var(--page-text);
-        }
-
-        /* Apply Global Background to Body */
-        body.dark-theme {
-            background: var(--page-bg) !important;
-            color: var(--page-text) !important;
-        }
-
-        /* Force components to adapt */
-        body.dark-theme .register-container,
-        body.dark-theme .login-container,
-        body.dark-theme .bento-card,
-        body.dark-theme .glass-box,
-        body.dark-theme .module-item,
-        body.dark-theme .card, 
-        body.dark-theme .dropdown-menu {
-            background: var(--card-bg) !important;
-            border-color: var(--border-color) !important;
-            color: var(--page-text) !important;
-        }
-
-        body.dark-theme h1, 
-        body.dark-theme h2, 
-        body.dark-theme h3, 
-        body.dark-theme h4, 
-        body.dark-theme h5, 
-        body.dark-theme h6,
-        body.dark-theme .form-title,
-        body.dark-theme .big-value,
-        body.dark-theme .dropdown-item {
-            color: #f8fafc !important;
-        }
-        
-        body.dark-theme .text-muted,
-        body.dark-theme .form-subtitle {
-            color: #94a3b8 !important;
-        }
-
-        body.dark-theme input,
-        body.dark-theme select,
-        body.dark-theme textarea {
-            background-color: var(--input-bg) !important;
-            color: #fff !important;
-            border-color: var(--border-color) !important;
-        }
-        
-        body.dark-theme .dropdown-item:hover {
-            background: rgba(255,255,255,0.05) !important;
-        }
-
-        .ivara-header {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            height: 72px;
-            background: var(--h-bg);
-            backdrop-filter: blur(var(--h-glass-blur));
-            border-bottom: 1px solid var(--h-border);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            padding: 0 40px;
-            transition: all 0.3s;
-        }
-
-        .iv-header-container {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Logo */
-        .iv-header-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            margin-right: 40px;
-        }
-
-        .iv-header-logo img { height: 38px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .logo-text { font-size: 22px; font-weight: 800; color: var(--h-primary); letter-spacing: -0.5px; }
-
-        /* Search Bar */
-        .iv-header-left { display: flex; align-items: center; flex: 1; }
-        .iv-header-search {
-            background: rgba(0,0,0,0.04);
-            border-radius: 14px;
-            padding: 10px 18px;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid transparent;
-            transition: all 0.2s;
-        }
-
-        body.dark-theme .iv-header-search { background: rgba(255,255,255,0.05); }
-
-        .iv-header-search:focus-within {
-            background: #fff;
-            border-color: var(--h-primary);
-            box-shadow: 0 0 0 4px rgba(146, 79, 194, 0.1);
-        }
-        
-        body.dark-theme .iv-header-search:focus-within { background: #0f172a; }
-
-        .ivara-header .search-icon { color: #94a3b8; font-size: 14px; margin-right: 12px; }
-        .iv-header-search input {
-            background: transparent;
-            border: none;
-            font-size: 14px;
-            color: var(--h-text);
-            width: 100%;
-            outline: none;
-        }
-        .ivara-header .search-key {
-            font-size: 12px;
-            font-weight: 700;
-            background: #e2e8f0;
-            color: #64748b;
-            padding: 2px 8px;
-            border-radius: 6px;
-            margin-left: 10px;
-        }
-
-        /* Right Side Actions */
-        .iv-header-right { display: flex; align-items: center; gap: 12px; }
-
-        .iv-nav-icon-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--h-text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s;
-        }
-
-        .iv-nav-icon-btn:hover { background: rgba(0,0,0,0.05); border-color: var(--h-border); color: var(--h-primary); }
-        .ivara-header .btn-primary-glow { background: var(--h-primary); color: white !important; }
-        .ivara-header .btn-primary-glow:hover { transform: scale(1.05); box-shadow: 0 8px 15px rgba(146, 79, 194, 0.3); }
-
-        /* Badges */
-        .ivara-header .badge-dot { position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; border: 2px solid var(--h-bg); }
-        .ivara-header .badge-count { position: absolute; top: 6px; right: 6px; background: var(--h-primary); color: white; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 100px; border: 2px solid var(--h-bg); }
-
-        /* Profile Dropdown Trigger */
-        .ivara-header .profile-trigger {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 6px 6px 6px 16px;
-            background: rgba(0,0,0,0.03);
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-        .ivara-header .profile-trigger:hover { background: rgba(0,0,0,0.06); border-color: var(--h-border); }
-
-        .ivara-header .header-avatar, .ivara-header .header-avatar-initial {
-            width: 36px; height: 36px; border-radius: 10px; object-fit: cover;
-        }
-        .ivara-header .header-avatar-initial {
-            background: linear-gradient(135deg, var(--h-primary), #6366f1);
-            color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;
-        }
-
-        .ivara-header .profile-name { font-size: 13px; font-weight: 700; color: var(--h-text); }
-        .ivara-header .profile-role { font-size: 11px; font-weight: 600; color: #94a3b8; }
-
-        /* Dropdowns */
-        .ivara-header .dropdown { position: relative; }
-        .ivara-header .dropdown-menu {
-            position: absolute;
-            top: 55px;
-            min-width: 220px;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 18px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
-            padding: 8px;
-            display: none;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s;
-            z-index: 2500;
-        }
-        .ivara-header .dropdown-menu.show { display: block; opacity: 1; transform: translateY(0); }
-        .ivara-header .dropdown-menu-right { right: 0; left: auto; }
-        .ivara-header .dropdown-menu-lg { width: 320px; }
-
-        .ivara-header .dropdown-header { padding: 10px 15px; font-size: 12px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-        .ivara-header .dropdown-item {
-            display: flex; align-items: center; padding: 10px 15px; font-size: 14px; color: #475569; text-decoration: none; border-radius: 12px; transition: all 0.2s;
-        }
-        .ivara-header .dropdown-item i { margin-right: 12px; width: 16px; font-size: 14px; opacity: 0.7; }
-        .ivara-header .dropdown-item:hover { background: #f8fafc; color: var(--h-primary); }
-        .ivara-header .dropdown-footer { display: block; text-align: center; padding: 12px; font-size: 13px; font-weight: 700; color: var(--h-primary); text-decoration: none; background: #f8fafc; border-top: 1px solid #f1f5f9; border-radius: 0 0 18px 18px; }
-
-        /* Theme Toggle specific styles */
-        #themeToggle .sun-icon { display: none; }
-        body.dark-theme #themeToggle .moon-icon { display: none; }
-        body.dark-theme #themeToggle .sun-icon { display: inline-block; color: #fbbf24; }
-
-        /* Body padding and transition */
-        body { padding-top: 72px; transition: background-color 0.3s, color 0.3s; }
-        
-        @media (max-width: 768px) {
-            .ivara-header { padding: 0 15px; }
-            .iv-header-search { display: none; }
-            .iv-header-logo span { display: none; }
-        }
-    </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // --- Dropdown Logic ---
             const triggers = [
-                { btn: 'addDropdownBtn', content: 'addDropdownContent' },
+                { btn: 'plusDropdownBtn', content: 'plusDropdownContent' },
                 { btn: 'msgDropdownBtn', content: 'msgDropdownContent' },
                 { btn: 'notifDropdownBtn', content: 'notifDropdownContent' },
+                { btn: 'langDropdownBtn', content: 'langDropdownContent' },
                 { btn: 'profileDropdownBtn', content: 'profileDropdownContent' }
             ];
 
@@ -447,17 +198,36 @@
             // --- Dark Mode Logic ---
             const themeBtn = document.getElementById('themeToggle');
             const currentTheme = localStorage.getItem('theme');
+            const root = document.documentElement;
 
             // Apply saved theme immediately
             if(currentTheme === 'dark') {
-                document.body.classList.add('dark-theme');
+                root.setAttribute('data-theme', 'dark');
             }
 
             if(themeBtn) {
+                const moonIcon = themeBtn.querySelector('.moon-icon');
+                const sunIcon = themeBtn.querySelector('.sun-icon');
+
+                const updateIcons = (isDark) => {
+                    if (moonIcon && sunIcon) {
+                        moonIcon.style.display = isDark ? 'none' : 'block';
+                        sunIcon.style.display = isDark ? 'block' : 'none';
+                    }
+                };
+
+                updateIcons(currentTheme === 'dark');
+
                 themeBtn.addEventListener('click', () => {
-                    document.body.classList.toggle('dark-theme');
-                    const theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-                    localStorage.setItem('theme', theme);
+                    if (root.getAttribute('data-theme') === 'dark') {
+                        root.removeAttribute('data-theme');
+                        localStorage.setItem('theme', 'light');
+                        updateIcons(false);
+                    } else {
+                        root.setAttribute('data-theme', 'dark');
+                        localStorage.setItem('theme', 'dark');
+                        updateIcons(true);
+                    }
                 });
             }
 
@@ -507,6 +277,62 @@
                         }
                     })
                     .catch(err => console.error('Failed to fetch cart count:', err));
+
+                // --- Fetch Notifications (Internal) ---
+                fetch('/api/header/notifications', {
+                    headers: { 'Accept': 'application/json' }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    const notifBadge = document.querySelector('#notifDropdownBtn .badge');
+                    const notifContent = document.getElementById('notifDropdownContent');
+
+                    if (data.unread_count > 0 && notifBadge) {
+                        notifBadge.textContent = data.unread_count;
+                        notifBadge.style.display = 'flex';
+                    } else if (notifBadge) {
+                        notifBadge.style.display = 'none';
+                    }
+
+                    if (data.latest && data.latest.length > 0 && notifContent) {
+                        // Preserve header
+                        const header = notifContent.querySelector('.dropdown-header');
+                        notifContent.innerHTML = '';
+                        if (header) notifContent.appendChild(header);
+
+                        data.latest.forEach(n => {
+                            const item = document.createElement('div');
+                            item.className = 'notif-item ' + (n.is_read ? '' : 'unread');
+                            const time = new Date(n.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                            item.innerHTML = `
+                                <div class="notif-icon bg-soft-primary"><i class="fas fa-info-circle"></i></div>
+                                <div class="notif-text">
+                                    <strong>${n.type || 'Notification'}</strong>
+                                    <p>${n.message}</p>
+                                    <small>${time}</small>
+                                </div>
+                            `;
+                            notifContent.appendChild(item);
+                        });
+                    }
+                })
+                .catch(err => console.error('Failed to fetch notifications:', err));
+
+                // --- Fetch Messages (Internal) ---
+                fetch('/api/header/messages', {
+                    headers: { 'Accept': 'application/json' }
+                })
+                .then(res => res.json())
+                .then(data => {
+                     const msgBadge = document.querySelector('#msgDropdownBtn .badge');
+                     if (data.unread_count > 0 && msgBadge) {
+                        msgBadge.textContent = data.unread_count;
+                        msgBadge.style.display = 'flex';
+                     } else if (msgBadge) {
+                        msgBadge.style.display = 'none';
+                     }
+                })
+                .catch(err => console.error('Failed to fetch messages:', err));
             }
             @endauth
         });
@@ -820,7 +646,7 @@
 
                         {{-- Testimonials & Reviews Section --}}
                         <a href="/portfolio#testimonials" class="res-item">
-                            <div class="f-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-right: 15px;">
+                            <div class="f-icon" style="background: rgba(146, 79, 194, 0.1); color: #924FC2; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-right: 15px;">
                                 <i class="fas fa-star"></i>
                             </div>
                             <div>
@@ -849,7 +675,7 @@
                                     <img src="{{ $featured['image'] }}" alt="{{ $featured['title'] }}" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                                 <div>
-                                    <span class="badge-tag" style="background: #ffb700; color: #000;">{{ $featured['category'] }}</span>
+                                    <span class="badge-tag" style="background: #924FC2; color: #fff;">{{ $featured['category'] }}</span>
                                     <h6 style="margin-top: 10px; font-size: 1.1rem;">{{ $featured['title'] }}</h6>
                                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">{{ Str::limit($featured['description'], 80) }}</p>
                                     <span class="read-more">View Details <i class="fas fa-arrow-right"></i></span>
@@ -919,30 +745,24 @@
                 <div class="res-right">
                     <h4 class="mega-title">Insights</h4>
                     <div class="iv-insight-list">
-                        <a href="{{ route('resource.show', 'b2b-vs-b2c-marketplaces') }}" class="insight-item">
-                            <div class="insight-thumb"><img src="https://placehold.co/100x70/0A1128/FFF?text=Blog" alt="Blog"></div>
-                            <div>
-                                <span class="badge-tag">Blog</span>
-                                <h6>B2B vs B2C Marketplaces</h6>
-                                <span class="read-more">Learn More <i class="fas fa-arrow-right"></i></span>
-                            </div>
-                        </a>
-                         <a href="{{ route('resource.show', 'create-online-marketplace-guide') }}" class="insight-item">
-                            <div class="insight-thumb"><img src="https://placehold.co/100x70/ffb700/000?text=Guide" alt="Guide"></div>
-                            <div>
-                                <span class="badge-tag" style="background:#e74c3c; color:white;">Guide</span>
-                                <h6>Create an Online Marketplace</h6>
-                                <span class="read-more">Learn More <i class="fas fa-arrow-right"></i></span>
-                            </div>
-                        </a>
-                        <a href="{{ route('resource.show', 'get-started-with-ivara') }}" class="insight-item">
-                            <div class="insight-thumb"><img src="https://placehold.co/100x70/162447/FFF?text=Tutorial" alt="Tutorial"></div>
-                            <div>
-                                <span class="badge-tag" style="background:#2ecc71; color:white;">Tutorial</span>
-                                <h6>Get Started with IVARA</h6>
-                                <span class="read-more">Watch Now <i class="fas fa-arrow-right"></i></span>
-                            </div>
-                        </a>
+                        @foreach($latestResources as $resource)
+                            <a href="{{ route('resource.show', $resource['slug']) }}" class="insight-item">
+                                <div class="insight-thumb">
+                                    <img src="{{ $resource['image'] ?? 'https://placehold.co/100x70/ccc/333?text=Img' }}" alt="{{ $resource['title'] }}">
+                                </div>
+                                <div>
+                                    @php
+                                        $type = $resource['type'] ?? 'Article';
+                                        $badgeStyle = '';
+                                        if($type == 'Guide') $badgeStyle = 'background:#e74c3c; color:white;';
+                                        elseif($type == 'Tutorial') $badgeStyle = 'background:#2ecc71; color:white;';
+                                    @endphp
+                                    <span class="badge-tag" style="{{ $badgeStyle }}">{{ $type }}</span>
+                                    <h6>{{ Str::limit($resource['title'], 45) }}</h6>
+                                    <span class="read-more">Read Now <i class="fas fa-arrow-right"></i></span>
+                                </div>
+                            </a>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -1006,7 +826,7 @@
             position: fixed;
             top: 0; left: 0; 
             width: 100%; /* Ensure full width */
-            height: 85px;
+            height: 72px;
             background: rgba(10, 17, 40, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1017,7 +837,7 @@
 
         /* Prevent content from hiding behind fixed header on non-landing pages */
         @if(!Route::is('index') && !Route::is('home'))
-            body { padding-top: 85px; }
+            body { padding-top: 72px; }
         @endif
 
         .web-header-premium .iv-header-container {
@@ -1123,7 +943,7 @@
             display: flex; gap: 15px; margin-bottom: 25px;
             text-decoration: none; transition: 0.2s;
         }
-        #megaMenu .feature-item:hover .f-icon { background: #ffb700; color: #000; }
+        #megaMenu .feature-item:hover .f-icon { background: #924FC2; color: #fff; }
         #megaMenu .f-icon {
             width: 40px; height: 40px; border-radius: 10px;
             background: rgba(10, 17, 40, 0.05); color: #0A1128;
@@ -1144,7 +964,7 @@
         .niche-item i { color: #0A1128; font-size: 1.2rem; margin-bottom: 5px; }
         .niche-item span { color: #333; font-weight: 600; font-size: 0.95rem; }
         .niche-item small { color: #888; font-size: 0.8rem; }
-        .niche-item:hover i { color: #ffb700; }
+        .niche-item:hover i { color: #924FC2; }
         .niche-item:hover span { color: #000; }
 
         /* Col 3 */
@@ -1183,8 +1003,8 @@
         .case-item p { font-size: 0.85rem; color: #666; line-height: 1.5; margin: 0; }
 
         .view-more-link {
-            color: #ffb700; text-decoration: none; font-weight: 700; font-size: 1rem;
-            border-bottom: 2px solid #ffb700; padding-bottom: 5px; transition: 0.3s;
+            color: #924FC2; text-decoration: none; font-weight: 700; font-size: 1rem;
+            border-bottom: 2px solid #924FC2; padding-bottom: 5px; transition: 0.3s;
         }
         .view-more-link:hover { color: #0A1128; border-color: #0A1128; }
         
@@ -1195,7 +1015,7 @@
         }
         .port-left { flex: 1.2; display: flex; flex-direction: column; gap: 30px; }
         .port-item { display: flex; gap: 20px; text-decoration: none; align-items: flex-start; }
-        .port-item:hover .port-text h5 { color: #ffb700; }
+        .port-item:hover .port-text h5 { color: #924FC2; }
 
         .port-img-box {
             width: 120px; height: 80px; overflow: hidden; border-radius: 8px; flex-shrink: 0;
@@ -1215,8 +1035,8 @@
         .port-right h4 { font-size: 1.2rem; margin-bottom: 20px; color: #0A1128; font-weight: 700; }
         
         .port-actions { display: flex; gap: 15px; }
-        .btn-demo { background: #ffb700; color: #000; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.3s; }
-        .btn-demo:hover { background: #e0a800; transform: translateY(-2px); }
+        .btn-demo { background: #924FC2; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.3s; }
+        .btn-demo:hover { background: #7b3fa8; transform: translateY(-2px); }
         .btn-learn { border: 2px solid #0A1128; color: #0A1128; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.3s; }
         .btn-learn:hover { background: #0A1128; color: white; transform: translateY(-2px); }
         
@@ -1237,7 +1057,7 @@
         .iv-res-wrapper .res-divider {
             width: 2px;
             background: #e2e8f0; 
-            box-shadow: 2px 0 0 #ffb700; /* Gold highlight for visibility */
+            box-shadow: 2px 0 0 #924FC2; /* Gold highlight for visibility */
             align-self: stretch;
         }
         
@@ -1253,8 +1073,8 @@
         }
         .code-red { color: #0A1128; } /* Rebranded to Navy */
 
-        .iv-res-wrapper .res-item:hover strong { color: #ffb700; }
-        .iv-res-wrapper .res-item:hover .res-icon { color: #ffb700; transform: scale(1.1); }
+        .iv-res-wrapper .res-item:hover strong { color: #924FC2; }
+        .iv-res-wrapper .res-item:hover .res-icon { color: #924FC2; transform: scale(1.1); }
 
         .iv-res-wrapper .res-item strong { display: block; color: #0A1128; font-size: 1rem; margin-bottom: 3px; transition: 0.3s; }
         .iv-res-wrapper .res-item p { margin: 0; color: #666; font-size: 0.85rem; line-height: 1.4; }
@@ -1270,14 +1090,14 @@
         .iv-insight-list .insight-item:hover .insight-thumb img { transform: scale(1.05); }
         
         .badge-tag { 
-            font-size: 0.7rem; font-weight: 700; color: #000; background: #ffb700; /* Gold Badge */
+            font-size: 0.7rem; font-weight: 700; color: #000; background: #924FC2; /* Purple Badge */
             padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 5px;
         }
         .iv-insight-list .insight-item h6 { font-size: 0.95rem; font-weight: 700; color: #0A1128; margin: 0 0 5px; line-height: 1.3; transition: 0.3s; }
-        .iv-insight-list .insight-item:hover h6 { color: #ffb700; }
+        .iv-insight-list .insight-item:hover h6 { color: #924FC2; }
 
         .iv-insight-list .read-more { font-size: 0.8rem; color: #0A1128; font-weight: 700; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
-        .iv-insight-list .insight-item:hover .read-more { color: #ffb700; margin-left: 5px; }
+        .iv-insight-list .insight-item:hover .read-more { color: #924FC2; margin-left: 5px; }
 
         /* SUPPORT MENU STYLES */
         .iv-support-wrapper {
@@ -1318,7 +1138,7 @@
             outline: none; border-color: #0A1128;
         }
         .btn-send {
-            width: 100%; background: #0A1128; color: #ffb700;
+            width: 100%; background: #0A1128; color: #924FC2;
             border: none; padding: 12px; border-radius: 6px;
             font-weight: 700; cursor: pointer; transition: 0.3s;
         }
@@ -1335,19 +1155,19 @@
         }
         .link-signin:hover { 
             background: #0A1128; color: #ffffff; /* Dark Blue BG, White Text */
-            border-color: #ffb700; /* Yellow Border */
+            border-color: #924FC2; /* Purple Border */
             transform: translateY(-2px);
         }
 
         .btn-signup, .btn-dashboard {
-            background: #ffb700; color: #000;
+            background: #924FC2; color: #fff;
             text-decoration: none; padding: 10px 24px;
             border-radius: 50px; font-weight: 700; font-size: 14px;
-            transition: all 0.3s; text-align: center; border: 2px solid #ffb700;
+            transition: all 0.3s; text-align: center; border: 2px solid #924FC2;
         }
         .btn-signup:hover, .btn-dashboard:hover { 
-            background: transparent; color: #ffb700;
-            transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 183, 0, 0.3);
+            background: transparent; color: #924FC2;
+            transform: translateY(-2px); box-shadow: 0 4px 15px rgba(146, 79, 194, 0.3);
         }
 
 
@@ -1362,7 +1182,7 @@
         ========================================
         */
         .badge-new {
-            background: #ffb700; color: #000; font-size: 9px; font-weight: 800;
+            background: #924FC2; color: #fff; font-size: 9px; font-weight: 800;
             padding: 2px 5px; border-radius: 4px; margin-left: 5px; vertical-align: middle;
         }
 
@@ -1390,7 +1210,7 @@
             z-index: 6000;
             
             scrollbar-width: thin;
-            scrollbar-color: #ffb700 #f1f5f9;
+            scrollbar-color: #924FC2 #f1f5f9;
             
             display: none;
             opacity: 0;
@@ -1409,7 +1229,7 @@
             z-index: 5999;
         }
 
-        /* Yellow Arrow (Triangle) */
+        /* Purple Arrow (Triangle) */
         .market-mega-menu::before {
             content: "";
             position: absolute;
@@ -1418,7 +1238,7 @@
             transform: translateX(-50%);
             border-width: 0 10px 10px 10px; /* Triangle pointing Up */
             border-style: solid;
-            border-color: transparent transparent #ffb700 transparent;
+            border-color: transparent transparent #924FC2 transparent;
             z-index: 6001;
             filter: drop-shadow(0 -1px 1px rgba(0,0,0,0.05));
         }
@@ -1460,7 +1280,7 @@
             transition: 0.2s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .btn-back-home:hover { background: #ffb700; color: #000; }
+        .btn-back-home:hover { background: #924FC2; color: #fff; }
 
         .market-main-title {
             text-align: center; font-size: 1.4rem; font-weight: 700; color: #0A1128;
@@ -1516,7 +1336,7 @@
             border-bottom: 2px solid #000; padding-bottom: 2px; transition: 0.2s;
             font-size: 0.95rem;
         }
-        .market-mega-menu .view-all-markets:hover { color: #ffb700 !important; border-color: #ffb700; }
+        .market-mega-menu .view-all-markets:hover { color: #924FC2 !important; border-color: #924FC2; }
 
         /* Modal Overlay for All Categories */
         .market-all-modal-overlay {
@@ -1586,10 +1406,10 @@
             background: rgba(255,255,255,0.8);
             margin-right: 10px;
         }
-        .header-cart-btn:hover { background: white; transform: scale(1.1); color: #ffb700; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header-cart-btn:hover { background: white; transform: scale(1.1); color: #924FC2; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .cart-badge {
             position: absolute; top: -5px; right: -5px;
-            background: #ffb700; color: #0A1128;
+            background: #924FC2; color: #0A1128;
             font-size: 0.7rem; font-weight: 800;
             width: 18px; height: 18px;
             display: flex; align-items: center; justify-content: center;
@@ -1727,6 +1547,107 @@
                     }
                 })
                 .catch(e => console.error('Cart fetch error', e));
+            }
+            
+            // --- Live Global Search Logic ---
+            const globalSearch = document.getElementById('globalSearch');
+            const searchResults = document.getElementById('searchResults');
+            let searchTimeout = null;
+
+            if(globalSearch && searchResults) {
+                // Style the results container
+                Object.assign(searchResults.style, {
+                    position: 'absolute',
+                    top: '100%',
+                    left: '0',
+                    width: '100%',
+                    backgroundColor: 'var(--dropdown-bg)', // Use theme var
+                    border: '1px solid var(--header-border)',
+                    borderRadius: '0 0 12px 12px',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                    zIndex: '1000',
+                    maxHeight: '400px',
+                    overflowY: 'auto',
+                    display: 'none',
+                    marginTop: '5px'
+                });
+
+                globalSearch.addEventListener('input', function(e) {
+                    const query = e.target.value.trim();
+                    
+                    // Clear previous timeout
+                    if(searchTimeout) clearTimeout(searchTimeout);
+
+                    // Hide if empty
+                    if(query.length < 2) {
+                        searchResults.style.display = 'none';
+                        searchResults.innerHTML = '';
+                        return;
+                    }
+
+                    // Debounce fetch
+                    searchTimeout = setTimeout(() => {
+                        searchResults.innerHTML = '<div style="padding:15px; text-align:center; color:var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Searching...</div>';
+                        searchResults.style.display = 'block';
+
+                        fetch(`{{ route('global.search') }}?query=${encodeURIComponent(query)}`, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.results && data.results.length > 0) {
+                                let html = '';
+                                data.results.forEach(item => {
+                                    html += `
+                                        <a href="${item.url}" style="display:flex; align-items:center; gap:12px; padding:12px 15px; text-decoration:none; border-bottom:1px solid var(--header-border); transition:0.2s; color: var(--text-main);">
+                                            <div style="width:32px; height:32px; background:rgba(59,130,246,0.1); color:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                                <i class="${item.icon}"></i>
+                                            </div>
+                                            <div style="flex:1;">
+                                                <div style="font-weight:600; font-size:14px;">${item.title}</div>
+                                                <div style="font-size:12px; color:var(--text-muted);">${item.category} • ${item.description || ''}</div>
+                                            </div>
+                                            <i class="fas fa-chevron-right" style="font-size:10px; color:var(--text-muted);"></i>
+                                        </a>
+                                    `;
+                                });
+                                // Add hover effect via JS since inline styles are hard for hover
+                                searchResults.innerHTML = html;
+                                
+                                // Attach hover listeners for cleaner UX
+                                const resultLinks = searchResults.querySelectorAll('a');
+                                resultLinks.forEach(link => {
+                                    link.addEventListener('mouseenter', () => link.style.background = 'rgba(0,0,0,0.03)');
+                                    link.addEventListener('mouseleave', () => link.style.background = 'transparent');
+                                });
+
+                            } else {
+                                searchResults.innerHTML = '<div style="padding:15px; text-align:center; color:var(--text-muted);">No results found.</div>';
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            searchResults.innerHTML = '<div style="padding:15px; text-align:center; color:red;">Error processing search.</div>';
+                        });
+                    }, 300); // 300ms debounce
+                });
+
+                // Close on click outside
+                document.addEventListener('click', function(e) {
+                    if (!globalSearch.contains(e.target) && !searchResults.contains(e.target)) {
+                        searchResults.style.display = 'none';
+                    }
+                });
+
+                // Focus back opens results if text is there
+                globalSearch.addEventListener('focus', function() {
+                    if(this.value.trim().length >= 2 && searchResults.children.length > 0) {
+                        searchResults.style.display = 'block';
+                    }
+                });
             }
         });
     </script>

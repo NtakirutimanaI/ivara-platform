@@ -3,14 +3,14 @@
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-    body { background-color: #fefce8; font-family: 'Segoe UI', sans-serif; } /* Light yellow */
-    .hazard-card { background: white; border-top: 4px solid #eab308; box-shadow: 0 4px 6px rgba(0,0,0,0.05); padding: 20px; border-radius: 8px; }
-    .btn-hazard { background-color: #000; color: #eab308; font-weight: bold; border: none; }
-    .btn-hazard:hover { background-color: #333; color: #eab308; }
+    body { background-color: #f5f3ff; font-family: 'Segoe UI', sans-serif; } /* Light purple */
+    .hazard-card { background: white; border-top: 4px solid #924FC2; box-shadow: 0 4px 6px rgba(0,0,0,0.05); padding: 20px; border-radius: 8px; }
+    .btn-hazard { background-color: #000; color: #924FC2; font-weight: bold; border: none; }
+    .btn-hazard:hover { background-color: #333; color: #924FC2; }
 </style>
 <div class="container-fluid p-4">
     <div class="d-flex align-items-center mb-5">
-         <div class="bg-warning text-dark p-3 rounded me-3 shadow-sm"><i class="fas fa-truck-pickup fa-2x"></i></div>
+         <div class="text-white p-3 rounded me-3 shadow-sm" style="background-color: #924FC2;"><i class="fas fa-truck-pickup fa-2x"></i></div>
          <div>
              <h2 class="fw-bold m-0">Roadside Assistance</h2>
              <p class="text-muted m-0">Fleet ID: #TOW-01</p>
@@ -29,7 +29,7 @@
     <div class="row g-4 mt-2">
         <div class="col-md-4">
             <div class="hazard-card h-100 text-center">
-                <i class="fas fa-map-marked-alt fa-3x text-warning mb-3"></i>
+                <i class="fas fa-map-marked-alt fa-3x mb-3" style="color: #924FC2;"></i>
                 <h5 class="fw-bold">My Location</h5>
                 <p class="text-muted">Tracking Active</p>
             </div>

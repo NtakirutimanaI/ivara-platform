@@ -7,7 +7,7 @@
     :root {
         --primary-navy: #0A1128;
         --secondary-navy: #162447;
-        --accent-gold: #ffb700;
+        --accent-gold: #924FC2;
         --bg-light: #f8f9fa;
         --text-gray: #666;
     }
@@ -178,6 +178,85 @@
         text-decoration: none;
         font-weight: 700;
     }
+
+    /* Dark Mode Overrides */
+    [data-theme="dark"] .orders-header {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .orders-header h1 {
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] .orders-header a {
+        color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .order-card {
+        background: #1e293b;
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    
+    [data-theme="dark"] .order-header {
+        background: rgba(0, 0, 0, 0.2);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .order-footer {
+        background: rgba(0, 0, 0, 0.2);
+        border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .order-meta span {
+        color: #94a3b8;
+    }
+    
+    [data-theme="dark"] .order-meta strong {
+        color: #f8fafc;
+    }
+
+    [data-theme="dark"] .order-item {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .item-name {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .item-meta {
+        color: #94a3b8;
+    }
+    
+    [data-theme="dark"] .item-img {
+        background: #0f172a;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    /* Empty Orders State */
+    [data-theme="dark"] .empty-orders {
+        background: #1e293b;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    
+    [data-theme="dark"] .empty-orders h2 {
+        color: #f8fafc;
+    }
+    
+    [data-theme="dark"] .empty-orders p {
+        color: #94a3b8;
+    }
+    
+    [data-theme="dark"] .empty-orders i {
+        color: #334155;
+    }
+
+    /* Status Badges Dark Mode */
+    [data-theme="dark"] .status-pending { background: rgba(255, 193, 7, 0.2); color: #924FC2 !important; }
+    [data-theme="dark"] .status-processing { background: rgba(13, 110, 253, 0.2); color: #6ea8fe !important; }
+    [data-theme="dark"] .status-shipped { background: rgba(25, 135, 84, 0.2); color: #75b798 !important; }
+    [data-theme="dark"] .status-delivered { background: rgba(13, 202, 240, 0.2); color: #3dd5f3 !important; }
+    [data-theme="dark"] .status-cancelled { background: rgba(220, 53, 69, 0.2); color: #ea868f !important; }
 </style>
 
 <div class="orders-container">

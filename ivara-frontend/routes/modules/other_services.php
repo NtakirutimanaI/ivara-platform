@@ -18,8 +18,10 @@ use App\Modules\OtherServices\Controllers\SettingController;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'ivara_role:admin,manager,supervisor', 'category_access:other-services'])->prefix('admin/other-services')->name('admin.other-services.')->group(function () {
-    // Dashboard
+// --- Management (Shared - Dashed Names) ---
+Route::middleware(['auth', 'ivara_role:admin', 'category_access:other-services'])
+    ->prefix('admin/other-services')->name('admin.other-services.')->group(function () {
+    
     Route::get('/', [OtherServicesController::class, 'index'])->name('index');
 
     // Services
@@ -93,4 +95,14 @@ Route::middleware(['auth', 'ivara_role:admin,manager,supervisor', 'category_acce
     Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit');
     Route::put('/settings/{id}', [SettingController::class, 'update'])->name('settings.update');
     Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy');
+});
+
+Route::middleware(['auth', 'ivara_role:manager', 'category_access:other-services'])
+    ->prefix('manager/other-services')->name('manager.other-services.')->group(function () {
+    Route::get('/', [OtherServicesController::class, 'index'])->name('index');
+});
+
+Route::middleware(['auth', 'ivara_role:supervisor', 'category_access:other-services'])
+    ->prefix('supervisor/other-services')->name('supervisor.other-services.')->group(function () {
+    Route::get('/', [OtherServicesController::class, 'index'])->name('index');
 });

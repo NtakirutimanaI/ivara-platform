@@ -27,10 +27,38 @@ class ServiceController extends BaseApiController
     /**
      * Display a listing of services
      */
-    public function index()
+    public function index(Request $request)
     {
-        $result = $this->apiGet($this->apiEndpoint);
-        return $this->handleApiResponse($result, 'admin.categories.technical-repair.services', 'services');
+        $params = [
+            'search' => $request->query('search'),
+            'status' => $request->query('status'),
+            'limit' => $request->query('limit', 10),
+            'page' => $request->query('page', 1)
+        ];
+
+        $result = $this->apiGet($this->apiEndpoint, $params);
+        
+        $services = collect([]);
+        $pagination = null;
+
+        if ($result['success']) {
+            $response = $result['response'];
+            
+            // Handle paginated response
+            if (isset($response['data']) && isset($response['pagination'])) {
+                $services = collect($response['data'])->map(fn($item) => (object)$item);
+                $pagination = (object)$response['pagination'];
+            } 
+            // Handle simple array response
+            else {
+                $services = collect($response)->map(fn($item) => (object)$item);
+            }
+        }
+
+        return view('admin.categories.technical-repair.services', [
+            'services' => $services,
+            'pagination' => $pagination
+        ]);
     }
 
     /**
@@ -70,7 +98,7 @@ class ServiceController extends BaseApiController
         $result = $this->apiGet($this->apiEndpoint . '/' . $id);
         
         if ($result['success']) {
-            return view('admin.categories.technical-repair.services_edit', ['service' => $result['data']]);
+            return view('admin.categories.technical-repair.services_edit', ['service' => (object)$result['data']]);
         }
         
         return redirect()->route('admin.technical-repair.services')

@@ -196,7 +196,7 @@ const stackedChart = new Chart(stackedCanvas, {
         labels:['Devices','Subscriptions','Inventory'],
         datasets:[
             {label:'Cost', data:[{{ $devicesCost }}, {{ $subscriptionsCost }}, {{ $inventoryCost }}], backgroundColor:['#E53935','#8E24AA','#FF5722']},
-            {label:'Profit', data:[{{ $deviceProfit }}, {{ $subscriptionProfit }}, {{ $inventoryProfit }}], backgroundColor:['#4CAF50','#4f46e5','#FFC107']}
+            {label:'Profit', data:[{{ $deviceProfit }}, {{ $subscriptionProfit }}, {{ $inventoryProfit }}], backgroundColor:['#4CAF50','#4f46e5','#924FC2']}
         ]
     },
     options:{responsive:true, plugins:{legend:{position:'top'}}, scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}}
@@ -206,7 +206,7 @@ const pieChart = new Chart(pieCanvas, {
     type:'pie',
     data:{
         labels:['Devices','Subscriptions','Inventory'],
-        datasets:[{data:[{{ $deviceRevenue }}, {{ $subscriptionsRevenue }}, {{ $inventoryRevenue }}], backgroundColor:['#4CAF50','#4f46e5','#FFC107']}]
+        datasets:[{data:[{{ $deviceRevenue }}, {{ $subscriptionsRevenue }}, {{ $inventoryRevenue }}], backgroundColor:['#4CAF50','#4f46e5','#924FC2']}]
     },
     options:{
         responsive:true,
