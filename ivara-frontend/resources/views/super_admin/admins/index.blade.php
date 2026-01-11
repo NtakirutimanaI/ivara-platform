@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="dashboard-wrapper" style="padding-top: 120px !important;">
+<div class="dashboard-wrapper" style="padding-top: 75px !important;">
     <style>
         /* Scoped Theme Variables */
         /* Scoped Theme Variables & High Specificity Override */
@@ -9,7 +9,7 @@
             --primary: #4F46E5;
             --secondary: #64748B; 
             --accent: #924FC2;
-            padding-top: 120px !important; /* Fix for hidden header */
+            padding-top: 75px !important; /* Fix for hidden header */
         }
 
         /* Modal Styles specific to this page */

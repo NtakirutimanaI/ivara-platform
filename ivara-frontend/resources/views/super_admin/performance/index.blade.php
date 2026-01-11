@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="dashboard-wrapper" style="padding-top: 120px !important;">
+<div class="dashboard-wrapper" style="padding-top: 40px !important;">
     <style>
         .dashboard-page .content .dashboard-wrapper {
             --primary: #4F46E5;
             --secondary: #64748B; 
-            padding-top: 120px !important; 
+            padding-top: 40px !important; 
         }
         .glass-panel {
             background: rgba(255, 255, 255, 0.9);
