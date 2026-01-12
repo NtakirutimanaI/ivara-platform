@@ -68,4 +68,9 @@ class MySQLSuperAdminRepository implements SuperAdminRepositoryInterface
         $user->update(['status' => $status]);
         return $user;
     }
+
+    public function getAllUsers()
+    {
+        return User::all();
+    }
 }

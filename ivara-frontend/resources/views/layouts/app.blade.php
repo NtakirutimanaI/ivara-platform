@@ -80,5 +80,6 @@
     @endif
 </script>
 
+    @stack('modals')
 </body>
 </html>

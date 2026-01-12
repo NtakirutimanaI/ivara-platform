@@ -30,14 +30,14 @@ class ApiSuperAdminRepository implements SuperAdminRepositoryInterface
 
     public function getAllAdmins()
     {
-        // For now, reuse the auth/users-by-roles if needed, or implement in backend
         try {
             $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
                 ->get(str_replace('super-admin', 'auth', $this->getApiUrl()) . '/users-by-roles', [
                     'roles' => 'admin,manager,supervisor'
                 ]);
             
-            return $response->successful() ? $response->json() : [];
+            return $response->successful() ? $this->normalizeUsers($response->json()) : [];
         } catch (\Exception $e) {
             Log::error('API Get Admins failed: ' . $e->getMessage());
             return [];
@@ -48,9 +48,10 @@ class ApiSuperAdminRepository implements SuperAdminRepositoryInterface
     {
         try {
             $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
                 ->post(str_replace('super-admin', 'auth', $this->getApiUrl()) . '/register', $data);
             
-            return $response->successful() ? $response->json() : null;
+            return $response->successful() ? $this->normalizeUser($response->json()) : null;
         } catch (\Exception $e) {
             Log::error('API Create Admin failed: ' . $e->getMessage());
             return null;
@@ -59,35 +60,111 @@ class ApiSuperAdminRepository implements SuperAdminRepositoryInterface
 
     public function updateAdmin($id, array $data)
     {
-        // Implement if needed in backend
-        return null;
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
+                ->put($this->getApiUrl() . '/users/' . $id, $data);
+            
+            return $response->successful() ? $this->normalizeUser($response->json()) : null;
+        } catch (\Exception $e) {
+            Log::error('API Update Admin failed: ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function deleteAdmin($id)
     {
-        // Implement if needed in backend
-        return false;
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
+                ->delete($this->getApiUrl() . '/users/' . $id);
+            
+            return $response->successful();
+        } catch (\Exception $e) {
+            Log::error('API Delete Admin failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function findUserById($id)
+    {
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
+                ->get(str_replace('super-admin', 'auth', $this->getApiUrl()) . '/user/' . $id);
+            
+            return $response->successful() ? $this->normalizeUser($response->json()) : null;
+        } catch (\Exception $e) {
+            Log::error('API Find User by ID failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function updateUserStatus($id, $status)
+    {
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
+                ->put($this->getApiUrl() . '/users/' . $id, ['status' => $status]);
+            
+            return $response->successful() ? $this->normalizeUser($response->json()) : null;
+        } catch (\Exception $e) {
+            Log::error('API Update User Status failed: ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function getUsersByRole(array $roles)
     {
         try {
             $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
                 ->get(str_replace('super-admin', 'auth', $this->getApiUrl()) . '/users-by-roles', [
                     'roles' => implode(',', $roles)
                 ]);
             
-            return $response->successful() ? $response->json() : [];
+            return $response->successful() ? $this->normalizeUsers($response->json()) : [];
         } catch (\Exception $e) {
             Log::error('API Get UsersByRole failed: ' . $e->getMessage());
             return [];
         }
     }
 
+    public function getAllUsers()
+    {
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(10)
+                ->get($this->getApiUrl() . '/users');
+            
+            return $response->successful() ? $this->normalizeUsers($response->json()) : [];
+        } catch (\Exception $e) {
+            Log::error('API Get All Users failed: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    private function normalizeUsers($users)
+    {
+        if (!is_array($users)) return [];
+        return array_map([$this, 'normalizeUser'], $users);
+    }
+
+    private function normalizeUser($user)
+    {
+        if (!$user) return null;
+        $user = (array) $user;
+        if (isset($user['_id']) && !isset($user['id'])) {
+            $user['id'] = $user['_id'];
+        }
+        return $user;
+    }
+
     public function getSystemOverview()
     {
         try {
             $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
                 ->get($this->getApiUrl() . '/overview');
             
             if ($response->successful()) {
@@ -100,6 +177,11 @@ class ApiSuperAdminRepository implements SuperAdminRepositoryInterface
                     'total_managers' => $stats['totalManagers'] ?? 0,
                     'total_supervisors' => $stats['totalSupervisors'] ?? 0,
                     'total_providers' => $stats['totalProviders'] ?? 0,
+                    'total_clients' => $stats['totalClients'] ?? 0,
+                    'online_admins' => $stats['onlineAdmins'] ?? 0,
+                    'online_managers' => $stats['onlineManagers'] ?? 0,
+                    'online_supervisors' => $stats['onlineSupervisors'] ?? 0,
+                    'pending_verifications' => $stats['pendingVerifications'] ?? 0,
                     'total_orders' => $stats['totalOrders'] ?? 0,
                     'total_revenue' => $stats['totalRevenue'] ?? 0,
                     'role_counts' => $data['roleCounts'] ?? [],
@@ -122,6 +204,11 @@ class ApiSuperAdminRepository implements SuperAdminRepositoryInterface
             'total_managers' => 0,
             'total_supervisors' => 0,
             'total_providers' => 0,
+            'total_clients' => 0,
+            'online_admins' => 0,
+            'online_managers' => 0,
+            'online_supervisors' => 0,
+            'pending_verifications' => 0,
             'total_orders' => 0,
             'total_revenue' => 0,
             'role_counts' => [],

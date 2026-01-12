@@ -19,6 +19,7 @@ class SessionUserProvider implements UserProvider
         if ($userData) {
             $data = (array)$userData;
             // Ensure common keys exist to prevent "Undefined array key" errors in GenericUser
+            $data['id'] = $data['id'] ?? $data['_id'] ?? null;
             $data['profile_photo'] = $data['profile_photo'] ?? $data['profilePhoto'] ?? null;
             $data['role'] = $data['role'] ?? 'user';
             $data['name'] = $data['name'] ?? $data['username'] ?? 'User';

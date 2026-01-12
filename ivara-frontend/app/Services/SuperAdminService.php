@@ -53,4 +53,9 @@ class SuperAdminService
     {
         return $this->repository->updateUserStatus($id, $status);
     }
+
+    public function getAllUsers()
+    {
+        return $this->repository->getAllUsers();
+    }
 }

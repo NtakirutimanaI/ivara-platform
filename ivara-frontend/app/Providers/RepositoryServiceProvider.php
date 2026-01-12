@@ -47,10 +47,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Contracts\Repositories\SuperAdminRepositoryInterface::class, function ($app) {
             $driver = config('database.default');
 
-            return match ($driver) {
-                'mongodb' => $app->make(\App\Repositories\Api\ApiSuperAdminRepository::class), // Keep API for MongoDB for now if that's the pattern
-                default => $app->make(\App\Repositories\MySQL\MySQLSuperAdminRepository::class),
-            };
+            // Use API repository if driver is mongodb OR if we are using the API Gateway
+            if ($driver === 'mongodb' || env('USE_API_GATEWAY', true)) {
+                return $app->make(\App\Repositories\Api\ApiSuperAdminRepository::class);
+            }
+
+            return $app->make(\App\Repositories\MySQL\MySQLSuperAdminRepository::class);
         });
     }
 

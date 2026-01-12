@@ -54,4 +54,9 @@ interface SuperAdminRepositoryInterface
      * Update a user's status.
      */
     public function updateUserStatus($id, $status);
+
+    /**
+     * Get ALL users across the system.
+     */
+    public function getAllUsers();
 }

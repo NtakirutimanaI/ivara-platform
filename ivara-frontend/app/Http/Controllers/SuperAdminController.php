@@ -158,72 +158,119 @@ class SuperAdminController extends Controller
                  ['id' => 5, 'name' => 'Education & Knowledge', 'slug' => 'education-knowledge', 'status' => 'Active', 'subs' => 20, 'providers' => 95, 'color' => '#2ecc71', 'icon' => 'fas fa-graduation-cap'],
                  ['id' => 6, 'name' => 'Agriculture & Environment', 'slug' => 'agriculture-environment', 'status' => 'Active', 'subs' => 10, 'providers' => 400, 'color' => '#27ae60', 'icon' => 'fas fa-leaf'],
                  ['id' => 7, 'name' => 'Media & Entertainment', 'slug' => 'media-entertainment', 'status' => 'Active', 'subs' => 6, 'providers' => 60, 'color' => '#9b59b6', 'icon' => 'fas fa-film'],
-                 ['id' => 8, 'name' => 'Legal & Professional', 'slug' => 'legal-professional', 'status' => 'Inactive', 'subs' => 5, 'providers' => 45, 'color' => '#34495e', 'icon' => 'fas fa-balance-scale'],
-                 ['id' => 9, 'name' => 'Other Services', 'slug' => 'other-services', 'status' => 'Active', 'subs' => 4, 'providers' => 30, 'color' => '#95a5a6', 'icon' => 'fas fa-ellipsis-h'],
+                 ['id' => 8, 'name' => 'Legal & Professional', 'slug' => 'legal-professional', 'status' => 'Active', 'subs' => 4, 'providers' => 45, 'color' => '#34495e', 'icon' => 'fas fa-gavel'],
+                 ['id' => 9, 'name' => 'Other Services', 'slug' => 'other-services', 'status' => 'Active', 'subs' => 3, 'providers' => 30, 'color' => '#7f8c8d', 'icon' => 'fas fa-concierge-bell'],
             ];
             session(['mock_categories' => $initial]);
         }
         return session('mock_categories');
     }
 
-    private function getMockUsers($roleKey = 'admins')
+    private function getMockUsers($roleKey)
     {
-        $sessionKey = 'mock_' . $roleKey; // mock_admins, mock_managers, mock_supervisors, mock_users
+        $sessionKey = 'mock_' . $roleKey;
 
         if (!session()->has($sessionKey)) {
             $users = [];
             $categories = $this->getMockCategories();
-            $names = ['Sarah Connor', 'John Doe', 'Emily Zhang', 'Michael Bay', 'Jessica Alba', 'Robert Stark', 'Daenerys T', 'Bruce Wayne', 'Clark Kent'];
             
-            // Customize role labels based on type
-            $defaultRole = match($roleKey) {
-                'managers' => 'Area Manager',
-                'supervisors' => 'Field Supervisor',
-                'users' => 'Client',
-                default => 'Category Manager'
-            };
+            // Exact Rwandan Personas from documentation.txt (2 per category ONLY)
+            $rwandanPersonas = [
+                'Technical & Repair' => [
+                    ['name' => 'Jean Pierre MUGABO', 'email' => 'mugabo.jp@ivara.com', 'role' => 'Client', 'phone' => '0788123456'],
+                    ['name' => 'Alain NIYONZIMA', 'email' => 'niyonzima.alain@ivara.com', 'role' => 'Provider', 'phone' => '0788654321']
+                ],
+                'Creative & Lifestyle' => [
+                    ['name' => 'Clarisse UMUTONI', 'email' => 'umutoni.c@ivara.com', 'role' => 'Client', 'phone' => '0788111222'],
+                    ['name' => 'David GAKWAYA', 'email' => 'gakwaya.d@ivara.com', 'role' => 'Provider', 'phone' => '0788333444']
+                ],
+                'Transport & Travel' => [
+                    ['name' => 'Emmanuel HABIMANA', 'email' => 'habimana.e@ivara.com', 'role' => 'Client', 'phone' => '0788555666'],
+                    ['name' => 'Fabrice KAMANZI', 'email' => 'kamanzi.f@ivara.com', 'role' => 'Provider', 'phone' => '0788777888']
+                ],
+                'Food, Fashion & Events' => [
+                    ['name' => 'Grace UWAMAHORO', 'email' => 'uwamahoro.g@ivara.com', 'role' => 'Client', 'phone' => '0788999000'],
+                    ['name' => 'Honoré RUKUNDO', 'email' => 'rukundo.h@ivara.com', 'role' => 'Provider', 'phone' => '0782123123']
+                ],
+                'Education & Knowledge' => [
+                    ['name' => 'Innocent NTAKIRUTIMANA', 'email' => 'ntakirutimana.i@ivara.com', 'role' => 'Client', 'phone' => '0783456456'],
+                    ['name' => 'Julienne MUKARUGWIZA', 'email' => 'mukarugwiza.j@ivara.com', 'role' => 'Provider', 'phone' => '0784567567']
+                ],
+                'Agriculture & Environment' => [
+                    ['name' => 'Kevin KALISA', 'email' => 'kalisa.k@ivara.com', 'role' => 'Client', 'phone' => '0785678678'],
+                    ['name' => 'Lydia UMULISA', 'email' => 'umulisa.l@ivara.com', 'role' => 'Provider', 'phone' => '0786789789']
+                ],
+                'Media & Entertainment' => [
+                    ['name' => 'Moses IRADUKUNDA', 'email' => 'iradukunda.m@ivara.com', 'role' => 'Client', 'phone' => '0787890890'],
+                    ['name' => 'Nancy UWASE', 'email' => 'uwase.n@ivara.com', 'role' => 'Provider', 'phone' => '0788901901']
+                ],
+                'Legal & Professional' => [
+                    ['name' => 'Olivier NDAYISHIMIYE', 'email' => 'ndayishimiye.o@ivara.com', 'role' => 'Client', 'phone' => '0789012012'],
+                    ['name' => 'Patricia MUTONIWA', 'email' => 'mutoniwa.p@ivara.com', 'role' => 'Provider', 'phone' => '0722123456']
+                ],
+                'Other Services' => [
+                    ['name' => 'Quentin GASANA', 'email' => 'gasana.q@ivara.com', 'role' => 'Client', 'phone' => '0733123456'],
+                    ['name' => 'Rose MUKESHIMANA', 'email' => 'mukeshimana.r@ivara.com', 'role' => 'Provider', 'phone' => '0788123111']
+                ],
+            ];
 
-            foreach($categories as $index => $cat) {
-                 // Primary
-                 $name = $names[$index % count($names)];
-                 $id = rand(100, 999);
+            // Rwandan Management Staff (from documentation.txt)
+            $rwandanMgmt = [ 
+                'Technical & Repair' => ['Admin' => 'Jean Bosco Niyonsaba', 'Manager' => 'Mutoni Alice', 'Supervisor' => 'Karasira Eric'],
+                'Creative & Lifestyle' => ['Admin' => 'Uwimana Marie', 'Manager' => 'Habimana Innocent', 'Supervisor' => 'Umutoniwase Solange'],
+                'Transport & Travel' => ['Admin' => 'Gakuba Benjamin', 'Manager' => 'Murekatete Claudine', 'Supervisor' => 'Ishimwe Didier'],
+                'Food, Fashion & Events' => ['Admin' => 'Mukansanga Salome', 'Manager' => 'Bizimana Jean de Dieu', 'Supervisor' => 'Uwera Beatrice'],
+                'Education & Knowledge' => ['Admin' => 'Ndayisaba Fabrice', 'Manager' => 'Mukandutiye Seraphine', 'Supervisor' => 'Rutayisire David'],
+                'Agriculture & Environment' => ['Admin' => 'Uwizeye Claudine', 'Manager' => 'Kalisa John', 'Supervisor' => 'Mutesi Divine'],
+                'Media & Entertainment' => ['Admin' => 'Jean Damascene Ntabanganyimana', 'Manager' => 'Nyirahabimana Speciose', 'Supervisor' => 'Manzi Olivier'],
+                'Legal & Professional' => ['Admin' => 'Umubyeyi Diane', 'Manager' => 'Nkurunziza Pascal', 'Supervisor' => 'Mugenzi Aimable'],
+                'Other Services' => ['Admin' => 'Uwimana Josiane', 'Manager' => 'Tuyishime Innocent', 'Supervisor' => 'Karasira Benjamin'],
+            ];
+
+            foreach($categories as $cat) {
+                 $catName = $cat['name'];
                  
-                 // Hardcoded Admin User
-                 if($roleKey == 'admins' && $cat['name'] == 'Technical & Repair' && $index == 0) {
-                     $id = 8480; 
-                     $name = "Innocent NTAKIRUTIMANA";
-                 }
-
-                 $role = $defaultRole;
                  if ($roleKey == 'users') {
-                     // Mix of clients and providers for 'users' page
-                     $role = ($index % 2 == 0) ? 'Client' : 'Provider';
-                 }
-
-                 $users[] = [
-                    'id' => $id,
-                    'name' => $name,
-                    'email' => strtolower(explode(' ', $name)[0]) . '@ivara.com',
-                    'role' => $role,
-                    'category' => $cat['name'],
-                    'status' => 'online',
-                    'tasks' => rand(2, 15)
-                 ];
-
-                 // Secondary
-                 if($index % 2 == 0) {
-                     $secRole = 'Support ' . ucfirst(substr($roleKey, 0, -1));
-                     if ($roleKey == 'users') $secRole = 'Provider';
+                     // Add BOTH Client and Provider from documentation for this category
+                     $personas = $rwandanPersonas[$catName] ?? [];
+                     foreach ($personas as $persona) {
+                         $users[] = [
+                            'id' => rand(1000, 9999),
+                            'name' => $persona['name'],
+                            'email' => $persona['email'],
+                            'role' => $persona['role'],
+                            'category' => $catName,
+                            'status' => 'online',
+                            'phone' => $persona['phone'],
+                            'last_login' => rand(1, 12) . ' hours ago',
+                            'tasks' => 0
+                         ];
+                     }
+                 } else {
+                     // Add specific Management role for this category
+                     $roleTitle = match($roleKey) {
+                        'managers' => 'Manager',
+                        'supervisors' => 'Supervisor',
+                        default => 'Admin'
+                     };
+                     
+                     $name = $rwandanMgmt[$catName][$roleTitle] ?? "Staff " . $roleTitle;
+                     
+                     // Generate email based on documentation pattern if not explicitly mapped
+                     $emailName = strtolower(str_replace(' ', '.', $name));
+                     $catSlug = strtolower(str_replace([' ', '&'], '', $catName));
+                     $email = $emailName . '.' . strtolower($roleTitle) . '.' . $catSlug . '@ivara.rw';
 
                      $users[] = [
-                        'id' => rand(2000, 3000),
-                        'name' => 'Assistant ' . ($index+1),
-                        'email' => 'assist'.($index+1).'@ivara.com',
-                        'role' => $secRole,
-                        'category' => $cat['name'],
-                        'status' => 'offline',
+                        'id' => rand(100, 999),
+                        'name' => $name,
+                        'email' => $email,
+                        'role' => $roleTitle,
+                        'category' => $catName,
+                        'status' => 'online',
+                        'last_login' => rand(1, 48) . ' mins ago',
                         'tasks' => 0
-                    ];
+                     ];
                  }
             }
             session([$sessionKey => $users]);
@@ -297,7 +344,16 @@ class SuperAdminController extends Controller
         $managers = $this->getMockUsers('managers');
         $supervisors = $this->getMockUsers('supervisors');
 
-        return view('super_admin.performance.index', compact('admins', 'managers', 'supervisors'));
+        $data = [
+            'admins' => $admins,
+            'managers' => $managers,
+            'supervisors' => $supervisors,
+            'admins_flat' => $admins,
+            'managers_flat' => $managers,
+            'supervisors_flat' => $supervisors,
+        ];
+
+        return view('super_admin.performance.index', $data);
     }
 
     public function storeReview(Request $request) {
@@ -327,47 +383,69 @@ class SuperAdminController extends Controller
     private function genericIndex($roleKey, $view) {
         $overview = $this->superAdminService->getSystemOverview();
         
-        $rolesToFetch = match($roleKey) {
-            'admins' => ['admin'],
-            'managers' => ['manager'],
-            'supervisors' => ['supervisor'],
-            'users' => ['client', 'provider', 'Client', 'Provider'], // Match common variations
-            default => []
-        };
-
-        $realUsers = $this->superAdminService->getUsersByRole($rolesToFetch);
+        $realUsers = [];
+        // For 'users' page, we force mock data to strictly adhere to the documentation personas (2 per category)
+        if ($roleKey !== 'users') {
+            if ($roleKey === 'admins') {
+                $rolesToFetch = ['admin'];
+                $realUsers = $this->superAdminService->getUsersByRole($rolesToFetch);
+            } else if ($roleKey === 'managers') {
+                $rolesToFetch = ['manager'];
+                $realUsers = $this->superAdminService->getUsersByRole($rolesToFetch);
+            } else if ($roleKey === 'supervisors') {
+                $rolesToFetch = ['supervisor'];
+                $realUsers = $this->superAdminService->getUsersByRole($rolesToFetch);
+            }
+        }
         
         if (count($realUsers) > 0) {
             $allUsers = collect($realUsers)->map(function($u) {
-                // Handle both object and array formats (from API or Eloquent)
                 $u = (object) $u;
                 return [
-                    'id' => $u->id ?? null,
+                    'id' => $u->id ?? $u->_id ?? null,
                     'name' => $u->name ?? 'Unknown',
                     'email' => $u->email ?? 'no-email@ivara.com',
                     'role' => ucfirst($u->role ?? 'User'),
                     'category' => $u->category ?? 'General',
                     'status' => $u->status ?? 'online',
+                    'phone' => $u->phone ?? $u->phoneNumber ?? '--',
+                    'last_login' => isset($u->last_login) ? \Carbon\Carbon::parse($u->last_login)->diffForHumans() : 'Never',
                     'tasks' => 0
                 ];
             })->toArray();
         } else {
-            // Fallback to mock data if no real users exist for these roles
+            // Fallback (or forced for users page) to mock data
             $allUsers = $this->getMockUsers($roleKey);
         }
 
-        $categories = $this->getMockCategories();
-        
+        $allCategories = $this->getMockCategories();
+        $categoryMap = collect($allCategories)->pluck('name', 'slug')->toArray();
+        $reverseCategoryMap = array_flip($categoryMap);
+
         $grouped = [];
         foreach($allUsers as $u) {
-            $cat = $u['category'] ?: 'General';
-            $grouped[$cat][] = $u;
+            $rawCat = $u['category'] ?: 'General';
+            // Try to find the slug if it's a name, or name if it's a slug
+            $catSlug = $reverseCategoryMap[$rawCat] ?? (str_contains($rawCat, ' ') ? \Illuminate\Support\Str::slug($rawCat) : $rawCat);
+            $catName = $categoryMap[$catSlug] ?? $rawCat;
+            
+            $u['category_slug'] = $catSlug;
+            $u['category_name'] = $catName;
+            
+            $grouped[$catSlug][] = $u;
+        }
+
+        // Add "General" to categories if not present but has users
+        if (isset($grouped['general']) && !collect($allCategories)->contains('slug', 'general')) {
+            $allCategories[] = ['id' => 99, 'name' => 'General', 'slug' => 'general', 'icon' => 'fas fa-folder-open'];
         }
 
         $data = [
-            'categories' => $categories,
+            'categories' => $allCategories,
             'admins' => $grouped,
             'users' => $grouped,
+            'admins_flat' => $allUsers, // Flat list for analytical pages
+            'users_flat' => $allUsers,
             'overview' => $overview
         ];
 
@@ -490,7 +568,72 @@ class SuperAdminController extends Controller
     public function marketplace() { return view('super_admin.marketplace.index'); }
     public function businesses() { return view('super_admin.businesses.index'); }
     public function licenses() { return view('super_admin.licenses.index'); }
-    public function roles() { return view('super_admin.roles.index'); }
+    public function roles() {
+        $roles = [
+            [
+                'id' => 1,
+                'name' => 'Super Admin',
+                'slug' => 'super_admin',
+                'description' => 'Full system access, including security and global configurations.',
+                'users_count' => 3,
+                'permissions' => ['full_access', 'manage_logs', 'system_settings'],
+                'color' => '#ef4444',
+                'badge' => 'System'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Admin',
+                'slug' => 'admin',
+                'description' => 'Manages platform categories, staff assignments, and high-level reports.',
+                'users_count' => 18,
+                'permissions' => ['manage_users', 'view_analytics', 'moderate_content'],
+                'color' => '#f59e0b',
+                'badge' => 'Management'
+            ],
+            [
+                'id' => 3,
+                'name' => 'Manager',
+                'slug' => 'manager',
+                'description' => 'Oversees service sectors and manages regional supervisor teams.',
+                'users_count' => 42,
+                'permissions' => ['assign_tasks', 'approve_applications', 'view_reports'],
+                'color' => '#3b82f6',
+                'badge' => 'Ops'
+            ],
+            [
+                'id' => 4,
+                'name' => 'Supervisor',
+                'slug' => 'supervisor',
+                'description' => 'On-the-ground verification of tasks and quality assurance.',
+                'users_count' => 115,
+                'permissions' => ['verify_completion', 'field_checks', 'update_status'],
+                'color' => '#10b981',
+                'badge' => 'Field'
+            ],
+            [
+                'id' => 5,
+                'name' => 'Provider',
+                'slug' => 'provider',
+                'description' => 'Professional service entities fulfilling platform requests.',
+                'users_count' => 1240,
+                'permissions' => ['manage_services', 'receive_payouts', 'fulfill_orders'],
+                'color' => '#8b5cf6',
+                'badge' => 'Partner'
+            ],
+            [
+                'id' => 6,
+                'name' => 'Client',
+                'slug' => 'client',
+                'description' => 'End users who request and consume services via the platform.',
+                'users_count' => 5800,
+                'permissions' => ['create_orders', 'view_history', 'chat_providers'],
+                'color' => '#6366f1',
+                'badge' => 'User'
+            ]
+        ];
+
+        return view('super_admin.roles.index', compact('roles'));
+    }
     public function services() { return view('super_admin.services.index'); }
     public function courses() { return view('super_admin.courses.index'); }
     public function payments() { return view('super_admin.payments.index'); }

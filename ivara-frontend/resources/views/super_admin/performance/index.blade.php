@@ -153,7 +153,8 @@
                     </thead>
                     <tbody>
                         @php
-                            $data = $$roleKey ?? [];
+                            $flatKey = $roleKey . '_flat';
+                            $data = $$flatKey ?? [];
                         @endphp
                         @forelse($data as $user)
                         @php

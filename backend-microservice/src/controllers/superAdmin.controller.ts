@@ -10,6 +10,12 @@ export const getPlatformOverview = async (req: Request, res: Response) => {
         const supervisorCount = await User.countDocuments({ role: 'supervisor' });
         const technicianCount = await User.countDocuments({ role: { $in: ['technician', 'mechanic', 'electrician', 'tailor', 'mediator', 'craftsperson', 'builder', 'businessperson'] } });
 
+        const onlineAdmins = await User.countDocuments({ role: 'admin', status: 'online' });
+        const onlineManagers = await User.countDocuments({ role: 'manager', status: 'online' });
+        const onlineSupervisors = await User.countDocuments({ role: 'supervisor', status: 'online' });
+        const clientCount = await User.countDocuments({ role: { $in: ['client', 'Client'] } });
+        const pendingVerifications = await User.countDocuments({ status: { $in: ['pending', 'inactive'] } });
+
         const totalOrders = await Order.countDocuments();
         const revenueData = await Order.aggregate([
             { $match: { status: { $ne: 'Cancelled' } } },
@@ -33,6 +39,11 @@ export const getPlatformOverview = async (req: Request, res: Response) => {
                 totalManagers: managerCount,
                 totalSupervisors: supervisorCount,
                 totalProviders: technicianCount,
+                totalClients: clientCount,
+                onlineAdmins,
+                onlineManagers,
+                onlineSupervisors,
+                pendingVerifications,
                 totalOrders,
                 totalRevenue,
                 activeCategories: 9
