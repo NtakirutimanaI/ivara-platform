@@ -3,233 +3,487 @@
 @section('title', 'System Credentials Documentation')
 
 @section('content')
-<div class="credentials-container p-4">
-    <div class="glass-card p-5">
-        <div class="d-flex justify-content-between align-items-center mb-5">
+<div class="unique-credentials-wrapper">
+    <div class="container-fluid p-0">
+        <!-- Header Section -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
             <div>
-                <h1 class="display-5 fw-bold text-primary">System Credentials</h1>
-                <p class="text-muted lead">Comprehensive list of all pre-populated test accounts and roles.</p>
+                <h1 class="cred-page-title mb-1">System Credentials</h1>
+                <p class="cred-page-subtitle mb-0">Secure access points for development and testing environments.</p>
             </div>
-            <div class="badge bg-soft-primary text-primary p-3 rounded-pill h4 mb-0">
-                <i class="fas fa-shield-alt me-2"></i> Super Admin Access
-            </div>
-        </div>
-
-        <div class="row g-4">
-            <!-- Administrators -->
-            <div class="col-md-12">
-                <div class="role-section border-start border-4 border-primary ps-4 mb-5">
-                    <h3 class="fw-bold mb-4"><i class="fas fa-user-shield me-2"></i> Core Administrators</h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover glass-table">
-                            <thead>
-                                <tr>
-                                    <th>Role Name</th>
-                                    <th>Email Address</th>
-                                    <th>Password</th>
-                                    <th>Scope</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Super Admin</td><td><code>superadmin@ivara.com</code></td><td><code>password</code></td><td>Global Control</td></tr>
-                                <tr><td>Standard Admin</td><td><code>admin@ivara.com</code></td><td><code>password</code></td><td>System Management</td></tr>
-                                <tr><td>Technical Admin</td><td><code>technical_admin@ivara.com</code></td><td><code>password</code></td><td>Tech Category</td></tr>
-                                <tr><td>Manager</td><td><code>manager@ivara.com</code></td><td><code>password</code></td><td>Operations</td></tr>
-                                <tr><td>Supervisor</td><td><code>supervisor@ivara.com</code></td><td><code>password</code></td><td>Site Monitoring</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+            
+            <div class="d-flex align-items-center gap-3 w-100 w-md-auto">
+                <div class="cred-search-box">
+                    <i class="fas fa-search cred-search-icon"></i>
+                    <input type="text" id="credentialSearch" class="form-control cred-search-input" placeholder="Search roles..." onkeyup="filterCredentials()">
                 </div>
-            </div>
-
-            <!-- Technical & Repair -->
-            <div class="col-md-6">
-                <div class="role-section border-start border-4 border-info ps-4">
-                    <h3 class="fw-bold mb-4 text-info"><i class="fas fa-tools me-2"></i> Technical & Repair</h3>
-                    <div class="table-responsive">
-                        <table class="table table-sm glass-table">
-                            <thead>
-                                <tr><th>Role</th><th>Email</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Technician</td><td><code>technician@ivara.com</code></td></tr>
-                                <tr><td>Mechanic</td><td><code>mechanic@ivara.com</code></td></tr>
-                                <tr><td>Electrician</td><td><code>electrician@ivara.com</code></td></tr>
-                                <tr><td>Builder</td><td><code>builder@ivara.com</code></td></tr>
-                                <tr><td>Tailor</td><td><code>tailor@ivara.com</code></td></tr>
-                                <tr><td>Mediator</td><td><code>mediator@ivara.com</code></td></tr>
-                                <tr><td>Artisan</td><td><code>craftsperson@ivara.com</code></td></tr>
-                                <tr><td>Business</td><td><code>business@ivara.com</code></td></tr>
-                                <tr><td>Intern</td><td><code>intern@ivara.com</code></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Driving & Transport -->
-            <div class="col-md-4">
-                <div class="role-section border-start border-4 border-success ps-4">
-                    <h3 class="fw-bold mb-4 text-success"><i class="fas fa-car me-2"></i> Driving & Transport</h3>
-                    <div class="table-responsive">
-                        <table class="table table-sm glass-table">
-                            <thead><tr><th>Role</th><th>Email</th></tr></thead>
-                            <tbody>
-                                <tr><td>Taxi Driver</td><td><code>taxidriver@ivara.com</code></td></tr>
-                                <tr><td>Moto Rider</td><td><code>motodriver@ivara.com</code></td></tr>
-                                <tr><td>Bus Driver</td><td><code>busdriver@ivara.com</code></td></tr>
-                                <tr><td>Tour Driver</td><td><code>tourdriver@ivara.com</code></td></tr>
-                                <tr><td>Delivery</td><td><code>deliverydriver@ivara.com</code></td></tr>
-                                <tr><td>Special</td><td><code>specialtransport@ivara.com</code></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Creative & Wellness -->
-            <div class="col-md-4">
-                <div class="role-section border-start border-4 border-warning ps-4 mb-5">
-                    <h3 class="fw-bold mb-4 text-warning"><i class="fas fa-spa me-2"></i> Creative & Wellness</h3>
-                    <div class="table-responsive">
-                        <table class="table table-sm glass-table">
-                            <thead><tr><th>Role</th><th>Email</th></tr></thead>
-                            <tbody>
-                                <tr><td>Sports Academy</td><td><code>sportsacademy@ivara.com</code></td></tr>
-                                <tr><td>Gym Trainer</td><td><code>gymtrainer@ivara.com</code></td></tr>
-                                <tr><td>Fitness Coach</td><td><code>fitnesscoach@ivara.com</code></td></tr>
-                                <tr><td>Yoga Trainer</td><td><code>yogatrainer@ivara.com</code></td></tr>
-                                <tr><td>Aerobics</td><td><code>aerobics@ivara.com</code></td></tr>
-                                <tr><td>Martial Arts</td><td><code>martialarts@ivara.com</code></td></tr>
-                                <tr><td>Pilates</td><td><code>pilates@ivara.com</code></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Food, Events & Fashion -->
-            <div class="col-md-4">
-                <div class="role-section border-start border-4 border-danger ps-4 mb-5">
-                    <h3 class="fw-bold mb-4 text-danger"><i class="fas fa-utensils me-2"></i> Food, Events & Fashion</h3>
-                    <div class="table-responsive">
-                        <table class="table table-sm glass-table">
-                            <thead><tr><th>Role</th><th>Email</th></tr></thead>
-                            <tbody>
-                                <tr><td>Customer</td><td><code>customer@food.com</code></td></tr>
-                                <tr><td>Food Vendor</td><td><code>vendor@food.com</code></td></tr>
-                                <tr><td>Event Organizer</td><td><code>events@ivara.com</code></td></tr>
-                                <tr><td>Fashion Vendor</td><td><code>fashion@ivara.com</code></td></tr>
-                                <tr><td>Delivery Agent</td><td><code>delivery@food.com</code></td></tr>
-                                <tr><td>Category Admin</td><td><code>foodadmin@ivara.com</code></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Education & Knowledge -->
-            <div class="col-md-4">
-                <div class="role-section border-start border-4 border-info ps-4 mb-5">
-                    <h3 class="fw-bold mb-4 text-info"><i class="fas fa-graduation-cap me-2"></i> Education & Knowledge</h3>
-                    <div class="table-responsive">
-                        <table class="table table-sm glass-table">
-                            <thead><tr><th>Role</th><th>Email</th></tr></thead>
-                            <tbody>
-                                <tr><td>Student</td><td><code>student@edu.com</code></td></tr>
-                                <tr><td>Teacher</td><td><code>teacher@edu.com</code></td></tr>
-                                <tr><td>Tutor</td><td><code>tutor@edu.com</code></td></tr>
-                                <tr><td>Content Creator</td><td><code>content@edu.com</code></td></tr>
-                                <tr><td>Institution</td><td><code>institution@edu.com</code></td></tr>
-                                <tr><td>Edu Admin</td><td><code>eduadmin@ivara.com</code></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Agriculture & Environment -->
-            <div class="col-md-6">
-                <div class="role-section border-start border-4 border-success ps-4 mb-5">
-                    <h3 class="fw-bold mb-4 text-success"><i class="fas fa-seedling me-2"></i> Agriculture & Environment</h3>
-                    <div class="table-responsive">
-                        <table class="table table-sm glass-table">
-                            <thead><tr><th>Role</th><th>Email</th></tr></thead>
-                            <tbody>
-                                <tr><td>Farmer</td><td><code>farmer@agri.com</code></td></tr>
-                                <tr><td>Farm Manager</td><td><code>manager@agri.com</code></td></tr>
-                                <tr><td>Input Supplier</td><td><code>supplier@agri.com</code></td></tr>
-                                <tr><td>Extension Officer</td><td><code>officer@agri.com</code></td></tr>
-                                <tr><td>Produce Buyer</td><td><code>buyer@agri.com</code></td></tr>
-                                <tr><td>Sustainability</td><td><code>eco@agri.com</code></td></tr>
-                                <tr><td>Agri Admin</td><td><code>agriadmin@ivara.com</code></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Media & Entertainment -->
-            <div class="col-md-6">
-                <div class="role-section border-start border-4 border-danger ps-4 mb-5">
-                    <h3 class="fw-bold mb-4 text-danger"><i class="fas fa-play-circle me-2"></i> Media & Entertainment</h3>
-                    <div class="table-responsive">
-                        <table class="table table-sm glass-table">
-                            <thead><tr><th>Role</th><th>Email</th></tr></thead>
-                            <tbody>
-                                <tr><td>Consumer</td><td><code>consumer@media.com</code></td></tr>
-                                <tr><td>Creator</td><td><code>creator@media.com</code></td></tr>
-                                <tr><td>Producer</td><td><code>producer@media.com</code></td></tr>
-                                <tr><td>Advertiser</td><td><code>advertiser@media.com</code></td></tr>
-                                <tr><td>Distributor</td><td><code>distributor@media.com</code></td></tr>
-                                <tr><td>Media Admin</td><td><code>mediaadmin@ivara.com</code></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Legal & Professional -->
-            <div class="col-md-6">
-                <div class="role-section border-start border-4 border-primary ps-4 mb-5">
-                    <h3 class="fw-bold mb-4 text-primary"><i class="fas fa-balance-scale me-2"></i> Legal & Professional</h3>
-                    <div class="table-responsive">
-                        <table class="table table-sm glass-table">
-                            <thead><tr><th>Role</th><th>Email</th></tr></thead>
-                            <tbody>
-                                <tr><td>Client</td><td><code>client@legal.com</code></td></tr>
-                                <tr><td>Legal Pro</td><td><code>pro@legal.com</code></td></tr>
-                                <tr><td>Consultant</td><td><code>consultant@legal.com</code></td></tr>
-                                <tr><td>Firm</td><td><code>firm@legal.com</code></td></tr>
-                                <tr><td>Regulator</td><td><code>regulator@legal.com</code></td></tr>
-                                <tr><td>Legal Admin</td><td><code>legaladmin@ivara.com</code></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="cred-dev-badge">
+                    <i class="fas fa-code"></i>
+                    <span class="d-none d-sm-inline ms-2">Dev Mode</span>
                 </div>
             </div>
         </div>
 
-        <div class="alert alert-soft-warning mt-5 rounded-4 border-warning d-flex align-items-center">
-            <i class="fas fa-info-circle fs-3 me-3"></i>
-            <div>
-                <strong>Security Note:</strong> These accounts are for development and testing purposes only. Credentials should be rotated before deployment to production.
+        <!-- Credentials Grid -->
+        <div class="row g-3" id="credentialsGrid">
+            
+            <!-- Core Admin Section -->
+            <div class="col-12 cred-section-item mb-2" data-category="Core Administrators">
+                <div class="cred-glass-card h-100">
+                    <div class="cred-card-header border-primary">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="cred-icon-box bg-primary-soft">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <h5 class="fw-bold mb-0">Core Administrators</h5>
+                        </div>
+                        <!-- Add button removed -->
+                    </div>
+                    <div class="cred-card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm align-middle mb-0 cred-table">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-3">Role</th>
+                                        <th>Email</th>
+                                        <th>Password</th>
+                                        <th>Scope</th>
+                                        <th class="text-end pe-3">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="cred-table-body">
+                                    @foreach([
+                                        ['Super Admin', 'superadmin@ivara.com', 'password', 'Global Control'],
+                                        ['Standard Admin', 'admin@ivara.com', 'password', 'System Management'],
+                                        ['Technical Admin', 'technical_admin@ivara.com', 'password', 'Tech Category'],
+                                        ['Manager', 'manager@ivara.com', 'password', 'Operations'],
+                                        ['Supervisor', 'supervisor@ivara.com', 'password', 'Site Monitoring']
+                                    ] as $user)
+                                    <tr class="cred-row">
+                                        <td class="fw-bold text-dark role-cell ps-3">{{ $user[0] }}</td>
+                                        <td><code class="cred-copy-text email-cell" onclick="copyToClipboard('{{ $user[1] }}')">{{ $user[1] }}</code></td>
+                                        <td><code class="text-muted password-cell">••••••••</code> <span class="d-none">{{ $user[2] }}</span></td>
+                                        <td><span class="badge bg-light text-dark border scope-cell py-1">{{ $user[3] }}</span></td>
+                                        <td class="text-end text-nowrap pe-3">
+                                            <div class="d-inline-flex gap-1">
+                                                <button class="cred-action-btn" onclick="copyToClipboard('{{ $user[1] }}')" title="Copy Email"><i class="far fa-copy"></i></button>
+                                                <button class="cred-action-btn edit" onclick="editCredential(this)" title="Edit"><i class="far fa-edit"></i></button>
+                                                <button class="cred-action-btn delete" onclick="deleteCredential(this)" title="Delete"><i class="far fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Loop -->
+            @php
+                $categories = [
+                    ['title' => 'Technical & Repair', 'icon' => 'fa-tools', 'color' => 'info', 'users' => [['Technician', 'technician@ivara.com'], ['Mechanic', 'mechanic@ivara.com'], ['Electrician', 'electrician@ivara.com'], ['Builder', 'builder@ivara.com'], ['Tailor', 'tailor@ivara.com'], ['Mediator', 'mediator@ivara.com'], ['Artisan', 'craftsperson@ivara.com'], ['Business', 'business@ivara.com'], ['Intern', 'intern@ivara.com']]],
+                    ['title' => 'Driving & Transport', 'icon' => 'fa-car', 'color' => 'success', 'users' => [['Taxi Driver', 'taxidriver@ivara.com'], ['Moto Rider', 'motodriver@ivara.com'], ['Bus Driver', 'busdriver@ivara.com'], ['Tour Driver', 'tourdriver@ivara.com'], ['Delivery', 'deliverydriver@ivara.com'], ['Special', 'specialtransport@ivara.com']]],
+                    ['title' => 'Creative & Wellness', 'icon' => 'fa-spa', 'color' => 'warning', 'users' => [['Sports Academy', 'sportsacademy@ivara.com'], ['Gym Trainer', 'gymtrainer@ivara.com'], ['Fitness Coach', 'fitnesscoach@ivara.com'], ['Yoga Trainer', 'yogatrainer@ivara.com'], ['Aerobics', 'aerobics@ivara.com'], ['Martial Arts', 'martialarts@ivara.com'], ['Pilates', 'pilates@ivara.com']]],
+                    ['title' => 'Food, Events & Fashion', 'icon' => 'fa-utensils', 'color' => 'danger', 'users' => [['Customer', 'customer@food.com'], ['Food Vendor', 'vendor@food.com'], ['Event Organizer', 'events@ivara.com'], ['Fashion Vendor', 'fashion@ivara.com'], ['Delivery Agent', 'delivery@food.com'], ['Category Admin', 'foodadmin@ivara.com']]],
+                    ['title' => 'Education & Knowledge', 'icon' => 'fa-graduation-cap', 'color' => 'info', 'users' => [['Student', 'student@edu.com'], ['Teacher', 'teacher@edu.com'], ['Tutor', 'tutor@edu.com'], ['Content Creator', 'content@edu.com'], ['Institution', 'institution@edu.com'], ['Edu Admin', 'eduadmin@ivara.com']]],
+                    ['title' => 'Agriculture & Environment', 'icon' => 'fa-seedling', 'color' => 'success', 'users' => [['Farmer', 'farmer@agri.com'], ['Farm Manager', 'manager@agri.com'], ['Input Supplier', 'supplier@agri.com'], ['Extension Officer', 'officer@agri.com'], ['Produce Buyer', 'buyer@agri.com'], ['Sustainability', 'eco@agri.com'], ['Agri Admin', 'agriadmin@ivara.com']]],
+                    ['title' => 'Media & Entertainment', 'icon' => 'fa-play-circle', 'color' => 'danger', 'users' => [['Consumer', 'consumer@media.com'], ['Creator', 'creator@media.com'], ['Producer', 'producer@media.com'], ['Advertiser', 'advertiser@media.com'], ['Distributor', 'distributor@media.com'], ['Media Admin', 'mediaadmin@ivara.com']]],
+                    ['title' => 'Legal & Professional', 'icon' => 'fa-balance-scale', 'color' => 'primary', 'users' => [['Client', 'client@legal.com'], ['Legal Pro', 'pro@legal.com'], ['Consultant', 'consultant@legal.com'], ['Firm', 'firm@legal.com'], ['Regulator', 'regulator@legal.com'], ['Legal Admin', 'legaladmin@ivara.com']]]
+                ];
+            @endphp
+
+            @foreach($categories as $category)
+            <div class="col-12 cred-section-item mb-2" data-category="{{ $category['title'] }}">
+                <div class="cred-glass-card h-100 cred-hover-effect">
+                    <div class="cred-card-header border-{{ $category['color'] }}">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="cred-icon-box bg-{{ $category['color'] }}-soft">
+                                <i class="fas {{ $category['icon'] }}"></i>
+                            </div>
+                            <h6 class="fw-bold mb-0">{{ $category['title'] }}</h6>
+                        </div>
+                        <!-- Add button removed -->
+                    </div>
+                    <div class="cred-card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm align-middle mb-0 cred-table">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-3">Role</th>
+                                        <th>Email</th>
+                                        <th>Password</th>
+                                        <th>Scope</th>
+                                        <th class="text-end pe-3">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="cred-table-body">
+                                    @foreach($category['users'] as $user)
+                                    <tr class="cred-row">
+                                        <td class="fw-semibold text-dark role-cell ps-3">{{ $user[0] }}</td>
+                                        <td><code class="cred-copy-text email-cell" onclick="copyToClipboard('{{ $user[1] }}')">{{ $user[1] }}</code></td>
+                                        <td><code class="text-muted password-cell">••••••••</code> <span class="d-none">password</span></td>
+                                        <td><span class="badge bg-light text-dark border scope-cell py-1">{{ explode(' ', $category['title'])[0] }} Access</span></td>
+                                        <td class="text-end text-nowrap pe-3">
+                                            <div class="d-inline-flex gap-1">
+                                                <button class="cred-action-btn" onclick="copyToClipboard('{{ $user[1] }}')" title="Copy Email"><i class="far fa-copy"></i></button>
+                                                <button class="cred-action-btn edit" onclick="editCredential(this)" title="Edit"><i class="far fa-edit"></i></button>
+                                                <button class="cred-action-btn delete" onclick="deleteCredential(this)" title="Delete"><i class="far fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        <!-- System Notice -->
+        <div class="cred-notice-alert mt-4">
+            <div class="d-flex align-items-center gap-3">
+                <i class="fas fa-shield-alt text-warning fs-4"></i>
+                <div>
+                    <h6 class="fw-bold mb-0">Security Notice</h6>
+                    <small class="text-muted">These credentials are for development use only.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" id="credentialModal" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content cred-glass-card border-0">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title fw-bold" id="modalTitle">Edit Credential</h6>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <div class="mb-2">
+                    <label class="form-label fw-bold x-small text-muted mb-1" style="font-size: 0.75rem;">Role Name</label>
+                    <input type="text" class="form-control form-control-sm rounded-pill" id="roleInput">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label fw-bold x-small text-muted mb-1" style="font-size: 0.75rem;">Email Address</label>
+                    <input type="email" class="form-control form-control-sm rounded-pill" id="emailInput">
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-sm btn-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="saveCredential()">Save</button>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .glass-card { background: rgba(255, 255, 255, 0.9); border-radius: 30px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-    .glass-table { border-collapse: separate; border-spacing: 0 8px; }
-    .glass-table thead th { border-bottom: none; color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
-    .glass-table tbody tr { background: #f8fafc; transition: transform 0.2s; }
-    .glass-table tbody tr:hover { transform: scale(1.01); background: #f1f5f9; }
-    .glass-table td { padding: 15px; border: none; vertical-align: middle; }
-    .glass-table td:first-child { border-radius: 12px 0 0 12px; font-weight: 700; color: #1e293b; }
-    .glass-table td:last-child { border-radius: 0 12px 12px 0; }
-    code { background: rgba(59, 130, 246, 0.1); color: #2563eb; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
-    .bg-soft-primary { background: rgba(59, 130, 246, 0.1); }
-    .bg-soft-warning { background: rgba(245, 158, 11, 0.05); color: #d97706; }
+    /* Unique Namespace for Credentials Page */
+    .unique-credentials-wrapper {
+        font-family: 'Inter', sans-serif;
+        padding-top: 3rem;
+        padding-bottom: 2rem;
+    }
+
+    .cred-page-title {
+        font-weight: 800;
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 1.75rem;
+    }
+
+    .cred-page-subtitle {
+        font-size: 0.95rem;
+    }
+
+    /* Grid & Cards */
+    .cred-glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+        overflow: hidden;
+    }
+
+    .cred-hover-effect:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    }
+
+    .cred-card-header {
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(to right, rgba(248, 250, 252, 0.5), transparent);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    }
+    
+    .cred-card-header.border-primary { border-left: 4px solid #6366f1; }
+    .cred-card-header.border-info { border-left: 4px solid #0ea5e9; }
+    .cred-card-header.border-success { border-left: 4px solid #10b981; }
+    .cred-card-header.border-warning { border-left: 4px solid #f59e0b; }
+    .cred-card-header.border-danger { border-left: 4px solid #ef4444; }
+
+    .cred-card-body {
+        padding: 0;
+    }
+
+    /* Icons */
+    .cred-icon-box {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+    .bg-primary-soft { background: rgba(99, 102, 241, 0.1); color: #6366f1; }
+    .bg-info-soft { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
+    .bg-success-soft { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+    .bg-warning-soft { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+    /* Search & Badge */
+    .cred-search-box {
+        position: relative;
+        max-width: 300px;
+        width: 100%;
+    }
+
+    .cred-search-input {
+        padding-left: 36px;
+        border-radius: 20px;
+        border: 1px solid #e2e8f0;
+        font-size: 0.9rem;
+        height: 38px;
+    }
+
+    .cred-search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 0.8rem;
+    }
+
+    .cred-dev-badge {
+        background: #f1f5f9;
+        color: #64748b;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+    }
+
+    /* Table & Actions */
+    .cred-table th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #94a3b8;
+        background: rgba(248, 250, 252, 0.5);
+        padding: 16px 24px; /* Increased Spacing */
+    }
+
+    .cred-table td {
+        font-size: 0.85rem;
+        padding: 16px 24px; /* Increased Spacing */
+    }
+
+    .cred-copy-text {
+        font-family: 'JetBrains Mono', monospace;
+        background: rgba(241, 245, 249, 0.8);
+        color: #475569;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
+    .cred-copy-text:hover {
+        background: #e0e7ff;
+        color: #4338ca;
+    }
+
+    .cred-action-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: #94a3b8;
+        transition: all 0.2s;
+        font-size: 0.8rem;
+    }
+    
+    .d-inline-flex.gap-1 {
+        display: inline-flex !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+    }
+    
+    .cred-action-btn:hover { background: #e0e7ff; color: #4338ca; }
+    .cred-action-btn.edit:hover { background: #fef3c7; color: #d97706; }
+    .cred-action-btn.delete:hover { background: #fee2e2; color: #dc2626; }
+
+    .cred-btn-add {
+        border: none;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        font-weight: 600;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+    }
+    .cred-btn-add:hover { opacity: 0.9; }
+
+    .cred-notice-alert {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(255, 237, 213, 1);
+        padding: 15px;
+        border-radius: 12px;
+        border-left: 4px solid #f59e0b;
+    }
+    
+    /* Force Modal Centering - Standard Bootstrap Fix */
+    .modal-dialog-centered {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem); 
+    }
+    
+    /* Ensure Inputs are Visible */
+    #roleInput, #emailInput {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #334155;
+    }
+
+    /* Dark Mode Support */
+    [data-theme="dark"] .cred-glass-card { background: #1e293b; border-color: #334155; }
+    [data-theme="dark"] .cred-card-header { border-bottom-color: #334155; }
+    [data-theme="dark"] .cred-page-title { color: #f8fafc; }
+    [data-theme="dark"] .cred-table th { background: #1e293b; color: #94a3b8; }
+    [data-theme="dark"] .cred-table td { color: #cbd5e1; }
+    [data-theme="dark"] .text-dark { color: #f1f5f9 !important; }
+    [data-theme="dark"] .cred-copy-text { background: #0f172a; color: #94a3b8; }
+    [data-theme="dark"] .cred-search-input { background: #1e293b; border-color: #334155; color: #fff; }
+    [data-theme="dark"] .cred-dev-badge { background: #1e293b; border-color: #334155; color: #94a3b8; }
+    [data-theme="dark"] .cred-notice-alert { background: #1e293b; border-color: #334155; }
+    
+    /* Dark Mode Inputs */
+    [data-theme="dark"] #roleInput, 
+    [data-theme="dark"] #emailInput {
+        background-color: #0f172a; 
+        border-color: #334155;
+        color: #f1f5f9;
+        caret-color: #fff;
+    }
+    
 </style>
+
+<script>
+
+    function filterCredentials() {
+        const query = document.getElementById('credentialSearch').value.toLowerCase();
+        document.querySelectorAll('.cred-section-item').forEach(section => {
+            const rows = section.querySelectorAll('.cred-row');
+            let hasMatch = false;
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const match = text.includes(query);
+                row.style.display = match ? '' : 'none';
+                if(match) hasMatch = true;
+            });
+            section.style.display = hasMatch ? '' : 'none';
+        });
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            if(window.showNotify) showNotify('Copied: ' + text, 'success');
+        });
+    }
+
+    // Global State for Edit
+    let currentEditingRow = null;
+
+    function editCredential(btn) {
+        const row = btn.closest('tr');
+        if (!row) return;
+        currentEditingRow = row;
+        
+        const role = row.querySelector('.role-cell').innerText.trim();
+        const email = row.querySelector('.email-cell').innerText.trim();
+        
+        document.getElementById('roleInput').value = role;
+        document.getElementById('emailInput').value = email;
+        document.getElementById('modalTitle').innerText = 'Edit Credential';
+        
+        const modalEl = document.getElementById('credentialModal');
+        if(modalEl && window.bootstrap) {
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        }
+    }
+
+    function saveCredential() {
+        const role = document.getElementById('roleInput').value;
+        const email = document.getElementById('emailInput').value;
+
+        if(!role || !email) {
+            if(window.showNotify) showNotify('Please fill in all fields', 'error');
+            return;
+        }
+
+        if(currentEditingRow) {
+            // Update Existing Row
+            const roleCell = currentEditingRow.querySelector('.role-cell');
+            const emailCell = currentEditingRow.querySelector('.email-cell');
+            
+            if(roleCell) roleCell.innerText = role;
+            if(emailCell) {
+                emailCell.innerText = email;
+                // Update click handler locally if needed
+                emailCell.setAttribute('onclick', `copyToClipboard('${email}')`);
+            }
+            
+            // Update Actions Copy Button
+            const copyBtn = currentEditingRow.querySelector('.cred-action-btn'); 
+            if(copyBtn) copyBtn.setAttribute('onclick', `copyToClipboard('${email}')`);
+
+            if(window.showNotify) showNotify('Credential updated!', 'success');
+        }
+        
+        const modalEl = document.getElementById('credentialModal');
+        if(modalEl && window.bootstrap) {
+            bootstrap.Modal.getInstance(modalEl).hide();
+        }
+    }
+
+    function deleteCredential(btn) {
+        if(confirm('Are you sure you want to delete this credential?')) {
+            const row = btn.closest('tr');
+            row.style.transition = 'all 0.3s';
+            row.style.opacity = '0';
+            setTimeout(() => row.remove(), 300);
+            if(window.showNotify) showNotify('Credential deleted', 'success');
+        }
+    }
+</script>
 @endsection

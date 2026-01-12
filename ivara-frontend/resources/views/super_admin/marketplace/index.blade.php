@@ -7,6 +7,26 @@
         --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
         --glass-border: rgba(255, 255, 255, 0.12);
         --premium-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+    }
+
+    [data-theme="dark"] {
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --border-color: #334155;
+        --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
     }
 
     [data-theme="dark"] {
@@ -16,6 +36,11 @@
     .marketplace-wrapper { 
         padding: 40px 30px; 
         animation: fadeIn 0.8s ease-out;
+        background: var(--bg-secondary);
+    }
+
+    [data-theme="dark"] .marketplace-wrapper {
+        background: #0f172a;
     }
     
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -32,6 +57,12 @@
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         box-shadow: var(--card-shadow);
         backdrop-filter: blur(20px);
+    }
+
+    [data-theme="dark"] .market-stat-card {
+        background: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(10px);
+        border-color: rgba(255, 255, 255, 0.1);
     }
     .market-stat-card:hover { 
         transform: translateY(-10px) scale(1.02); 
@@ -87,32 +118,115 @@
         background: var(--bg-glass); 
         border: 1px solid var(--glass-border); 
         border-radius: 32px; overflow: hidden; 
-        padding: 30px; box-shadow: var(--card-shadow);
-        backdrop-filter: blur(25px);
+        padding: 40px; 
+        box-shadow: var(--card-shadow);
     }
-    .table thead th { border: none; padding-bottom: 25px; }
-    .table tbody tr { transition: all 0.3s ease; border-bottom: 1px solid rgba(0,0,0,0.03); }
-    [data-theme="dark"] .table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.03); }
+
+    [data-theme="dark"] .pro-table-wrapper {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(10px);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .table { 
+        margin: 0; 
+        color: var(--text-primary);
+    }
+
+    .table thead th { 
+        border-bottom: 2px solid var(--border-color); 
+        padding: 16px 12px; 
+        font-weight: 700; 
+        letter-spacing: 0.5px;
+    }
+
+    [data-theme="dark"] .table thead th {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-secondary);
+    }
+
+    .table tbody tr { 
+        border-bottom: 1px solid var(--border-color); 
+        transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] .table tbody tr {
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+
     .table tbody tr:hover { 
-        background: rgba(99, 102, 241, 0.04); 
-        transform: scale(1.005) translateX(5px);
+        background: rgba(99, 102, 241, 0.05); 
+        transform: scale(1.005);
+    }
+
+    [data-theme="dark"] .table tbody tr:hover {
+        background: rgba(99, 102, 241, 0.1);
     }
     .table tbody tr:last-child { border-bottom: none; }
 
-    /* Badges - Glassmorphism style */
+    /* Badges & Status */
     .plan-badge { 
-        font-size: 10px; padding: 6px 14px; border-radius: 50px; 
-        font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;
-        display: inline-block; border: 1px solid transparent;
+        padding: 6px 14px; 
+        border-radius: 12px; 
+        font-weight: 700; 
+        font-size: 0.75rem; 
+        text-transform: uppercase; 
+        letter-spacing: 0.5px;
     }
-    .plan-basic { background: rgba(107, 114, 128, 0.1); color: #4b5563; border-color: rgba(107, 114, 128, 0.15); }
-    .plan-standard { background: rgba(14, 165, 233, 0.1); color: #0284c7; border-color: rgba(14, 165, 233, 0.15); }
-    .plan-premium { background: rgba(245, 158, 11, 0.1); color: #d97706; border-color: rgba(245, 158, 11, 0.15); }
+    .plan-basic { 
+        background: rgba(148, 163, 184, 0.15); 
+        color: #64748b; 
+        border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+    .plan-standard { 
+        background: rgba(59, 130, 246, 0.15); 
+        color: #3b82f6; 
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .plan-premium { 
+        background: rgba(168, 85, 247, 0.15); 
+        color: #a855f7; 
+        border: 1px solid rgba(168, 85, 247, 0.3);
+    }
 
-    .status-active { background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid rgba(16, 185, 129, 0.2); }
-    .status-pending { background: rgba(245, 158, 11, 0.1); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.2); }
-    
-    .level-badge { font-weight: 900; letter-spacing: 0.5px; font-size: 0.85rem; }
+    [data-theme="dark"] .plan-basic {
+        background: rgba(148, 163, 184, 0.2);
+        color: #94a3b8;
+    }
+    [data-theme="dark"] .plan-standard {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+    }
+    [data-theme="dark"] .plan-premium {
+        background: rgba(168, 85, 247, 0.2);
+        color: #c084fc;
+    }
+
+    .status-active { 
+        background: rgba(16, 185, 129, 0.15); 
+        color: #10b981; 
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-pending { 
+        background: rgba(251, 191, 36, 0.15); 
+        color: #f59e0b; 
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    [data-theme="dark"] .status-active {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+    }
+    [data-theme="dark"] .status-pending {
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+    }
+
+    .level-badge { 
+        font-weight: 900; 
+        letter-spacing: 0.5px; 
+        font-size: 0.85rem; 
+    }
 
     /* Plan Configuration */
     .plans-config-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
@@ -365,6 +479,81 @@
         border-color: rgba(255, 255, 255, 0.3);
         color: #e5e7eb;
     }
+
+    /* Search and Filter Styling */
+    .search-filter-wrapper {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .search-input {
+        background: var(--bg-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 24px;
+        padding: 10px 18px;
+        font-size: 0.9rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        width: 280px;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        background: var(--bg-primary);
+    }
+
+    .search-input::placeholder {
+        color: var(--text-secondary);
+        opacity: 0.7;
+    }
+
+    [data-theme="dark"] .search-input {
+        background: rgba(15, 23, 42, 0.6);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+    }
+
+    [data-theme="dark"] .search-input:focus {
+        background: rgba(15, 23, 42, 0.8);
+        border-color: #6366f1;
+    }
+
+    .custom-filter {
+        background: var(--bg-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 24px;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 160px;
+    }
+
+    .custom-filter:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    [data-theme="dark"] .custom-filter {
+        background: rgba(15, 23, 42, 0.6);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+    }
+
+    [data-theme="dark"] .custom-filter option {
+        background: #1e293b;
+        color: var(--text-primary);
+    }
+
+    .custom-filter:hover {
+        border-color: #a855f7;
+    }
 </style>
 
 <div class="marketplace-wrapper">
@@ -423,12 +612,25 @@
         <div class="pro-table-wrapper">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="fw-bold mb-0">Product Moderation</h4>
-                <div class="d-flex gap-2">
-                    <input type="text" class="form-control form-control-sm rounded-pill px-3" placeholder="Search products..." style="width: 250px;">
-                    <select class="form-select form-select-sm rounded-pill" style="width: 150px;">
-                        <option>All Status</option>
-                        <option>Pending</option>
-                        <option>Active</option>
+                <div class="search-filter-wrapper">
+                    <select id="inventoryPageSize" class="custom-filter" style="width: 100px;" onchange="updateInventoryPageSize()">
+                        <option value="5">5 rows</option>
+                        <option value="10" selected>10 rows</option>
+                        <option value="15">15 rows</option>
+                        <option value="20">20 rows</option>
+                    </select>
+                    <input type="text" 
+                           id="inventory-search" 
+                           class="search-input" 
+                           placeholder="🔍 Search products..." 
+                           onkeyup="filterInventory()">
+                    <select id="status-filter" 
+                            class="custom-filter" 
+                            onchange="filterInventory()">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="active">Active</option>
+                        <option value="rejected">Rejected</option>
                     </select>
                 </div>
             </div>
@@ -494,6 +696,16 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Inventory Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-4 p-3 bg-white rounded-4 border border-light shadow-sm">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-muted small">
+                        Showing <span id="inventoryStart" class="fw-bold text-dark">0</span> - <span id="inventoryEnd" class="fw-bold text-dark">0</span> of <span id="inventoryTotal" class="fw-bold text-dark">{{ count($products) }}</span>
+                    </div>
+                </div>
+                <div id="inventoryPagination" class="d-flex gap-2"></div>
+            </div>
         </div>
     </div>
 
@@ -502,12 +714,22 @@
         <div class="pro-table-wrapper">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="fw-bold mb-0">Seller Subscriptions Management</h4>
-                <div class="d-flex gap-2">
-                    <input type="text" id="sellerSearch" class="form-control form-control-sm rounded-pill px-3" 
-                           placeholder="Search sellers..." style="width: 250px;" onkeyup="filterSellers()">
-                    <select id="planFilter" class="form-select form-select-sm rounded-pill" 
-                            style="width: 150px;" onchange="filterSellers()">
-                        <option value="">All Plans</option>
+                <div class="search-filter-wrapper">
+                    <select id="sellerPageSize" class="custom-filter" style="width: 100px;" onchange="updateSellerPageSize()">
+                        <option value="5">5 rows</option>
+                        <option value="10" selected>10 rows</option>
+                        <option value="15">15 rows</option>
+                        <option value="20">20 rows</option>
+                    </select>
+                    <input type="text" 
+                           id="seller-search" 
+                           class="search-input" 
+                           placeholder="🔍 Search sellers..." 
+                           onkeyup="filterSellers()">
+                    <select id="plan-filter" 
+                            class="custom-filter" 
+                            onchange="filterSellers()">
+                        <option value="all">All Plans</option>
                         <option value="Basic">Basic</option>
                         <option value="Standard">Standard</option>
                         <option value="Premium">Premium</option>
@@ -569,9 +791,11 @@
             </table>
 
             <!-- Pagination -->
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <div class="text-muted small">
-                    Showing <span id="sellerStart">1</span> to <span id="sellerEnd">10</span> of <span id="sellerTotal">{{ count($sellerSubscriptions) }}</span> sellers
+            <div class="d-flex justify-content-between align-items-center mt-4 p-3 bg-white rounded-4 border border-light shadow-sm">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-muted small">
+                        Showing <span id="sellerStart" class="fw-bold text-dark">1</span> - <span id="sellerEnd" class="fw-bold text-dark">10</span> of <span id="sellerTotal" class="fw-bold text-dark">{{ count($sellerSubscriptions) }}</span>
+                    </div>
                 </div>
                 <div id="sellerPagination" class="d-flex gap-2"></div>
             </div>
@@ -583,9 +807,17 @@
         <div class="pro-table-wrapper">
              <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="fw-bold mb-0">Mediator Referral Tracking</h4>
-                <button class="btn-settlement" onclick="generateSettlementReport()">
-                    <i class="fas fa-file-invoice-dollar"></i>Settlement Report
-                </button>
+                <div class="d-flex gap-3 align-items-center">
+                    <select id="mediatorPageSize" class="custom-filter" style="width: 100px;" onchange="updateMediatorPageSize()">
+                        <option value="5">5 rows</option>
+                        <option value="10" selected>10 rows</option>
+                        <option value="15">15 rows</option>
+                        <option value="20">20 rows</option>
+                    </select>
+                    <button class="btn-settlement" onclick="generateSettlementReport()">
+                        <i class="fas fa-file-invoice-dollar"></i>Settlement Report
+                    </button>
+                </div>
             </div>
             <table class="table align-middle">
                 <thead>
@@ -636,6 +868,16 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Mediator Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-4 p-3 bg-white rounded-4 border border-light shadow-sm">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-muted small">
+                        Showing <span id="mediatorStart" class="fw-bold text-dark">0</span> - <span id="mediatorEnd" class="fw-bold text-dark">0</span> of <span id="mediatorTotal" class="fw-bold text-dark">{{ count($mediators) }}</span>
+                    </div>
+                </div>
+                <div id="mediatorPagination" class="d-flex gap-2"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -658,8 +900,14 @@
         
         // Initialize seller pagination
         if (document.getElementById('sellersTable')) {
-            paginateSellers();
+            filterSellers(); // This calls paginateSellers
         }
+        
+        // Initialize inventory pagination
+        filterInventory();
+
+        // Initialize mediator pagination
+        paginateMediators();
     });
 
     function switchMarketTab(tabName, btn) {
@@ -704,83 +952,291 @@
         }
     }
 
+
+    // Inventory Filtering and Pagination variables
+    let currentInventoryPage = 1;
+    let inventoryItemsPerPage = 10;
+
+    // Inventory Filtering
+    function filterInventory() {
+        const searchInput = document.getElementById('inventory-search');
+        const statusFilter = document.getElementById('status-filter');
+        const table = document.querySelector('#tab-inventory table tbody');
+        
+        if (!searchInput || !statusFilter || !table) return;
+        
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedStatus = statusFilter.value.toLowerCase();
+        // Use all visible rows (exclude pagination clones or hidden ones if any logic added)
+        // Actually, we need to select all original rows. If pagination hides them, querySelectorAll still finds them if we use a class.
+        // Let's assume all rows are in tbody.
+        const rows = Array.from(table.getElementsByTagName('tr'));
+        
+        let visibleCount = 0;
+        
+        rows.forEach(row => {
+            if (row.id === 'inventory-no-results') {
+                row.remove();
+                return;
+            }
+
+            const productName = row.querySelector('td:first-child .fw-bold')?.textContent.toLowerCase() || '';
+            const sellerName = row.querySelector('td:nth-child(2) .fw-semibold')?.textContent.toLowerCase() || '';
+            
+            const matchesSearch = searchTerm === '' || 
+                                productName.includes(searchTerm) || 
+                                sellerName.includes(searchTerm);
+            
+            const matchesStatus = selectedStatus === 'all' || 
+                                row.innerHTML.toLowerCase().includes(selectedStatus); 
+            
+            if (matchesSearch && matchesStatus) {
+                row.dataset.visible = 'true';
+                visibleCount++;
+            } else {
+                row.dataset.visible = 'false';
+            }
+        });
+
+        // Handle no results
+        const existingMessage = document.getElementById('inventory-no-results');
+        if (existingMessage) existingMessage.remove();
+        
+        if (visibleCount === 0) {
+            const noResultsRow = document.createElement('tr');
+            noResultsRow.id = 'inventory-no-results';
+            noResultsRow.innerHTML = `
+                <td colspan="7" class="text-center py-5">
+                    <div style="color: var(--text-secondary);">
+                        <i class="fas fa-search fa-3x mb-3" style="opacity: 0.3;"></i>
+                        <h5>No products found</h5>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                </td>
+            `;
+            table.appendChild(noResultsRow);
+            // Hide pagination if no results
+            document.getElementById('inventoryTotal').textContent = 0;
+            document.getElementById('inventoryStart').textContent = 0;
+            document.getElementById('inventoryEnd').textContent = 0;
+            document.getElementById('inventoryPagination').innerHTML = '';
+        } else {
+            document.getElementById('inventoryTotal').textContent = visibleCount;
+            currentInventoryPage = 1; // Reset to first page on filter
+            paginateInventory();
+        }
+    }
+
+    function updateInventoryPageSize() {
+        inventoryItemsPerPage = parseInt(document.getElementById('inventoryPageSize').value);
+        currentInventoryPage = 1;
+        paginateInventory();
+    }
+
+    function paginateInventory() {
+        const table = document.querySelector('#tab-inventory table tbody');
+        const allRows = Array.from(table.getElementsByTagName('tr')).filter(r => r.id !== 'inventory-no-results');
+        const validRows = allRows.filter(row => row.dataset.visible === 'true' || !row.dataset.visible); // Default to visible if not set (init)
+        
+        const totalItems = validRows.length;
+        const totalPages = Math.ceil(totalItems / inventoryItemsPerPage);
+
+        // Hide all original rows
+        allRows.forEach(row => row.style.display = 'none');
+
+        // Show window
+        const start = (currentInventoryPage - 1) * inventoryItemsPerPage;
+        const end = start + inventoryItemsPerPage;
+        
+        validRows.slice(start, end).forEach(row => row.style.display = '');
+
+        // Update Info
+        document.getElementById('inventoryStart').textContent = totalItems > 0 ? start + 1 : 0;
+        document.getElementById('inventoryEnd').textContent = Math.min(end, totalItems);
+
+        // Render Controls
+        renderPaginationControls('inventoryPagination', totalPages, currentInventoryPage, (newPage) => {
+            currentInventoryPage = newPage;
+            paginateInventory();
+        });
+    }
+
+    // Generic Pagination Control Renderer
+    function renderPaginationControls(containerId, totalPages, currentPage, onPageChange) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        
+        if (totalPages <= 1) return;
+
+        // Prev
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'btn btn-sm btn-outline-secondary rounded-pill';
+        prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => onPageChange(currentPage - 1);
+        container.appendChild(prevBtn);
+
+        // Numbers
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+        
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        if (startPage > 1) {
+             const firstBtn = document.createElement('button');
+             firstBtn.className = 'btn btn-sm btn-outline-secondary rounded-pill';
+             firstBtn.textContent = '1';
+             firstBtn.onclick = () => onPageChange(1);
+             container.appendChild(firstBtn);
+             
+             if (startPage > 2) {
+                 const dots = document.createElement('span');
+                 dots.className = 'px-2 text-muted';
+                 dots.textContent = '...';
+                 container.appendChild(dots);
+             }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline-secondary'} rounded-pill`;
+            pageBtn.textContent = i;
+            pageBtn.style.minWidth = '30px';
+            pageBtn.onclick = () => onPageChange(i);
+            container.appendChild(pageBtn);
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                 const dots = document.createElement('span');
+                 dots.className = 'px-2 text-muted';
+                 dots.textContent = '...';
+                 container.appendChild(dots);
+            }
+            const lastBtn = document.createElement('button');
+            lastBtn.className = 'btn btn-sm btn-outline-secondary rounded-pill';
+            lastBtn.textContent = totalPages;
+            lastBtn.onclick = () => onPageChange(totalPages);
+            container.appendChild(lastBtn);
+        }
+
+        // Next
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'btn btn-sm btn-outline-secondary rounded-pill';
+        nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => onPageChange(currentPage + 1);
+        container.appendChild(nextBtn);
+    }
+
     // Seller Subscriptions Filtering and Pagination
-    let currentPage = 1;
-    const itemsPerPage = 10;
+    let currentSellerPage = 1;
+    let sellerItemsPerPage = 10;
+
+    function updateSellerPageSize() {
+        sellerItemsPerPage = parseInt(document.getElementById('sellerPageSize').value);
+        currentSellerPage = 1;
+        paginateSellers();
+    }
 
     function filterSellers() {
-        const searchTerm = document.getElementById('sellerSearch').value.toLowerCase();
-        const planFilter = document.getElementById('planFilter').value;
+        const searchTerm = document.getElementById('seller-search').value.toLowerCase().trim();
+        const planFilter = document.getElementById('plan-filter').value;
         const rows = document.querySelectorAll('.seller-row');
         
         let visibleCount = 0;
         rows.forEach(row => {
-            const name = row.dataset.name;
-            const plan = row.dataset.plan;
+            const name = row.dataset.name || '';
+            const plan = row.dataset.plan || '';
             
-            const matchesSearch = name.includes(searchTerm);
-            const matchesPlan = !planFilter || plan === planFilter;
+            const matchesSearch = searchTerm === '' || name.includes(searchTerm);
+            const matchesPlan = planFilter === 'all' || plan === planFilter;
             
             if (matchesSearch && matchesPlan) {
-                row.style.display = '';
+                row.dataset.visible = 'true';
                 visibleCount++;
             } else {
-                row.style.display = 'none';
+                row.dataset.visible = 'false';
             }
         });
         
         document.getElementById('sellerTotal').textContent = visibleCount;
-        currentPage = 1;
+        currentSellerPage = 1;
         paginateSellers();
     }
 
     function paginateSellers() {
-        const rows = Array.from(document.querySelectorAll('.seller-row')).filter(row => row.style.display !== 'none');
-        const totalItems = rows.length;
-        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        // Get all rows
+        const allRows = Array.from(document.querySelectorAll('.seller-row'));
+        // Filter by visibility state set in filter function
+        const validRows = allRows.filter(row => row.dataset.visible === 'true' || !row.dataset.visible);
+
+        const totalItems = validRows.length;
+        const totalPages = Math.ceil(totalItems / sellerItemsPerPage);
         
-        // Hide all rows first
-        rows.forEach(row => row.classList.add('d-none'));
+        // Hide ALL rows first
+        allRows.forEach(row => row.style.display = 'none');
         
-        // Show only current page items
-        const start = (currentPage - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        rows.slice(start, end).forEach(row => row.classList.remove('d-none'));
+        // Calculate slice
+        const start = (currentSellerPage - 1) * sellerItemsPerPage;
+        const end = start + sellerItemsPerPage;
+        
+        // Show only rows for current page from the VALID list
+        validRows.slice(start, end).forEach(row => row.style.display = '');
         
         // Update pagination info
         document.getElementById('sellerStart').textContent = totalItems > 0 ? start + 1 : 0;
         document.getElementById('sellerEnd').textContent = Math.min(end, totalItems);
         
-        // Generate pagination buttons
-        const paginationDiv = document.getElementById('sellerPagination');
-        paginationDiv.innerHTML = '';
+        // Use generic render function
+        renderPaginationControls('sellerPagination', totalPages, currentSellerPage, (newPage) => {
+            currentSellerPage = newPage;
+            paginateSellers();
+        });
+    }
+
+    // Mediator Pagination
+    let currentMediatorPage = 1;
+    let mediatorItemsPerPage = 10;
+
+    function updateMediatorPageSize() {
+        mediatorItemsPerPage = parseInt(document.getElementById('mediatorPageSize').value);
+        currentMediatorPage = 1;
+        paginateMediators();
+    }
+
+    function paginateMediators() {
+        const table = document.querySelector('#tab-network table tbody');
+        if (!table) return; // Guard clause
+        const rows = Array.from(table.getElementsByTagName('tr'));
+        const totalItems = rows.length;
+        const totalPages = Math.ceil(totalItems / mediatorItemsPerPage);
+
+        // Hide all rows
+        rows.forEach(row => row.style.display = 'none');
+
+        // Show current page
+        const start = (currentMediatorPage - 1) * mediatorItemsPerPage;
+        const end = start + mediatorItemsPerPage;
+
+        rows.slice(start, end).forEach(row => row.style.display = '');
+
+        // Update Info
+        const startText = document.getElementById('mediatorStart');
+        const endText = document.getElementById('mediatorEnd');
+        const totalText = document.getElementById('mediatorTotal');
         
-        if (totalPages > 1) {
-            // Previous button
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'btn btn-sm btn-outline-secondary rounded-pill';
-            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => { currentPage--; paginateSellers(); };
-            paginationDiv.appendChild(prevBtn);
-            
-            // Page numbers
-            for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline-secondary'} rounded-pill`;
-                pageBtn.textContent = i;
-                pageBtn.onclick = () => { currentPage = i; paginateSellers(); };
-                paginationDiv.appendChild(pageBtn);
-            }
-            
-            // Next button
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'btn btn-sm btn-outline-secondary rounded-pill';
-            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => { currentPage++; paginateSellers(); };
-            paginationDiv.appendChild(nextBtn);
-        }
+        if (startText) startText.textContent = totalItems > 0 ? start + 1 : 0;
+        if (endText) endText.textContent = Math.min(end, totalItems);
+        if (totalText) totalText.textContent = totalItems;
+
+        // Render Controls
+        renderPaginationControls('mediatorPagination', totalPages, currentMediatorPage, (newPage) => {
+            currentMediatorPage = newPage;
+            paginateMediators();
+        });
     }
 
     // Mediator Network Functions

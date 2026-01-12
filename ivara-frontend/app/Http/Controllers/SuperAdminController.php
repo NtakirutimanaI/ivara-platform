@@ -37,6 +37,59 @@ class SuperAdminController extends Controller
         return $this->genericIndex('users', 'super_admin.users.index');
     }
 
+    public function businesses()
+    {
+        $businesses = $this->getMockB2BBusinesses();
+        $transactions = $this->getMockB2BTransactions();
+        
+        $totalTransactions = count($transactions);
+        $platformRevenue = collect($businesses)->sum('platform_fee');
+        $pendingVerifications = collect($businesses)->where('status', 'Pending')->count();
+        
+        return view('super_admin.businesses.index', compact(
+            'businesses',
+            'transactions',
+            'totalTransactions',
+            'platformRevenue',
+            'pendingVerifications'
+        ));
+    }
+
+    private function getMockB2BBusinesses()
+    {
+        if (!session()->has('mock_b2b_businesses')) {
+            $businesses = [
+                ['id' => 'biz_001', 'name' => 'AgriGrow Supplies Ltd', 'email' => 'contact@agrigrow.rw', 'tier' => 'Enterprise', 'products_count' => 245, 'revenue' => 5200000, 'platform_fee' => 104000, 'status' => 'Verified'],
+                ['id' => 'biz_002', 'name' => 'BuildRight Contractors', 'email' => 'info@buildright.rw', 'tier' => 'Enterprise', 'products_count' => 189, 'revenue' => 4800000, 'platform_fee' => 96000, 'status' => 'Verified'],
+                ['id' => 'biz_003', 'name' => 'TechSolutions Rwanda', 'email' => 'sales@techsolutions.rw', 'tier' => 'Growth', 'products_count' => 156, 'revenue' => 3900000, 'platform_fee' => 136500, 'status' => 'Verified'],
+                ['id' => 'biz_004', 'name' => 'FoodHub Distributors', 'email' => 'orders@foodhub.rw', 'tier' => 'Growth', 'products_count' => 312, 'revenue' => 3500000, 'platform_fee' => 122500, 'status' => 'Verified'],
+                ['id' => 'biz_005', 'name' => 'Fashion Wholesale RW', 'email' => 'wholesale@fashion.rw', 'tier' => 'Growth', 'products_count' => 428, 'revenue' => 2800000, 'platform_fee' => 98000, 'status' => 'Verified'],
+                ['id' => 'biz_006', 'name' => 'Medical Supplies Co', 'email' => 'info@medsupply.rw', 'tier' => 'Enterprise', 'products_count' => 167, 'revenue' => 2600000, 'platform_fee' => 52000, 'status' => 'Verified'],
+                ['id' => 'biz_007', 'name' => 'Auto Parts Warehouse', 'email' => 'sales@autoparts.rw', 'tier' => 'Starter', 'products_count' => 98, 'revenue' => 1800000, 'platform_fee' => 90000, 'status' => 'Verified'],
+                ['id' => 'biz_008', 'name' => 'Office Furniture Plus', 'email' => 'orders@officefurniture.rw', 'tier' => 'Starter', 'products_count' => 76, 'revenue' => 1500000, 'platform_fee' => 75000, 'status' => 'Pending'],
+                ['id' => 'biz_009', 'name' => 'Electronics Bulk Supply', 'email' => 'bulk@electronics.rw', 'tier' => 'Growth', 'products_count' => 203, 'revenue' => 1200000, 'platform_fee' => 42000, 'status' => 'Verified'],
+                ['id' => 'biz_010', 'name' => 'Construction Materials Ltd', 'email' => 'info@construction.rw', 'tier' => 'Starter', 'products_count' => 54, 'revenue' => 950000, 'platform_fee' => 47500, 'status' => 'Pending'],
+            ];
+            session(['mock_b2b_businesses' => $businesses]);
+        }
+        return session('mock_b2b_businesses');
+    }
+
+    private function getMockB2BTransactions()
+    {
+        if (!session()->has('mock_b2b_transactions')) {
+            $transactions = [
+                ['id' => 'TXN001', 'buyer' => 'BuildRight Contractors', 'seller' => 'Construction Materials Ltd', 'amount' => 850000, 'fee' => 42500, 'date' => '2026-01-10', 'status' => 'Verified'],
+                ['id' => 'TXN002', 'buyer' => 'FoodHub Distributors', 'seller' => 'AgriGrow Supplies Ltd', 'amount' => 1200000, 'fee' => 24000, 'date' => '2026-01-09', 'status' => 'Verified'],
+                ['id' => 'TXN003', 'buyer' => 'Medical Supplies Co', 'seller' => 'TechSolutions Rwanda', 'amount' => 650000, 'fee' => 22750, 'date' => '2026-01-08', 'status' => 'Verified'],
+                ['id' => 'TXN004', 'buyer' => 'Office Furniture Plus', 'seller' => 'Fashion Wholesale RW', 'amount' => 480000, 'fee' => 16800, 'date' => '2026-01-07', 'status' => 'Pending'],
+                ['id' => 'TXN005', 'buyer' => 'Auto Parts Warehouse', 'seller' => 'Electronics Bulk Supply', 'amount' => 920000, 'fee' => 32200, 'date' => '2026-01-06', 'status' => 'Verified'],
+            ];
+            session(['mock_b2b_transactions' => $transactions]);
+        }
+        return session('mock_b2b_transactions');
+    }
+
     public function showUser($id)
     {
         $user = $this->superAdminService->findUserById($id);
