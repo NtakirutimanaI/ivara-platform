@@ -59,4 +59,24 @@ interface SuperAdminRepositoryInterface
      * Get ALL users across the system.
      */
     public function getAllUsers();
+
+    /**
+     * Get Marketplace intelligence and listings.
+     * @return array
+     */
+    public function getMarketplaceData();
+
+    /**
+     * Moderate a marketplace listing.
+     * @param string $id
+     * @param string $action (approve|reject|delete)
+     * @return bool
+     */
+    public function moderateProductListing($id, $action);
+
+    /**
+     * Get system role registry.
+     * @return array
+     */
+    public function getRoleRegistry();
 }

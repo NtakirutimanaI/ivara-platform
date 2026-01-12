@@ -25,19 +25,20 @@
         .glass-panel {
             background: var(--bg-glass);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
+            border-radius: 24px;
             border: 1px solid var(--border-glass);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            padding: 24px;
+            box-shadow: var(--premium-shadow);
+            padding: 18px 22px;
             overflow-x: auto;
             transition: all 0.3s ease;
+            margin-bottom: 30px;
         }
 
-        .table-custom { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-        .table-custom th { text-align: left; padding: 12px 15px; color: var(--text-muted); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; border-bottom: 2px solid var(--border-glass); }
-        .table-custom td { padding: 16px 15px; color: var(--text-dark); background: transparent; vertical-align: middle; border-bottom: 1px solid var(--border-glass); }
-        .table-row { transition: all 0.2s; border-radius: 12px; }
-        .table-row:hover { background: rgba(79, 70, 229, 0.04); }
+        .table-custom { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+        .table-custom th { text-align: left; padding: 10px 12px; color: var(--text-muted); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; border-bottom: 1px solid var(--border-glass); letter-spacing: 0.5px; }
+        .table-custom td { padding: 10px 12px; color: var(--text-dark); background: transparent; vertical-align: middle; border-bottom: 1px solid var(--border-glass); font-size: 0.85rem; font-weight: 500; }
+        .table-row { transition: all 0.2s; }
+        .table-row:hover { background: rgba(79, 70, 229, 0.04); transform: scale(1.002); }
         [data-theme="dark"] .table-row:hover { background: rgba(79, 70, 229, 0.1); }
         
         .score-badge {
@@ -88,24 +89,25 @@
         .modal-overlay.active .modal-glass { transform: scale(1); }
         
         .btn-glass { 
-            padding: 10px 20px; 
-            border-radius: 12px; 
+            padding: 7px 15px; 
+            border-radius: 10px; 
             border: 1px solid transparent; 
             cursor: pointer; 
-            font-weight: 700; 
-            font-size: 0.85rem;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 800; 
+            font-size: 0.75rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            white-space: nowrap;
         }
         .btn-primary { 
             background: linear-gradient(135deg, #4F46E5 0%, #4338ca 100%); 
             color: white !important;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); 
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25); 
         }
-        .btn-glass:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn-glass:active { transform: translateY(0); }
+        .btn-glass:hover { transform: translateY(-2px) scale(1.05); filter: brightness(1.1); box-shadow: 0 8px 15px rgba(79, 70, 229, 0.3); }
+        .btn-glass:active { transform: translateY(0) scale(0.98); }
 
         .form-control-custom {
             width: 100%; padding: 12px; border-radius: 12px; 
@@ -144,11 +146,11 @@
                             <th>Team Member</th>
                             <th>Role</th>
                             <th>Category</th>
-                            <th>Team Controlled</th>
-                            <th>Tasks Completed</th>
-                            <th>Satisfaction Score</th>
+                            <th class="text-nowrap">Controlled</th>
+                            <th class="text-nowrap">Tasks</th>
+                            <th>Score</th>
                             <th>Efficiency</th>
-                            <th>Actions</th>
+                            <th style="text-align: right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -190,7 +192,7 @@
                                     <div style="width: {{ $score }}%; height: 100%; background: {{ $score >= 90 ? '#22c55e' : '#eab308' }};"></div>
                                 </div>
                             </td>
-                            <td>
+                             <td style="text-align: right;">
                                 <button class="btn-glass btn-primary" onclick="openReviewModal('{{ $user['id'] }}', '{{ $user['name'] }}', '{{ $roleKey }}')">
                                     <i class="fas fa-edit"></i> Review
                                 </button>
@@ -276,16 +278,16 @@
         .then(response => response.json())
         .then(data => {
             if(data.success) {
-                toastr.success(data.message);
+                showNotify(data.message);
                 closeReviewModal();
                 form.reset();
             } else {
-                toastr.error('Error submitting review');
+                showNotify('Error submitting review', 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            toastr.error('Something went wrong');
+            showNotify('Something went wrong', 'error');
         });
     }
 </script>

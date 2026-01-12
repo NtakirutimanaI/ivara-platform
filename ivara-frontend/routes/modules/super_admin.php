@@ -8,10 +8,13 @@ Route::middleware(['auth', 'admin'])->prefix('super_admin')->name('super_admin.'
     Route::get('/credentials', [SuperAdminController::class, 'credentials'])->name('credentials');
     Route::get('/users', [SuperAdminController::class, 'users'])->name('users.index');
     Route::get('/users/{id}', [SuperAdminController::class, 'showUser'])->name('users.show')->where('id', '[0-9]+');
+    Route::put('/users/{id}', [SuperAdminController::class, 'updateGeneralUser'])->name('users.update')->where('id', '[0-9]+');
+    Route::delete('/users/{id}', [SuperAdminController::class, 'deleteGeneralUser'])->name('users.delete')->where('id', '[0-9]+');
     Route::post('/users/{id}/ban', [SuperAdminController::class, 'banUser'])->name('users.ban')->where('id', '[0-9]+');
 
     // Sidebar Pages
     Route::get('/marketplace', [SuperAdminController::class, 'marketplace'])->name('marketplace.index');
+    Route::post('/marketplace/product/{id}', [SuperAdminController::class, 'productAction'])->name('marketplace.product.action');
     Route::get('/businesses', [SuperAdminController::class, 'businesses'])->name('businesses.index');
 
     // Subscriptions
@@ -22,7 +25,14 @@ Route::middleware(['auth', 'admin'])->prefix('super_admin')->name('super_admin.'
     });
 
     Route::get('/licenses', [SuperAdminController::class, 'licenses'])->name('licenses.index');
+    
+    // Roles Management
     Route::get('/roles', [SuperAdminController::class, 'roles'])->name('roles.index');
+    Route::post('/roles', [SuperAdminController::class, 'storeRole'])->name('roles.store');
+    Route::put('/roles/{slug}', [SuperAdminController::class, 'updateRole'])->name('roles.update');
+    Route::delete('/roles/{slug}', [SuperAdminController::class, 'deleteRole'])->name('roles.delete');
+    Route::post('/roles/{slug}/permissions', [SuperAdminController::class, 'syncPermissions'])->name('roles.permissions');
+
     Route::get('/services', [SuperAdminController::class, 'services'])->name('services.index');
     Route::get('/courses', [SuperAdminController::class, 'courses'])->name('courses.index');
     Route::get('/payments', [SuperAdminController::class, 'payments'])->name('payments.index');
@@ -88,6 +98,15 @@ Route::middleware(['auth', 'admin'])->prefix('super_admin')->name('super_admin.'
 
     // Billing
     Route::get('/billing/rules', [SuperAdminController::class, 'billingRules'])->name('billing.rules');
+    Route::post('/billing/rules/commission', [SuperAdminController::class, 'updateCommissionRates'])->name('billing.rules.commission');
+    Route::post('/billing/rules/tax', [SuperAdminController::class, 'updateTaxPolicies'])->name('billing.rules.tax');
+
+    // Marketplace
+    Route::get('/marketplace', [SuperAdminController::class, 'marketplace'])->name('marketplace.index');
+    Route::post('/marketplace/product/{id}', [SuperAdminController::class, 'productAction'])->name('marketplace.product.action');
+    Route::post('/marketplace/seller/upgrade', [SuperAdminController::class, 'upgradeSeller'])->name('marketplace.seller.upgrade');
+    Route::post('/marketplace/settlement/generate', [SuperAdminController::class, 'generateSettlementReport'])->name('marketplace.settlement.generate');
+    Route::post('/marketplace/mediator/audit', [SuperAdminController::class, 'auditMediator'])->name('marketplace.mediator.audit');
 
     // Settings
     Route::get('/settings', [SuperAdminController::class, 'settings'])->name('settings.index');

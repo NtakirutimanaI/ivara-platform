@@ -58,4 +58,19 @@ class SuperAdminService
     {
         return $this->repository->getAllUsers();
     }
+
+    public function getMarketplaceData()
+    {
+        return $this->repository->getMarketplaceData();
+    }
+
+    public function moderateProduct($id, $action)
+    {
+        return $this->repository->moderateProductListing($id, $action);
+    }
+
+    public function getRoles()
+    {
+        return $this->repository->getRoleRegistry();
+    }
 }

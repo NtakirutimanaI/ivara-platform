@@ -178,7 +178,7 @@
             <div class="all-admins-wrapper">
                 @foreach($categories as $cat)
                     @php 
-                        $group = $admins[$cat['slug']] ?? [];
+                        $group = $managers[$cat['slug']] ?? [];
                     @endphp
                     @if(count($group) > 0)
                         <div class="category-section" style="margin-bottom: 40px;">

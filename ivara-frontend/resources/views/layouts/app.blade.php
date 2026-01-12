@@ -54,28 +54,32 @@
         "closeButton": true,
         "progressBar": true,
         "positionClass": "toast-top-right",
-        "timeOut": "5000"
+        "timeOut": "5000",
+        "extendedTimeOut": "2000"
     };
-    @if(Session::has('success'))
-        toastr.success("{{ Session::get('success') }}");
-    @endif
-    @if(Session::has('error'))
-        toastr.error("{{ Session::get('error') }}");
-    @endif
-    @if(Session::has('info'))
-        toastr.info("{{ Session::get('info') }}");
-    @endif
-    @if(Session::has('warning'))
-        toastr.warning("{{ Session::get('warning') }}");
-    @endif
-    @if(Session::has('status'))
-        toastr.success("{{ Session::get('status') }}");
-    @endif
+
+    // Global Notification Helper
+    window.showNotify = function(message, type = 'success') {
+        if (!message) return;
+        switch(type) {
+            case 'success': toastr.success(message); break;
+            case 'error': toastr.error(message); break;
+            case 'info': toastr.info(message); break;
+            case 'warning': toastr.warning(message); break;
+            default: toastr.success(message);
+        }
+    };
+
+    @if(Session::has('success')) showNotify("{{ Session::get('success') }}", 'success'); @endif
+    @if(Session::has('error')) showNotify("{{ Session::get('error') }}", 'error'); @endif
+    @if(Session::has('info')) showNotify("{{ Session::get('info') }}", 'info'); @endif
+    @if(Session::has('warning')) showNotify("{{ Session::get('warning') }}", 'warning'); @endif
+    @if(Session::has('status')) showNotify("{{ Session::get('status') }}", 'success'); @endif
     
     // Display validation errors if any
     @if($errors->any())
         @foreach($errors->all() as $error)
-            toastr.error("{{ $error }}");
+            showNotify("{{ $error }}", 'error');
         @endforeach
     @endif
 </script>

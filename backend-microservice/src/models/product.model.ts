@@ -17,7 +17,9 @@ export interface IProduct extends Document {
     images: string[];
     variants: IProductVariant[];
     seller: mongoose.Types.ObjectId;
-    status: 'Active' | 'Inactive';
+    sellerName?: string;
+    status: 'Pending' | 'Active' | 'Inactive' | 'Rejected';
+    tier: 'Basic' | 'Standard' | 'Premium';
     createdAt: Date;
     updatedAt: Date;
 }
@@ -90,10 +92,18 @@ const ProductSchema: Schema = new Schema({
         ref: 'User',
         required: true
     },
+    sellerName: {
+        type: String
+    },
     status: {
         type: String,
-        enum: ['Active', 'Inactive'],
-        default: 'Active'
+        enum: ['Pending', 'Active', 'Inactive', 'Rejected'],
+        default: 'Pending'
+    },
+    tier: {
+        type: String,
+        enum: ['Basic', 'Standard', 'Premium'],
+        default: 'Basic'
     }
 }, {
     timestamps: true

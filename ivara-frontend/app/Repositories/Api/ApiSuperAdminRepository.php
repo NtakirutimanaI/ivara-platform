@@ -157,7 +157,72 @@ class ApiSuperAdminRepository implements SuperAdminRepositoryInterface
         if (isset($user['_id']) && !isset($user['id'])) {
             $user['id'] = $user['_id'];
         }
+        
+        // Ensure common timestamp availability
+        if (isset($user['createdAt']) && !isset($user['created_at'])) {
+            $user['created_at'] = \Carbon\Carbon::parse($user['createdAt'])->diffForHumans();
+        }
+        
         return $user;
+    }
+
+    private function normalizeProduct($p)
+    {
+        if (!$p) return null;
+        $p = (array) $p;
+        
+        // Identity & Timestamps
+        if (isset($p['_id']) && !isset($p['id'])) $p['id'] = $p['_id'];
+        if (isset($p['createdAt'])) $p['created_at'] = \Carbon\Carbon::parse($p['createdAt'])->format('M d, Y');
+        else $p['created_at'] = 'Just now';
+
+        // Mapping API terms to Frontend terms
+        $p['plan'] = $p['tier'] ?? 'Basic';
+        $p['seller_id'] = $p['seller'] ?? '0';
+        $p['seller_name'] = $p['sellerName'] ?? 'Platform Seller';
+        
+        return $p;
+    }
+
+    private function normalizePlan($plan)
+    {
+        if (!$plan) return null;
+        $plan = (array) $plan;
+        
+        // Map API 'features' array to frontend 'benefits' string
+        if (isset($plan['features']) && is_array($plan['features'])) {
+            $plan['benefits'] = implode(', ', $plan['features']);
+        } else {
+            $plan['benefits'] = $plan['benefits'] ?? 'Standard Platform Access';
+        }
+        
+        return $plan;
+    }
+
+    private function normalizeMediator($m)
+    {
+        if (!$m) return null;
+        $m = (array) $m;
+        
+        // Identity normalization
+        if (isset($m['_id']) && !isset($m['id'])) $m['id'] = $m['_id'];
+        
+        // Map API fields to frontend expectations
+        $m['clients'] = $m['clientsProvided'] ?? 0;
+        
+        // Map numeric level to tier name
+        if (isset($m['level'])) {
+            $levelMap = [1 => 'Basic', 2 => 'Standard', 3 => 'Premium'];
+            $m['level'] = is_numeric($m['level']) ? ($levelMap[$m['level']] ?? 'Basic') : $m['level'];
+        } else {
+            $m['level'] = 'Basic';
+        }
+        
+        // Calculate requirement for next tier
+        $m['requirement'] = $m['nextMilestone'] ?? 0;
+        $m['earnings'] = $m['earnings'] ?? 0;
+        
+        return $m;
     }
 
     public function getSystemOverview()
@@ -193,6 +258,59 @@ class ApiSuperAdminRepository implements SuperAdminRepositoryInterface
         } catch (\Exception $e) {
             Log::error('API System Overview failed: ' . $e->getMessage());
             return $this->getFallbackStats();
+        }
+    }
+
+    public function getMarketplaceData()
+    {
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
+                ->get($this->getApiUrl() . '/marketplace');
+            
+            if ($response->successful()) {
+                $data = $response->json();
+                return [
+                    'stats' => $data['stats'] ?? [],
+                    'products' => array_map([$this, 'normalizeProduct'], $data['products'] ?? []),
+                    'plans' => array_map([$this, 'normalizePlan'], $data['plans'] ?? []),
+                    'mediators' => array_map([$this, 'normalizeMediator'], $data['mediators'] ?? [])
+                ];
+            }
+            return ['stats' => [], 'products' => [], 'plans' => [], 'mediators' => []];
+        } catch (\Exception $e) {
+            Log::error('API Get Marketplace failed: ' . $e->getMessage());
+            return ['stats' => [], 'products' => [], 'plans' => [], 'mediators' => []];
+        }
+    }
+
+    public function moderateProductListing($id, $action)
+    {
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
+                ->post($this->getApiUrl() . '/marketplace/product/' . $id, [
+                    'action' => $action
+                ]);
+            
+            return $response->successful();
+        } catch (\Exception $e) {
+            Log::error('API Moderate Product failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getRoleRegistry()
+    {
+        try {
+            $response = Http::withHeaders($this->getAuthHeaders())
+                ->timeout(5)
+                ->get($this->getApiUrl() . '/roles');
+            
+            return $response->successful() ? $response->json() : [];
+        } catch (\Exception $e) {
+            Log::error('API Get Roles failed: ' . $e->getMessage());
+            return [];
         }
     }
 

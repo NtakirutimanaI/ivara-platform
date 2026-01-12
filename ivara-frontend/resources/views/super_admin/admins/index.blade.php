@@ -2,118 +2,114 @@
 
 @section('content')
 <div class="dashboard-wrapper" style="padding-top: 75px !important;">
-    <style>
-    <style>
-        /* Scoped Theme Variables */
-        :root {
-            --primary: #4F46E5;
-            --secondary: #64748B; 
-            --accent: #924FC2;
-            --bg-glass: rgba(255, 255, 255, 0.9);
-            --border-glass: rgba(255, 255, 255, 0.5);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-        }
+<style>
+    :root {
+        --p-indigo: #4F46E5;
+        --p-indigo-light: #EEF2FF;
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --glass-border: rgba(0, 0, 0, 0.08);
+        --card-shadow: 0 15px 30px rgba(0, 0, 0, 0.04);
+        --premium-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+        --premium-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
 
-        [data-theme="dark"] {
-            --bg-glass: #1f2937;
-            --border-glass: #374151;
-            --text-main: #f8fafc;
-            --text-muted: #9ca3af;
-        }
+    [data-theme="dark"] {
+        --glass-bg: #111827;
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --text-main: #f8fafc;
+        --text-muted: #9ca3af;
+    }
 
-        .dashboard-wrapper { padding-top: 75px !important; }
+    .dashboard-wrapper { 
+        padding-top: 80px !important; 
+        animation: fadeIn 0.8s ease-out;
+    }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 11000;
-            display: none; align-items: center; justify-content: center;
-            backdrop-filter: blur(8px);
-        }
-        .modal-glass {
-            background: var(--bg-glass); padding: 32px; border-radius: 24px;
-            width: 500px; max-width: 90%;
-            border: 1px solid var(--border-glass);
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .modal-header-custom {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 25px;
-        }
-        .modal-header-custom h3 { margin: 0; font-size: 20px; font-weight: 700; color: var(--text-main); }
-        
-        .glass-input {
-            width: 100%; padding: 12px; margin-top: 8px;
-            border-radius: 12px; border: 1px solid var(--border-glass);
-            background: rgba(255, 255, 255, 0.5); color: var(--text-main);
-            font-size: 14px; outline: none; transition: 0.3s;
-        }
-        [data-theme="dark"] .glass-input { background: rgba(0,0,0,0.2); }
-        .glass-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
-        
-        @keyframes zoomIn { from{opacity:0; transform:scale(0.95);} to{opacity:1; transform:scale(1);} }
+    /* Premium Modals */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 23, 42, 0.3); z-index: 11000;
+        display: none; align-items: center; justify-content: center;
+        backdrop-filter: blur(12px);
+    }
+    .modal-glass {
+        background: var(--glass-bg); padding: 40px; border-radius: 35px;
+        width: 520px; max-width: 90%;
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--premium-shadow);
+        animation: modalEntrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+    }
+    @keyframes modalEntrance { from{opacity:0; transform:scale(0.9) translateY(20px);} to{opacity:1; transform:scale(1) translateY(0);} }
 
-        /* Custom buttons */
-        .btn-glass {
-            padding: 12px 24px; border-radius: 14px; font-weight: 700; 
-            border: none; cursor: pointer; transition: all 0.2s;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-glass.primary { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    .glass-input {
+        width: 100%; padding: 14px 20px; margin-top: 10px;
+        border-radius: 16px; border: 1px solid var(--glass-border);
+        background: rgba(0,0,0,0.02); color: var(--text-main);
+        font-size: 0.95rem; outline: none; transition: 0.3s; font-weight: 500;
+    }
+    [data-theme="dark"] .glass-input { background: rgba(255, 255, 255, 0.03); }
+    .glass-input:focus { border-color: var(--p-indigo); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
 
-        .employee-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        
-        .card-menu { position: absolute; top: 15px; right: 15px; }
-        .menu-dots { background: none; border: none; font-size: 14px; color: var(--text-muted); cursor: pointer; }
-        .dropdown-menu-custom {
-            position: absolute; right: 0; top: 20px; background: var(--bg-glass); 
-            border-radius: 12px; width: 140px; display: none; 
-            border: 1px solid var(--border-glass);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 10;
-            overflow: hidden;
-        }
-        .card-menu:hover .dropdown-menu-custom { display: block; }
-        .dropdown-menu-custom button, .dropdown-menu-custom a {
-            display: block; width: 100%; padding: 10px 15px; text-align: left; background: none; 
-            border: none; font-size: 13px; color: var(--text-main); text-decoration: none; cursor: pointer;
-            transition: 0.2s;
-        }
-        .dropdown-menu-custom button:hover, .dropdown-menu-custom a:hover { background: rgba(79, 70, 229, 0.1); color: var(--primary); }
+    .btn-glass {
+        padding: 14px 28px; border-radius: 18px; font-weight: 800; 
+        border: none; cursor: pointer; transition: all 0.3s ease;
+        display: inline-flex; align-items: center; gap: 10px; font-size: 0.9rem;
+    }
+    .btn-glass:hover { transform: translateY(-3px); }
+    .btn-glass.primary { background: var(--p-indigo); color: #fff; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); }
 
-        .category-separator {
-            grid-column: 1 / -1; margin-top: 30px; margin-bottom: 20px;
-            display: flex; align-items: center; gap: 15px;
-        }
-        .category-separator h3 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0; }
-        .category-line { flex: 1; height: 1px; background: var(--border-glass); }
+    /* Grid & Cards */
+    .employee-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    
+    .employee-card {
+        background: var(--glass-bg); border: 1px solid var(--glass-border);
+        border-radius: 32px; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        position: relative; overflow: hidden; height: 100%;
+        backdrop-filter: blur(20px); box-shadow: var(--card-shadow);
+    }
+    .employee-card:hover { transform: translateY(-10px); box-shadow: var(--premium-shadow); border-color: var(--p-indigo); }
+    
+    .category-separator {
+        grid-column: 1 / -1; margin-top: 40px; margin-bottom: 25px;
+        display: flex; align-items: center; gap: 20px;
+    }
+    .category-separator h3 { font-size: 1.25rem; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
+    .category-line { flex: 1; height: 1px; background: var(--glass-border); }
 
-        /* Card Stylings */
-        .employee-card {
-            background: var(--bg-glass); border: 1px solid var(--border-glass);
-            border-radius: 24px; transition: all 0.3s ease;
-        }
-        .employee-card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1); }
-        
-        .card-profile h4 { color: var(--text-main); }
-        .role-badge {
-            font-size: 0.75rem; color: #4F46E5; font-weight: 700; background: #EEF2FF; 
-            padding: 6px 12px; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        [data-theme="dark"] .role-badge { background: rgba(79, 70, 229, 0.2); color: #818cf8; border: 1px solid rgba(79, 70, 229, 0.3); }
+    .card-profile h4 { color: var(--text-main); font-weight: 900; margin-bottom: 8px; }
+    .role-badge {
+        display: inline-block; padding: 6px 14px; border-radius: 50px;
+        background: var(--p-indigo-light); color: var(--p-indigo);
+        font-weight: 800; font-size: 0.7rem; text-transform: uppercase;
+    }
 
-        .card-details .detail-item { color: var(--text-muted); font-size: 0.85rem; }
-        .btn-action { 
-            background: rgba(0,0,0,0.05); color: var(--text-muted); 
-            width: 42px; height: 42px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            border: 1px solid var(--border-glass); cursor: pointer; transition: 0.2s;
-        }
-        [data-theme="dark"] .btn-action { background: rgba(255,255,255,0.05); }
-        .btn-action:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: scale(1.1); }
-    </style>
-    </style>
+    .card-menu { position: absolute; top: 20px; right: 20px; }
+    .menu-dots { 
+        width: 34px; height: 34px; border: none; background: rgba(0,0,0,0.03); 
+        color: var(--text-muted); border-radius: 10px; cursor: pointer; transition: 0.3s;
+    }
+    .menu-dots:hover { background: var(--p-indigo); color: #fff; transform: rotate(90deg); }
+
+    .dropdown-menu-custom {
+        position: absolute; right: 0; top: 40px; background: var(--glass-bg); 
+        border-radius: 18px; width: 160px; display: none; 
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--premium-shadow); z-index: 50;
+        overflow: hidden; backdrop-filter: blur(20px);
+    }
+    .card-menu:hover .dropdown-menu-custom { display: block; animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);} }
+
+    .dropdown-menu-custom button, .dropdown-menu-custom a {
+        display: block; width: 100%; padding: 12px 18px; text-align: left; background: none; 
+        border: none; font-size: 0.85rem; color: var(--text-main); font-weight: 600;
+        transition: 0.2s; border-bottom: 1px solid var(--glass-border);
+    }
+    .dropdown-menu-custom button:hover { background: var(--p-indigo-light); color: var(--p-indigo); }
+</style>
 
     {{-- Header --}}
     <header class="pro-header">
@@ -337,18 +333,7 @@
 </div>
 
 <script>
-    // AJAX Functions
-    function showToast(message, type = 'success') {
-        toastr.options = { 
-            "positionClass": "toast-top-right", 
-            "timeOut": "3000",
-            "closeButton": true,
-            "progressBar": true
-        };
-        if(type === 'success') toastr.success(message);
-        else toastr.error(message);
-    }
-
+    // Unified AJax Actions for Admin Management
     function handleCreateAdmin(e) {
         e.preventDefault();
         const form = document.getElementById('createAdminForm');
@@ -370,7 +355,7 @@
         .then(response => response.json())
         .then(data => {
             if(data.success) {
-                showToast(data.message);
+                showNotify(data.message);
                 document.getElementById('createAdminModal').style.display = 'none';
                 form.reset();
 
@@ -436,12 +421,12 @@
                 }
 
             } else {
-                showToast('Error creating admin', 'error');
+                showNotify('Error creating admin', 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showToast('Something went wrong', 'error');
+            showNotify('Something went wrong', 'error');
         });
     }
 
@@ -478,14 +463,14 @@
             return response.json();
         })
         .then(data => {
-            showToast(data.message || 'Message sent successfully');
+            showNotify(data.message || 'Message sent successfully');
             closeMessageModal();
         })
         .catch(error => {
             console.error('Error:', error);
             // Since we use mock IDs on frontend that might not exist in backend DB, 
             // we'll show success for UX demonstration if it fails
-            showToast('Message sent successfully (Simulation)', 'success');
+            showNotify('Message sent successfully (Simulation)', 'success');
             closeMessageModal();
         });
     }
@@ -505,7 +490,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            showToast(data.message || 'Admin suspended');
+            showNotify(data.message || 'Admin suspended');
             // Visual Update: Find the card and maybe dim it 
             const btn = e.target;
             // Traverse up to find card or just disable button
@@ -515,7 +500,7 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            showToast('Admin suspended (Simulation)', 'success');
+            showNotify('Admin suspended (Simulation)', 'success');
         });
     }
 

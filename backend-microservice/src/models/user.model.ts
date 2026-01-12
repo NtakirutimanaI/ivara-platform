@@ -11,6 +11,12 @@ export interface IUser extends Document {
     address?: string;
     profilePhoto?: string;
     category?: string;
+    status: 'online' | 'offline' | 'pending' | 'inactive';
+    isVerified: boolean;
+    earnings: number;
+    level: 1 | 2 | 3;
+    clientsProvided: number;
+    nextMilestone: number;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -23,6 +29,12 @@ const UserSchema = new Schema<IUser>({
     address: { type: String },
     profilePhoto: { type: String },
     category: { type: String },
+    status: { type: String, enum: ['online', 'offline', 'pending', 'inactive'], default: 'offline' },
+    isVerified: { type: Boolean, default: false },
+    earnings: { type: Number, default: 0 },
+    level: { type: Number, enum: [1, 2, 3], default: 1 },
+    clientsProvided: { type: Number, default: 0 },
+    nextMilestone: { type: Number, default: 10 }
 });
 
 export const User = model<IUser>('User', UserSchema);

@@ -106,6 +106,12 @@ router.get('/:id', getProductById);
  *                 type: number
  *               category:
  *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [Active, Inactive, Pending, Rejected]
+ *               tier:
+ *                 type: string
+ *                 enum: [Basic, Standard, Premium]
  *     responses:
  *       201:
  *         description: Product created
@@ -124,6 +130,23 @@ router.post('/', createProduct);
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               status:
+ *                 type: string
+ *                 enum: [Active, Inactive, Pending, Rejected]
+ *               tier:
+ *                 type: string
+ *                 enum: [Basic, Standard, Premium]
  *     responses:
  *       200:
  *         description: Product updated

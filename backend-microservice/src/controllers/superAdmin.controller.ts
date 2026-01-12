@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user.model';
 import { Order } from '../models/order.model';
+import { Product } from '../models/product.model';
 
 export const getPlatformOverview = async (req: Request, res: Response) => {
     try {
@@ -141,13 +142,6 @@ export const addReview = async (req: Request, res: Response) => {
     try {
         const { userId, content, rating } = req.body;
 
-        // In a real app, we would push to a reviews array or update fields
-        // For now, let's update a 'performanceReview' field on the user model if it existed
-        // Since we can't easily change schema on the fly without looking at model file, 
-        // we will just treat it as a successful operation for the API completeness check
-        // or try to update if the schema allows strict: false or similar.
-
-        // Assuming we might have a dynamic schema or we just want to acknowledge it:
         const user = await User.findByIdAndUpdate(userId, {
             $set: {
                 performanceReview: {
@@ -166,5 +160,140 @@ export const addReview = async (req: Request, res: Response) => {
     } catch (err) {
         console.error('Add review error:', err);
         res.status(500).json({ error: 'Failed to submit review' });
+    }
+};
+
+export const getMarketplaceData = async (req: Request, res: Response) => {
+    try {
+        const products = await Product.find().sort({ createdAt: -1 });
+        const mediators = await User.find({ role: 'mediator' }).select('-password');
+
+        const stats = {
+            totalListings: await Product.countDocuments(),
+            pendingApprovals: await Product.countDocuments({ status: 'Pending' }),
+            verifiedSellers: await User.countDocuments({ role: { $in: ['businessperson', 'craftsperson'] }, isVerified: true }),
+            platformRevenue: 1250000 // Mock platform revenue for now
+        };
+
+        const plans = [
+            { id: 1, name: 'Basic', price: 10000, color: 'basic', features: ['5 Listings', 'Standard Support', 'Basic Analytics'] },
+            { id: 2, name: 'Standard', price: 25000, color: 'standard', features: ['20 Listings', 'Priority Support', 'Advanced Analytics', 'Featured Badges'] },
+            { id: 3, name: 'Premium', price: 50000, color: 'premium', features: ['Unlimited Listings', 'Dedicated Manager', 'API Access', 'Global Reach'] }
+        ];
+
+        res.json({
+            stats,
+            products,
+            plans,
+            mediators
+        });
+    } catch (err) {
+        console.error('Marketplace data error:', err);
+        res.status(500).json({ error: 'Failed to fetch marketplace data' });
+    }
+};
+
+export const moderateProduct = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { action } = req.body; // 'approve', 'reject', 'delete'
+
+        if (action === 'delete') {
+            await Product.findByIdAndDelete(id);
+            return res.json({ message: 'Product deleted successfully' });
+        }
+
+        const status = action === 'approve' ? 'Active' : 'Rejected';
+        const product = await Product.findByIdAndUpdate(id, { status }, { new: true });
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        res.json({ message: `Product ${status.toLowerCase()}ed successfully`, product });
+    } catch (err) {
+        console.error('Moderate product error:', err);
+        res.status(500).json({ error: 'Failed to moderate product' });
+    }
+};
+
+export const getRoles = async (req: Request, res: Response) => {
+    try {
+        const roles = [
+            {
+                id: 0,
+                name: 'Super Admin',
+                slug: 'super_admin',
+                users_count: 1,
+                permissions: ['Full Access', 'System Settings', 'Security Hub'],
+                badge: 'System',
+                color: '#ef4444',
+                description: 'Full system access, including security and global configurations.'
+            },
+            {
+                id: 1,
+                name: 'Admin',
+                slug: 'admin',
+                users_count: await User.countDocuments({ role: 'admin' }),
+                permissions: ['View Analytics', 'Manage Users', 'System Settings'],
+                badge: 'Management',
+                color: '#f59e0b',
+                description: 'Manages platform categories, staff assignments, and high-level reports.'
+            },
+            {
+                id: 2,
+                name: 'Manager',
+                slug: 'manager',
+                users_count: await User.countDocuments({ role: 'manager' }),
+                permissions: ['Moderate Content', 'Support Chat', 'Basic Reports'],
+                badge: 'Ops',
+                color: '#3b82f6',
+                description: 'Oversees service sectors and manages regional supervisor teams.'
+            },
+            {
+                id: 3,
+                name: 'Supervisor',
+                slug: 'supervisor',
+                users_count: await User.countDocuments({ role: 'supervisor' }),
+                permissions: ['View Listings', 'Approve Requests'],
+                badge: 'Field',
+                color: '#10b981',
+                description: 'On-the-ground verification of tasks and quality assurance.'
+            },
+            {
+                id: 4,
+                name: 'Provider',
+                slug: 'provider',
+                users_count: await User.countDocuments({ role: 'provider' }),
+                permissions: ['Self Management', 'Manage Services', 'Receive Payouts'],
+                badge: 'Partner',
+                color: '#8b5cf6',
+                description: 'Professional service entities fulfilling platform requests.'
+            },
+            {
+                id: 5,
+                name: 'Client',
+                slug: 'client',
+                users_count: await User.countDocuments({ role: 'client' }),
+                permissions: ['Purchase Products', 'View History', 'Chat Providers'],
+                badge: 'User',
+                color: '#6366f1',
+                description: 'End users who request and consume services via the platform.'
+            },
+            {
+                id: 6,
+                name: 'Mediator',
+                slug: 'mediator',
+                users_count: await User.countDocuments({ role: 'mediator' }),
+                permissions: ['Referral Network', 'Tier Tracking'],
+                badge: 'Incentive',
+                color: '#ec4899',
+                description: 'Earn rewards by connecting clients to the platform.'
+            }
+        ];
+        res.json(roles);
+    } catch (err) {
+        console.error('Fetch roles error:', err);
+        res.status(500).json({ error: 'Failed to fetch roles' });
     }
 };

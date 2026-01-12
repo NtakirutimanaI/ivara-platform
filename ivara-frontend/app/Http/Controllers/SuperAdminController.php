@@ -47,6 +47,15 @@ class SuperAdminController extends Controller
     {
         $user = $this->superAdminService->updateUserStatus($id, 'banned');
         
+        // Update mock session too if it exists
+        if (session()->has('mock_users')) {
+            $users = session('mock_users');
+            foreach($users as &$u) {
+                if ($u['id'] == $id) { $u['status'] = 'banned'; break; }
+            }
+            session(['mock_users' => $users]);
+        }
+
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
@@ -56,6 +65,41 @@ class SuperAdminController extends Controller
         }
 
         return back()->with('success', 'User banned successfully.');
+    }
+
+    public function updateGeneralUser(Request $request, $id)
+    {
+        $users = $this->getMockUsers('users');
+        $updatedUser = null;
+        foreach($users as &$u) {
+            if ($u['id'] == $id) {
+                $u['name'] = $request->input('name');
+                $u['email'] = $request->input('email');
+                $u['role'] = $request->input('role');
+                $u['status'] = $request->input('status');
+                $updatedUser = $u;
+                break;
+            }
+        }
+        session(['mock_users' => $users]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'User profile updated successfully.',
+            'user' => $updatedUser
+        ]);
+    }
+
+    public function deleteGeneralUser($id)
+    {
+        $users = $this->getMockUsers('users');
+        $users = collect($users)->filter(fn($u) => $u['id'] != $id)->values()->toArray();
+        session(['mock_users' => $users]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User account deleted successfully.'
+        ]);
     }
 
     public function categories()
@@ -169,8 +213,11 @@ class SuperAdminController extends Controller
     private function getMockUsers($roleKey)
     {
         $sessionKey = 'mock_' . $roleKey;
+        $isMgmt = in_array($roleKey, ['admins', 'managers', 'supervisors']);
+        $expectedCount = $isMgmt ? 14 : 18;
 
-        if (!session()->has($sessionKey)) {
+        // Force re-generation if session is missing or significantly mismatched/empty
+        if (!session()->has($sessionKey) || count(session($sessionKey)) < $expectedCount) {
             $users = [];
             $categories = $this->getMockCategories();
             
@@ -214,17 +261,22 @@ class SuperAdminController extends Controller
                 ],
             ];
 
-            // Rwandan Management Staff (from documentation.txt)
+            // Rwandan Management Staff (Expanded to exactly 14 per tier)
             $rwandanMgmt = [ 
-                'Technical & Repair' => ['Admin' => 'Jean Bosco Niyonsaba', 'Manager' => 'Mutoni Alice', 'Supervisor' => 'Karasira Eric'],
-                'Creative & Lifestyle' => ['Admin' => 'Uwimana Marie', 'Manager' => 'Habimana Innocent', 'Supervisor' => 'Umutoniwase Solange'],
-                'Transport & Travel' => ['Admin' => 'Gakuba Benjamin', 'Manager' => 'Murekatete Claudine', 'Supervisor' => 'Ishimwe Didier'],
-                'Food, Fashion & Events' => ['Admin' => 'Mukansanga Salome', 'Manager' => 'Bizimana Jean de Dieu', 'Supervisor' => 'Uwera Beatrice'],
-                'Education & Knowledge' => ['Admin' => 'Ndayisaba Fabrice', 'Manager' => 'Mukandutiye Seraphine', 'Supervisor' => 'Rutayisire David'],
-                'Agriculture & Environment' => ['Admin' => 'Uwizeye Claudine', 'Manager' => 'Kalisa John', 'Supervisor' => 'Mutesi Divine'],
-                'Media & Entertainment' => ['Admin' => 'Jean Damascene Ntabanganyimana', 'Manager' => 'Nyirahabimana Speciose', 'Supervisor' => 'Manzi Olivier'],
-                'Legal & Professional' => ['Admin' => 'Umubyeyi Diane', 'Manager' => 'Nkurunziza Pascal', 'Supervisor' => 'Mugenzi Aimable'],
-                'Other Services' => ['Admin' => 'Uwimana Josiane', 'Manager' => 'Tuyishime Innocent', 'Supervisor' => 'Karasira Benjamin'],
+                ['Admin' => 'Jean Bosco Niyonsaba', 'Manager' => 'Mutoni Alice', 'Supervisor' => 'Karasira Eric'],
+                ['Admin' => 'Uwimana Marie', 'Manager' => 'Habimana Innocent', 'Supervisor' => 'Umutoniwase Solange'],
+                ['Admin' => 'Gakuba Benjamin', 'Manager' => 'Murekatete Claudine', 'Supervisor' => 'Ishimwe Didier'],
+                ['Admin' => 'Mukansanga Salome', 'Manager' => 'Bizimana Jean de Dieu', 'Supervisor' => 'Uwera Beatrice'],
+                ['Admin' => 'Ndayisaba Fabrice', 'Manager' => 'Mukandutiye Seraphine', 'Supervisor' => 'Rutayisire David'],
+                ['Admin' => 'Uwizeye Claudine', 'Manager' => 'Kalisa John', 'Supervisor' => 'Mutesi Divine'],
+                ['Admin' => 'Jean Damascene Ntabanganyimana', 'Manager' => 'Nyirahabimana Speciose', 'Supervisor' => 'Manzi Olivier'],
+                ['Admin' => 'Umubyeyi Diane', 'Manager' => 'Nkurunziza Pascal', 'Supervisor' => 'Mugenzi Aimable'],
+                ['Admin' => 'Uwimana Josiane', 'Manager' => 'Tuyishime Innocent', 'Supervisor' => 'Karasira Benjamin'],
+                ['Admin' => 'Rwigema Silas', 'Manager' => 'Umutoni Fiona', 'Supervisor' => 'Niyonzima Placide'],
+                ['Admin' => 'Kayitesi Hope', 'Manager' => 'Ntaganda Fred', 'Supervisor' => 'Mukeshimana Marie'],
+                ['Admin' => 'Gatera Kevin', 'Manager' => 'Uwayezu Phiona', 'Supervisor' => 'Ndimbati Salva'],
+                ['Admin' => 'Ishimwe Grace', 'Manager' => 'Rukundo Regis', 'Supervisor' => 'Uwamahoro Betty'],
+                ['Admin' => 'Nteziryayo Paul', 'Manager' => 'Kamanzi Robert', 'Supervisor' => 'Tuyisenge Chantal'],
             ];
 
             foreach($categories as $cat) {
@@ -246,42 +298,46 @@ class SuperAdminController extends Controller
                             'tasks' => 0
                          ];
                      }
-                 } else {
-                     // Add specific Management role for this category
-                     $roleTitle = match($roleKey) {
+                } else {
+                    // Add all 14 Management roles exactly once
+                    $roleTitle = match($roleKey) {
                         'managers' => 'Manager',
                         'supervisors' => 'Supervisor',
                         default => 'Admin'
-                     };
-                     
-                     $name = $rwandanMgmt[$catName][$roleTitle] ?? "Staff " . $roleTitle;
-                     
-                     // Generate email based on documentation pattern if not explicitly mapped
-                     $emailName = strtolower(str_replace(' ', '.', $name));
-                     $catSlug = strtolower(str_replace([' ', '&'], '', $catName));
-                     $email = $emailName . '.' . strtolower($roleTitle) . '.' . $catSlug . '@ivara.rw';
-
-                     $users[] = [
-                        'id' => rand(100, 999),
-                        'name' => $name,
-                        'email' => $email,
-                        'role' => $roleTitle,
-                        'category' => $catName,
-                        'status' => 'online',
-                        'last_login' => rand(1, 48) . ' mins ago',
-                        'tasks' => 0
-                     ];
-                 }
+                    };
+                    
+                    foreach ($rwandanMgmt as $index => $staff) {
+                        $cat = $categories[$index % count($categories)];
+                        $users[] = [
+                           'id' => rand(100, 999),
+                           'name' => $staff[$roleTitle],
+                           'email' => strtolower(str_replace(' ', '.', $staff[$roleTitle])) . '@ivara.com',
+                           'role' => $roleTitle,
+                           'category' => $cat['name'],
+                           'status' => 'online',
+                           'phone' => '078' . rand(1111111, 9999999),
+                           'last_login' => rand(1, 48) . ' mins ago',
+                           'tasks' => rand(0, 5)
+                        ];
+                    }
+                    break; 
+                }
             }
             session([$sessionKey => $users]);
         }
         return session($sessionKey);
     }
 
-    // --- Admins ---
     public function indexAdmins() {
         return $this->genericIndex('admins', 'super_admin.admins.index');
     }
+    public function indexManagers() {
+        return $this->genericIndex('managers', 'super_admin.managers.index');
+    }
+    public function indexSupervisors() {
+        return $this->genericIndex('supervisors', 'super_admin.supervisors.index');
+    }
+
     public function storeAdmin(Request $request) {
         return $this->genericStore($request, 'admins', 'super_admin.admins.index');
     }
@@ -291,17 +347,7 @@ class SuperAdminController extends Controller
     public function updateAdmin(Request $request, $id) {
         return $this->genericUpdate($request, $id, 'admins', 'super_admin.admins.index');
     }
-    public function messageAdmin($id) {
-        return back()->with('success', 'Message sent successfully (Simulation).');
-    }
-    public function suspendAdmin($id) {
-        return back()->with('success', 'Admin status updated (Simulation).');
-    }
 
-    // --- Managers ---
-    public function indexManagers() {
-        return $this->genericIndex('managers', 'super_admin.managers.index');
-    }
     public function storeManager(Request $request) {
         return $this->genericStore($request, 'managers', 'super_admin.managers.index');
     }
@@ -312,10 +358,6 @@ class SuperAdminController extends Controller
         return $this->genericUpdate($request, $id, 'managers', 'super_admin.managers.index'); 
     }
 
-    // --- Supervisors ---
-    public function indexSupervisors() {
-        return $this->genericIndex('supervisors', 'super_admin.supervisors.index');
-    }
     public function storeSupervisor(Request $request) {
         return $this->genericStore($request, 'supervisors', 'super_admin.supervisors.index');
     }
@@ -383,44 +425,63 @@ class SuperAdminController extends Controller
     private function genericIndex($roleKey, $view) {
         $overview = $this->superAdminService->getSystemOverview();
         
-        $realUsers = [];
-        // For 'users' page, we force mock data to strictly adhere to the documentation personas (2 per category)
-        if ($roleKey !== 'users') {
-            if ($roleKey === 'admins') {
-                $rolesToFetch = ['admin'];
-                $realUsers = $this->superAdminService->getUsersByRole($rolesToFetch);
-            } else if ($roleKey === 'managers') {
-                $rolesToFetch = ['manager'];
-                $realUsers = $this->superAdminService->getUsersByRole($rolesToFetch);
-            } else if ($roleKey === 'supervisors') {
-                $rolesToFetch = ['supervisor'];
-                $realUsers = $this->superAdminService->getUsersByRole($rolesToFetch);
-            }
-        }
+        // Fetch Real Data First
+        $roleToFetch = match($roleKey) {
+            'admins' => ['admin'],
+            'managers' => ['manager'],
+            'supervisors' => ['supervisor'],
+            'users' => ['client', 'provider'],
+            default => []
+        };
         
-        if (count($realUsers) > 0) {
-            $allUsers = collect($realUsers)->map(function($u) {
-                $u = (object) $u;
-                return [
-                    'id' => $u->id ?? $u->_id ?? null,
-                    'name' => $u->name ?? 'Unknown',
-                    'email' => $u->email ?? 'no-email@ivara.com',
-                    'role' => ucfirst($u->role ?? 'User'),
-                    'category' => $u->category ?? 'General',
-                    'status' => $u->status ?? 'online',
-                    'phone' => $u->phone ?? $u->phoneNumber ?? '--',
-                    'last_login' => isset($u->last_login) ? \Carbon\Carbon::parse($u->last_login)->diffForHumans() : 'Never',
-                    'tasks' => 0
-                ];
-            })->toArray();
-        } else {
-            // Fallback (or forced for users page) to mock data
-            $allUsers = $this->getMockUsers($roleKey);
+        $realUsers = [];
+        if (!empty($roleToFetch)) {
+            $realUsers = $this->superAdminService->getUsersByRole($roleToFetch);
         }
+
+        $normalizedReal = collect($realUsers)->map(function($u) {
+            $uArr = (array) $u;
+            return [
+                'id' => $uArr['id'] ?? $uArr['_id'] ?? rand(100000, 999999),
+                'name' => $uArr['name'] ?? 'Real Entity',
+                'email' => $uArr['email'] ?? 'api@ivara.com',
+                'role' => ucfirst($uArr['role'] ?? 'User'),
+                'category' => $uArr['category'] ?? 'General',
+                'status' => $uArr['status'] ?? 'online',
+                'phone' => $uArr['phone'] ?? $uArr['phoneNumber'] ?? '--',
+                'last_login' => isset($uArr['last_login']) ? \Carbon\Carbon::parse($uArr['last_login'])->diffForHumans() : 'Just now',
+                'tasks' => rand(0, 10)
+            ];
+        })->toArray();
+
+        // Merge with Mock Personas to ensure high population
+        if ($roleKey === 'users') {
+            $mockBase = array_merge(
+                $this->getMockUsers('admins'),
+                $this->getMockUsers('managers'),
+                $this->getMockUsers('supervisors'),
+                $this->getMockUsers('users')
+            );
+        } else {
+            $mockBase = $this->getMockUsers($roleKey);
+        }
+
+        // Deduplicate and Merge: Real data wins on ID collision
+        $allUsers = array_merge($mockBase, $normalizedReal);
+        $allUsers = collect($allUsers)->unique('email')->values()->toArray();
+
+        // Clean up: Ensure $allUsers is always a collection for easier mapping
+        $allUsers = collect($allUsers)->values()->toArray();
 
         $allCategories = $this->getMockCategories();
         $categoryMap = collect($allCategories)->pluck('name', 'slug')->toArray();
         $reverseCategoryMap = array_flip($categoryMap);
+
+        $roleDefinitions = $this->superAdminService->getRoles();
+        if (empty($roleDefinitions)) {
+            $roleDefinitions = $this->getMockRoles();
+        }
+        $roleSlugMap = collect($roleDefinitions)->pluck('slug', 'name')->toArray();
 
         $grouped = [];
         foreach($allUsers as $u) {
@@ -431,6 +492,7 @@ class SuperAdminController extends Controller
             
             $u['category_slug'] = $catSlug;
             $u['category_name'] = $catName;
+            $u['role_slug'] = $roleSlugMap[$u['role']] ?? \Illuminate\Support\Str::slug($u['role']);
             
             $grouped[$catSlug][] = $u;
         }
@@ -442,9 +504,13 @@ class SuperAdminController extends Controller
 
         $data = [
             'categories' => $allCategories,
-            'admins' => $grouped,
+            'roles' => $roleDefinitions,
+            // Provide data under the expected key for the view
+            'admins' => $grouped, 
+            'managers' => $grouped,
+            'supervisors' => $grouped,
             'users' => $grouped,
-            'admins_flat' => $allUsers, // Flat list for analytical pages
+            'admins_flat' => $allUsers,
             'users_flat' => $allUsers,
             'overview' => $overview
         ];
@@ -558,81 +624,434 @@ class SuperAdminController extends Controller
         return view('super_admin.billing.rules');
     }
 
+    public function updateCommissionRates(Request $request)
+    {
+        $rules = session('billing_rules', []);
+        
+        $rules['standard_commission'] = $request->input('standard_commission', 15);
+        $rules['premium_commission'] = $request->input('premium_commission', 10);
+        $rules['product_commission'] = $request->input('product_commission', 5);
+        
+        session(['billing_rules' => $rules]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Commission rates updated successfully',
+            'data' => $rules
+        ]);
+    }
+
+    public function updateTaxPolicies(Request $request)
+    {
+        $rules = session('billing_rules', []);
+        
+        $rules['vat_enabled'] = $request->has('vat_enabled');
+        $rules['transaction_fee'] = $request->input('transaction_fee', 0.50);
+        $rules['payout_schedule'] = $request->input('payout_schedule', 'weekly');
+        
+        session(['billing_rules' => $rules]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Tax and fee policies saved successfully',
+            'data' => $rules
+        ]);
+    }
+
     // --- Settings ---
     public function settings()
     {
         return view('super_admin.settings.index');
     }
 
-    // --- Other Sidebar Pages (Previously incorrectly pointing to dashboard) ---
-    public function marketplace() { return view('super_admin.marketplace.index'); }
-    public function businesses() { return view('super_admin.businesses.index'); }
-    public function licenses() { return view('super_admin.licenses.index'); }
-    public function roles() {
-        $roles = [
-            [
-                'id' => 1,
-                'name' => 'Super Admin',
-                'slug' => 'super_admin',
-                'description' => 'Full system access, including security and global configurations.',
-                'users_count' => 3,
-                'permissions' => ['full_access', 'manage_logs', 'system_settings'],
-                'color' => '#ef4444',
-                'badge' => 'System'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Admin',
-                'slug' => 'admin',
-                'description' => 'Manages platform categories, staff assignments, and high-level reports.',
-                'users_count' => 18,
-                'permissions' => ['manage_users', 'view_analytics', 'moderate_content'],
-                'color' => '#f59e0b',
-                'badge' => 'Management'
-            ],
-            [
-                'id' => 3,
-                'name' => 'Manager',
-                'slug' => 'manager',
-                'description' => 'Oversees service sectors and manages regional supervisor teams.',
-                'users_count' => 42,
-                'permissions' => ['assign_tasks', 'approve_applications', 'view_reports'],
-                'color' => '#3b82f6',
-                'badge' => 'Ops'
-            ],
-            [
-                'id' => 4,
-                'name' => 'Supervisor',
-                'slug' => 'supervisor',
-                'description' => 'On-the-ground verification of tasks and quality assurance.',
-                'users_count' => 115,
-                'permissions' => ['verify_completion', 'field_checks', 'update_status'],
-                'color' => '#10b981',
-                'badge' => 'Field'
-            ],
-            [
-                'id' => 5,
-                'name' => 'Provider',
-                'slug' => 'provider',
-                'description' => 'Professional service entities fulfilling platform requests.',
-                'users_count' => 1240,
-                'permissions' => ['manage_services', 'receive_payouts', 'fulfill_orders'],
-                'color' => '#8b5cf6',
-                'badge' => 'Partner'
-            ],
-            [
-                'id' => 6,
-                'name' => 'Client',
-                'slug' => 'client',
-                'description' => 'End users who request and consume services via the platform.',
-                'users_count' => 5800,
-                'permissions' => ['create_orders', 'view_history', 'chat_providers'],
-                'color' => '#6366f1',
-                'badge' => 'User'
-            ]
+    public function marketplace() { 
+        $apiData = $this->superAdminService->getMarketplaceData();
+        
+        $products = !empty($apiData['products']) ? $apiData['products'] : $this->getMockProducts();
+        $plans = !empty($apiData['plans']) ? $apiData['plans'] : $this->getMockPlans();
+        $mediators = !empty($apiData['mediators']) ? $apiData['mediators'] : $this->getMockMediators();
+        
+        if (!empty($apiData['stats'])) {
+            $stats = [
+                'total_listings' => $apiData['stats']['totalListings'] ?? 0,
+                'pending_reviews' => $apiData['stats']['pendingApprovals'] ?? 0,
+                'total_sellers' => $apiData['stats']['verifiedSellers'] ?? 0,
+                'marketplace_revenue' => $apiData['stats']['platformRevenue'] ?? 0
+            ];
+        } else {
+            $stats = [
+                'total_listings' => count($products),
+                'pending_reviews' => collect($products)->where('status', 'Pending')->count(),
+                'total_sellers' => collect($products)->pluck('seller_id')->unique()->count(),
+                'marketplace_revenue' => collect($mediators)->sum('earnings') + 1250000 
+            ];
+        }
+
+        $sellerSubscriptions = $this->getMockSellerSubscriptions();
+
+        return view('super_admin.marketplace.index', compact('products', 'plans', 'mediators', 'stats', 'sellerSubscriptions')); 
+    }
+
+    private function getMockSellerSubscriptions() {
+        if (!session()->has('mock_seller_subscriptions')) {
+            $sellers = [
+                ['name' => 'AgriGrow Rwanda Ltd', 'email' => 'contact@agrigrow.rw', 'plan' => 'Premium', 'status' => 'Active', 'revenue' => 450000, 'joined' => '2024-01-15'],
+                ['name' => 'FashionHub Kigali', 'email' => 'info@fashionhub.rw', 'plan' => 'Standard', 'status' => 'Active', 'revenue' => 280000, 'joined' => '2024-02-20'],
+                ['name' => 'TechRepair Pro', 'email' => 'support@techrepair.rw', 'plan' => 'Premium', 'status' => 'Active', 'revenue' => 520000, 'joined' => '2023-11-10'],
+                ['name' => 'BuildMasters Construction', 'email' => 'admin@buildmasters.rw', 'plan' => 'Standard', 'status' => 'Active', 'revenue' => 380000, 'joined' => '2024-03-05'],
+                ['name' => 'EduTech Solutions', 'email' => 'hello@edutech.rw', 'plan' => 'Basic', 'status' => 'Active', 'revenue' => 120000, 'joined' => '2024-04-12'],
+                ['name' => 'Creative Media Hub', 'email' => 'contact@creativemedia.rw', 'plan' => 'Standard', 'status' => 'Active', 'revenue' => 310000, 'joined' => '2024-01-28'],
+                ['name' => 'Transport Solutions Ltd', 'email' => 'info@transportsolutions.rw', 'plan' => 'Premium', 'status' => 'Active', 'revenue' => 680000, 'joined' => '2023-12-03'],
+                ['name' => 'Legal Advisors Rwanda', 'email' => 'legal@advisors.rw', 'plan' => 'Basic', 'status' => 'Pending', 'revenue' => 85000, 'joined' => '2024-05-01'],
+                ['name' => 'Food Delivery Express', 'email' => 'orders@foodexpress.rw', 'plan' => 'Standard', 'status' => 'Active', 'revenue' => 420000, 'joined' => '2024-02-14'],
+                ['name' => 'Home Services Plus', 'email' => 'support@homeservices.rw', 'plan' => 'Premium', 'status' => 'Active', 'revenue' => 590000, 'joined' => '2023-10-22'],
+                ['name' => 'Craft Artisans Collective', 'email' => 'hello@craftartisans.rw', 'plan' => 'Basic', 'status' => 'Active', 'revenue' => 95000, 'joined' => '2024-04-18'],
+                ['name' => 'Auto Mechanics Pro', 'email' => 'service@automechanics.rw', 'plan' => 'Standard', 'status' => 'Active', 'revenue' => 340000, 'joined' => '2024-03-22'],
+            ];
+            session(['mock_seller_subscriptions' => $sellers]);
+        }
+        return session('mock_seller_subscriptions');
+    }
+
+    private function getMockProducts() {
+        if (!session()->has('mock_marketplace_products')) {
+            $products = [
+                // Technical & Repair Services
+                ['id' => 'prod_001', 'name' => 'Professional Laptop Repair & Maintenance', 'seller_name' => 'TechFix Rwanda', 'seller_id' => 'seller_001', 'category' => 'Technical & Repair', 'price' => 25000, 'status' => 'Active', 'plan' => 'Premium', 'created_at' => '2025-12-15'],
+                ['id' => 'prod_002', 'name' => 'Smartphone Screen Replacement Service', 'seller_name' => 'Mobile Care Pro', 'seller_id' => 'seller_002', 'category' => 'Technical & Repair', 'price' => 15000, 'status' => 'Active', 'plan' => 'Standard', 'created_at' => '2025-12-20'],
+                ['id' => 'prod_003', 'name' => 'Home Appliance Repair (Refrigerators, Washers)', 'seller_name' => 'HomeService Plus', 'seller_id' => 'seller_003', 'category' => 'Technical & Repair', 'price' => 35000, 'status' => 'Pending', 'plan' => 'Standard', 'created_at' => '2026-01-05'],
+                
+                // Creative & Lifestyle
+                ['id' => 'prod_004', 'name' => 'Professional Wedding Photography Package', 'seller_name' => 'Lens & Light Studio', 'seller_id' => 'seller_004', 'category' => 'Creative & Lifestyle', 'price' => 150000, 'status' => 'Active', 'plan' => 'Premium', 'created_at' => '2025-11-10'],
+                ['id' => 'prod_005', 'name' => 'Custom Logo Design & Branding', 'seller_name' => 'Creative Minds RW', 'seller_id' => 'seller_005', 'category' => 'Creative & Lifestyle', 'price' => 45000, 'status' => 'Active', 'plan' => 'Standard', 'created_at' => '2025-12-01'],
+                ['id' => 'prod_006', 'name' => 'Event DJ Services - Weddings & Parties', 'seller_name' => 'DJ Maestro', 'seller_id' => 'seller_006', 'category' => 'Creative & Lifestyle', 'price' => 80000, 'status' => 'Pending', 'plan' => 'Basic', 'created_at' => '2026-01-08'],
+                
+                // Transport & Travel
+                ['id' => 'prod_007', 'name' => 'Airport Transfer Service (Kigali)', 'seller_name' => 'Swift Rides Rwanda', 'seller_id' => 'seller_007', 'category' => 'Transport & Travel', 'price' => 20000, 'status' => 'Active', 'plan' => 'Premium', 'created_at' => '2025-10-15'],
+                ['id' => 'prod_008', 'name' => 'Car Rental - SUV (Daily Rate)', 'seller_name' => 'DriveEasy RW', 'seller_id' => 'seller_008', 'category' => 'Transport & Travel', 'price' => 50000, 'status' => 'Active', 'plan' => 'Standard', 'created_at' => '2025-11-20'],
+                ['id' => 'prod_009', 'name' => 'Motorcycle Taxi Service (Moto)', 'seller_name' => 'SafeMoto Network', 'seller_id' => 'seller_009', 'category' => 'Transport & Travel', 'price' => 2000, 'status' => 'Rejected', 'plan' => 'Basic', 'created_at' => '2025-12-28'],
+                
+                // Food, Fashion & Events
+                ['id' => 'prod_010', 'name' => 'Catering Service - Corporate Events (50 pax)', 'seller_name' => 'Gourmet Delights RW', 'seller_id' => 'seller_010', 'category' => 'Food, Fashion & Events', 'price' => 250000, 'status' => 'Active', 'plan' => 'Premium', 'created_at' => '2025-09-05'],
+                ['id' => 'prod_011', 'name' => 'Custom Tailoring - Traditional Imishanana', 'seller_name' => 'Heritage Fashion House', 'seller_id' => 'seller_011', 'category' => 'Food, Fashion & Events', 'price' => 35000, 'status' => 'Active', 'plan' => 'Standard', 'created_at' => '2025-11-12'],
+                ['id' => 'prod_012', 'name' => 'Wedding Cake Design & Delivery', 'seller_name' => 'Sweet Celebrations', 'seller_id' => 'seller_012', 'category' => 'Food, Fashion & Events', 'price' => 120000, 'status' => 'Pending', 'plan' => 'Standard', 'created_at' => '2026-01-03'],
+                
+                // Education & Knowledge
+                ['id' => 'prod_013', 'name' => 'Private Math Tutoring (Secondary Level)', 'seller_name' => 'EduMasters Rwanda', 'seller_id' => 'seller_013', 'category' => 'Education & Knowledge', 'price' => 30000, 'status' => 'Active', 'plan' => 'Basic', 'created_at' => '2025-10-20'],
+                ['id' => 'prod_014', 'name' => 'IELTS Preparation Course (2 Months)', 'seller_name' => 'Global Language Institute', 'seller_id' => 'seller_014', 'category' => 'Education & Knowledge', 'price' => 180000, 'status' => 'Active', 'plan' => 'Premium', 'created_at' => '2025-11-01'],
+                ['id' => 'prod_015', 'name' => 'Web Development Bootcamp (3 Months)', 'seller_name' => 'CodeCraft Academy', 'seller_id' => 'seller_015', 'category' => 'Education & Knowledge', 'price' => 350000, 'status' => 'Pending', 'plan' => 'Premium', 'created_at' => '2026-01-07'],
+                
+                // Media
+                ['id' => 'prod_016', 'name' => 'Corporate Video Production Service', 'seller_name' => 'Vision Media Group', 'seller_id' => 'seller_016', 'category' => 'Media', 'price' => 200000, 'status' => 'Active', 'plan' => 'Premium', 'created_at' => '2025-08-15'],
+                ['id' => 'prod_017', 'name' => 'Social Media Management (Monthly)', 'seller_name' => 'Digital Boost RW', 'seller_id' => 'seller_017', 'category' => 'Media', 'price' => 75000, 'status' => 'Active', 'plan' => 'Standard', 'created_at' => '2025-12-10'],
+                
+                // Agriculture
+                ['id' => 'prod_018', 'name' => 'Organic Fertilizer Supply (50kg bags)', 'seller_name' => 'GreenGrow Supplies', 'seller_id' => 'seller_018', 'category' => 'Agriculture', 'price' => 18000, 'status' => 'Active', 'plan' => 'Standard', 'created_at' => '2025-11-25'],
+                ['id' => 'prod_019', 'name' => 'Farm Irrigation System Installation', 'seller_name' => 'AgroTech Solutions', 'seller_id' => 'seller_019', 'category' => 'Agriculture', 'price' => 450000, 'status' => 'Pending', 'plan' => 'Premium', 'created_at' => '2026-01-02'],
+                
+                // Legal
+                ['id' => 'prod_020', 'name' => 'Legal Consultation - Business Registration', 'seller_name' => 'Rwanda Legal Advisors', 'seller_id' => 'seller_020', 'category' => 'Legal', 'price' => 50000, 'status' => 'Active', 'plan' => 'Premium', 'created_at' => '2025-09-20'],
+                ['id' => 'prod_021', 'name' => 'Contract Review & Drafting Service', 'seller_name' => 'LawPro Associates', 'seller_id' => 'seller_021', 'category' => 'Legal', 'price' => 75000, 'status' => 'Pending', 'plan' => 'Standard', 'created_at' => '2026-01-06'],
+                
+                // Construction
+                ['id' => 'prod_022', 'name' => 'Residential House Construction (per sqm)', 'seller_name' => 'BuildRight Contractors', 'seller_id' => 'seller_022', 'category' => 'Construction', 'price' => 120000, 'status' => 'Active', 'plan' => 'Premium', 'created_at' => '2025-10-05'],
+                ['id' => 'prod_023', 'name' => 'Plumbing Installation & Repair', 'seller_name' => 'PipeMasters RW', 'seller_id' => 'seller_023', 'category' => 'Construction', 'price' => 28000, 'status' => 'Active', 'plan' => 'Basic', 'created_at' => '2025-12-18'],
+            ];
+            
+            session(['mock_marketplace_products' => $products]);
+        }
+        return session('mock_marketplace_products');
+    }
+
+    private function getMockPlans() {
+        return [
+            ['name' => 'Basic', 'price' => 10000, 'benefits' => '5 Listings, Standard Visibility'],
+            ['name' => 'Standard', 'price' => 25000, 'benefits' => '20 Listings, Featured Badges'],
+            ['name' => 'Premium', 'price' => 50000, 'benefits' => 'Unlimited Listings, Priority Search']
         ];
+    }
+
+    private function getMockMediators() {
+        if (!session()->has('mock_marketplace_mediators')) {
+            $mediators = [
+                ['id' => 1, 'name' => 'Jean de Dieu', 'clients' => 12, 'level' => 'Basic', 'earnings' => 120000, 'requirement' => 20],
+                ['id' => 2, 'name' => 'Marie Claire', 'clients' => 45, 'level' => 'Standard', 'earnings' => 450000, 'requirement' => 50],
+                ['id' => 3, 'name' => 'Innocent K.', 'clients' => 105, 'level' => 'Premium', 'earnings' => 1250000, 'requirement' => 0]
+            ];
+            session(['mock_marketplace_mediators' => $mediators]);
+        }
+        return session('mock_marketplace_mediators');
+    }
+
+    public function productAction(Request $request, $id) {
+        $action = $request->input('action'); // 'approve', 'reject', 'delete'
+        $success = $this->superAdminService->moderateProduct($id, $action);
+
+        if (!$success) {
+            // Fallback to mock session if API fails
+            $products = $this->getMockProducts();
+            if ($action === 'delete') {
+                $products = collect($products)->filter(fn($p) => $p['id'] != $id)->values()->toArray();
+            } else {
+                foreach($products as &$p) {
+                    if ($p['id'] == $id) {
+                        $p['status'] = ($action === 'approve') ? 'Active' : 'Rejected';
+                        break;
+                    }
+                }
+            }
+            session(['mock_marketplace_products' => $products]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Marketplace listing updated.']);
+    }
+
+    public function upgradeSeller(Request $request)
+    {
+        $name = $request->input('name');
+        $currentPlan = $request->input('current_plan');
+        $email = $request->input('email');
+        
+        $planHierarchy = ['Basic' => 'Standard', 'Standard' => 'Premium'];
+        $newPlan = $planHierarchy[$currentPlan] ?? $currentPlan;
+        
+        // Update seller subscription in session
+        $sellers = $this->getMockSellerSubscriptions();
+        foreach ($sellers as &$seller) {
+            if ($seller['name'] === $name) {
+                $seller['plan'] = $newPlan;
+                $seller['upgraded_at'] = now()->toDateTimeString();
+                break;
+            }
+        }
+        session(['mock_seller_subscriptions' => $sellers]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => "Successfully upgraded {$name} to {$newPlan} plan",
+            'new_plan' => $newPlan
+        ]);
+    }
+
+    public function generateSettlementReport(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        $mediators = $this->getMockMediators();
+        $totalCommissions = collect($mediators)->sum('earnings');
+        $totalClients = collect($mediators)->sum('clients');
+        
+        $reportData = [
+            'period' => ['start' => $startDate, 'end' => $endDate],
+            'total_commissions' => $totalCommissions,
+            'total_clients' => $totalClients,
+            'mediator_count' => count($mediators),
+            'mediators' => $mediators,
+            'generated_at' => now()->toDateTimeString()
+        ];
+        
+        // Store report in session
+        session(['last_settlement_report' => $reportData]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Settlement report generated successfully',
+            'report' => $reportData
+        ]);
+    }
+
+    public function auditMediator(Request $request)
+    {
+        $name = $request->input('name');
+        $mediators = $this->getMockMediators();
+        
+        $mediator = collect($mediators)->firstWhere('name', $name);
+        
+        if (!$mediator) {
+            return response()->json(['success' => false, 'message' => 'Mediator not found'], 404);
+        }
+        
+        $auditData = [
+            'mediator' => $mediator,
+            'commission_rate' => 0.15,
+            'avg_commission_per_client' => $mediator['earnings'] / max($mediator['clients'], 1),
+            'last_payment' => now()->subDays(30)->format('M d, Y'),
+            'status' => 'verified',
+            'audited_at' => now()->toDateTimeString()
+        ];
+        
+        // Store audit in session
+        $audits = session('mediator_audits', []);
+        $audits[$name] = $auditData;
+        session(['mediator_audits' => $audits]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => "Audit completed for {$name}",
+            'audit' => $auditData
+        ]);
+    }
+    public function licenses() { return view('super_admin.licenses.index'); }
+    private function getMockRoles() {
+        if (!session()->has('mock_roles')) {
+            $initial = [
+                [
+                    'id' => 1,
+                    'name' => 'Super Admin',
+                    'slug' => 'super_admin',
+                    'description' => 'Full system access, including security and global configurations. Yes',
+                    'users_count' => 3,
+                    'permissions' => ['full_access', 'manage_logs', 'system_settings'],
+                    'color' => '#ef4444',
+                    'badge' => 'System'
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Admin',
+                    'slug' => 'admin',
+                    'description' => 'Manages platform categories, staff assignments, and high-level reports.',
+                    'users_count' => 18,
+                    'permissions' => ['manage_users', 'view_analytics', 'moderate_content'],
+                    'color' => '#f59e0b',
+                    'badge' => 'Management'
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Manager',
+                    'slug' => 'manager',
+                    'description' => 'Oversees service sectors and manages regional supervisor teams.',
+                    'users_count' => 42,
+                    'permissions' => ['assign_tasks', 'approve_applications', 'view_reports'],
+                    'color' => '#3b82f6',
+                    'badge' => 'Ops'
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Supervisor',
+                    'slug' => 'supervisor',
+                    'description' => 'On-the-ground verification of tasks and quality assurance.',
+                    'users_count' => 115,
+                    'permissions' => ['verify_completion', 'field_checks', 'update_status'],
+                    'color' => '#10b981',
+                    'badge' => 'Field'
+                ],
+                [
+                    'id' => 5,
+                    'name' => 'Provider',
+                    'slug' => 'provider',
+                    'description' => 'Professional service entities fulfilling platform requests.',
+                    'users_count' => 1240,
+                    'permissions' => ['manage_services', 'receive_payouts', 'fulfill_orders'],
+                    'color' => '#8b5cf6',
+                    'badge' => 'Partner'
+                ],
+                [
+                    'id' => 6,
+                    'name' => 'Client',
+                    'slug' => 'client',
+                    'description' => 'End users who request and consume services via the platform.',
+                    'users_count' => 5800,
+                    'permissions' => ['create_orders', 'view_history', 'chat_providers'],
+                    'color' => '#6366f1',
+                    'badge' => 'User'
+                ]
+            ];
+            session(['mock_roles' => $initial]);
+        }
+        return session('mock_roles');
+    }
+
+    public function roles() {
+        // High-Fidelity Session Synchronization: Prioritize session overrides for real-time mandate simulation
+        $roles = session('mock_roles');
+        
+        if (empty($roles)) {
+            $apiRoles = $this->superAdminService->getRoles();
+            if (!empty($apiRoles)) {
+                $roles = $apiRoles;
+                session(['mock_roles' => $roles]);
+            } else {
+                $roles = $this->getMockRoles();
+            }
+        }
+        
+        // Dynamic Entity Synchronization: Calculate actual counts from session-based mock data
+        $admins = $this->getMockUsers('admins');
+        $managers = $this->getMockUsers('managers');
+        $supervisors = $this->getMockUsers('supervisors');
+        $generalUsers = $this->getMockUsers('users');
+
+        foreach($roles as &$role) {
+            $role['users_count'] = match($role['slug']) {
+                'super_admin' => 1,
+                'admin'       => count($admins),
+                'manager'     => count($managers),
+                'supervisor'  => count($supervisors),
+                'provider'    => collect($generalUsers)->where('role', 'Provider')->count(),
+                'client'      => collect($generalUsers)->where('role', 'Client')->count(),
+                default       => $role['users_count'] ?? 0
+            };
+
+            // Ensure required keys for view safety
+            $role['badge'] = $role['badge'] ?? 'Management';
+            $role['color'] = $role['color'] ?? '#4F46E5';
+            $role['description'] = $role['description'] ?? 'Platform role with standard access boundaries.';
+        }
 
         return view('super_admin.roles.index', compact('roles'));
+    }
+
+    public function storeRole(Request $request) {
+        $roles = $this->getMockRoles();
+        $newRole = [
+            'id' => count($roles) + 1,
+            'name' => $request->name,
+            'slug' => \Illuminate\Support\Str::slug($request->name),
+            'description' => $request->description,
+            'users_count' => 0,
+            'permissions' => [],
+            'color' => $request->color ?? '#4F46E5',
+            'badge' => $request->badge ?? 'Operations'
+        ];
+        $roles[] = $newRole;
+        session(['mock_roles' => $roles]);
+
+        return response()->json(['success' => true, 'message' => 'Role provisioned successfully']);
+    }
+
+    public function updateRole(Request $request, $slug) {
+        $roles = $this->getMockRoles();
+        foreach($roles as &$role) {
+            if ($role['slug'] === $slug) {
+                $role['name'] = $request->name;
+                $role['description'] = $request->description;
+                $role['color'] = $request->color;
+                $role['badge'] = $request->badge;
+                break;
+            }
+        }
+        session(['mock_roles' => $roles]);
+        return response()->json(['success' => true, 'message' => 'Role mandate updated successfully']);
+    }
+
+    public function deleteRole($slug) {
+        $roles = $this->getMockRoles();
+        $roles = collect($roles)->filter(fn($r) => $r['slug'] !== $slug)->values()->toArray();
+        session(['mock_roles' => $roles]);
+        return response()->json(['success' => true, 'message' => 'Role enclave revoked successfully']);
+    }
+
+    public function syncPermissions(Request $request, $slug) {
+        $roles = $this->getMockRoles();
+        foreach($roles as &$role) {
+            if ($role['slug'] === $slug) {
+                $role['permissions'] = $request->permissions ?? [];
+                break;
+            }
+        }
+        session(['mock_roles' => $roles]);
+        return response()->json(['success' => true, 'message' => 'Capability matrix synchronized successfully']);
     }
     public function services() { return view('super_admin.services.index'); }
     public function courses() { return view('super_admin.courses.index'); }
