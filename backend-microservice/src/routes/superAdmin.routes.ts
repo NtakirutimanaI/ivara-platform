@@ -8,13 +8,29 @@ import {
     addReview,
     getMarketplaceData,
     moderateProduct,
-    getRoles
+    getRoles,
+    getActiveSubscriptions
 } from '../controllers/superAdmin.controller';
 import { verifyJwt } from '../middleware/jwt';
 import { authorize } from '../middleware/auth';
 
 const router = Router();
 
+// ... (existing routes)
+
+/**
+ * @swagger
+ * /api/super-admin/subscriptions/active:
+ *   get:
+ *     summary: Get active subscriptions list
+ *     tags: [Super Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of active subscriptions
+ */
+router.get('/subscriptions/active', getActiveSubscriptions);
 /**
  * @swagger
  * tags:

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { User } from '../models/user.model';
 import { Order } from '../models/order.model';
 import { Product } from '../models/product.model';
+import { Subscription } from '../models/subscription.model';
 
 export const getPlatformOverview = async (req: Request, res: Response) => {
     try {
@@ -295,5 +296,52 @@ export const getRoles = async (req: Request, res: Response) => {
     } catch (err) {
         console.error('Fetch roles error:', err);
         res.status(500).json({ error: 'Failed to fetch roles' });
+    }
+};
+export const getActiveSubscriptions = async (req: Request, res: Response) => {
+    try {
+        // Find users who likely have subscriptions (Providers, Businesspersons)
+        // In a real app, we'd look up a Subscriptions collection.
+        // Here, we simulate it by finding relevant users and attaching plan info.
+        const subscribedUsers = await User.find({
+            role: { $in: ['provider', 'businessperson', 'mechanic', 'technician'] },
+            status: { $in: ['online', 'active', 'verified'] } // Assuming active users
+        }).limit(50);
+
+        const plans = ['Basic', 'Standard', 'Premium'];
+        const prices = { 'Basic': 10000, 'Standard': 25000, 'Premium': 50000 };
+
+        const subscriptions = subscribedUsers.map(user => {
+            // Deterministic random plan based on user ID length or char code to keep it consistent-ish
+            const planIndex = (user._id.toString().charCodeAt(0) + user._id.toString().charCodeAt(user._id.toString().length - 1)) % 3;
+            const planName = plans[planIndex];
+
+            // Random start date within last 30 days
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - Math.floor(Math.random() * 30));
+
+            // End date is start date + 30 days
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 30);
+
+            return {
+                id: user._id,
+                user: {
+                    name: user.name || user.username,
+                    email: user.email,
+                    avatar: user.profilePhoto
+                },
+                plan: planName,
+                price: prices[planName as keyof typeof prices],
+                start_date: startDate.toISOString(),
+                end_date: endDate.toISOString(),
+                status: 'Active'
+            };
+        });
+
+        res.json(subscriptions);
+    } catch (err) {
+        console.error('Fetch active subscriptions error:', err);
+        res.status(500).json({ error: 'Failed to fetch subscriptions' });
     }
 };

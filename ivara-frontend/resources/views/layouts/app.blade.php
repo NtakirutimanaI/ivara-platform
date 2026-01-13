@@ -58,9 +58,12 @@
         "extendedTimeOut": "2000"
     };
 
-    // Global Notification Helper
-    window.showNotify = function(message, type = 'success') {
-        if (!message) return;
+    window.showNotify = function(type, message) {
+        if (!message) {
+            // Fallback for old calls that might pass message as first argument
+            message = type;
+            type = 'success';
+        }
         switch(type) {
             case 'success': toastr.success(message); break;
             case 'error': toastr.error(message); break;

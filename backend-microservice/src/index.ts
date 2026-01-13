@@ -35,6 +35,10 @@ import contactRouter from './routes/contact.routes';
 import uploadRouter from './routes/upload.routes';
 import deviceRouter from './routes/device.routes';
 import technicalServiceRouter from './routes/technicalService.routes';
+import subscriptionRouter from './routes/subscription.routes';
+import paymentRouter from './routes/payment.routes';
+import licenseRouter from './routes/license.routes';
+import serviceRouter from './routes/service.routes';
 
 import { setupSwagger } from './config/swagger';
 
@@ -103,6 +107,10 @@ app.use('/api/agriculture-environment', agricultureEnvironmentRouter);
 app.use('/api/media-entertainment', mediaEntertainmentRouter);
 app.use('/api/legal-professional', legalProfessionalRouter);
 app.use('/api/other-services', otherServicesRouter);
+app.use('/api/subscriptions', subscriptionRouter);
+app.use('/api/payments', paymentRouter);
+app.use('/api/licenses', licenseRouter);
+app.use('/api/services-registry', serviceRouter);
 
 
 // Serve uploaded files statically

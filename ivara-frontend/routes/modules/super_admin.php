@@ -21,10 +21,19 @@ Route::middleware(['auth', 'admin'])->prefix('super_admin')->name('super_admin.'
     Route::prefix('subscriptions')->name('subscriptions.')->group(function() {
         Route::get('/plans', [SuperAdminController::class, 'subPlans'])->name('plans');
         Route::get('/active', [SuperAdminController::class, 'subActive'])->name('active');
+        Route::post('/active', [SuperAdminController::class, 'storeSub'])->name('active.store');
+        Route::put('/active/{id}', [SuperAdminController::class, 'updateSub'])->name('active.update');
+        Route::patch('/active/{id}/status', [SuperAdminController::class, 'updateSubStatus'])->name('active.status');
+        Route::delete('/active/{id}', [SuperAdminController::class, 'deleteSub'])->name('active.delete');
         Route::get('/payments', [SuperAdminController::class, 'subPayments'])->name('payments');
+        Route::get('/payments/export', [SuperAdminController::class, 'exportPayments'])->name('payments.export');
+        Route::patch('/payments/{id}/status', [SuperAdminController::class, 'updatePayStatus'])->name('payments.status');
+        Route::delete('/payments/{id}', [SuperAdminController::class, 'deletePay'])->name('payments.delete');
     });
 
     Route::get('/licenses', [SuperAdminController::class, 'licenses'])->name('licenses.index');
+    Route::put('/licenses/{id}', [SuperAdminController::class, 'updateLicense'])->name('licenses.update');
+    Route::delete('/licenses/{id}', [SuperAdminController::class, 'deleteLicense'])->name('licenses.delete');
     
     // Roles Management
     Route::get('/roles', [SuperAdminController::class, 'roles'])->name('roles.index');
@@ -34,6 +43,9 @@ Route::middleware(['auth', 'admin'])->prefix('super_admin')->name('super_admin.'
     Route::post('/roles/{slug}/permissions', [SuperAdminController::class, 'syncPermissions'])->name('roles.permissions');
 
     Route::get('/services', [SuperAdminController::class, 'services'])->name('services.index');
+    Route::post('/services', [SuperAdminController::class, 'storeService'])->name('services.store');
+    Route::put('/services/{id}', [SuperAdminController::class, 'updateServiceAction'])->name('services.update');
+    Route::delete('/services/{id}', [SuperAdminController::class, 'deleteServiceAction'])->name('services.delete');
     Route::get('/courses', [SuperAdminController::class, 'courses'])->name('courses.index');
     Route::get('/payments', [SuperAdminController::class, 'payments'])->name('payments.index');
     Route::get('/invoices', [SuperAdminController::class, 'invoices'])->name('invoices.index');

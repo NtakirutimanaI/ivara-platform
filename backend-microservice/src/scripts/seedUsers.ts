@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: { type: String, required: true },
     category: { type: String },
+    status: { type: String, default: 'offline' }, // Added status field to match main model
     isActive: { type: Boolean, default: true },
 }, { timestamps: true });
 
@@ -454,8 +455,11 @@ const seedUsers = async () => {
 
         // --- SPECIFIC OTHER SERVICES ROLES ---
         const otherRoles = [
-            { name: 'Other Admin', role: 'admin', email: 'other.admin@ivara.com' },
-            { name: 'Other Manager', role: 'manager', email: 'other.manager@ivara.com' },
+            { name: 'Other Admin', role: 'admin', email: 'other.admin@ivara.com', status: 'online' },
+            { name: 'Other Manager', role: 'manager', email: 'other.manager@ivara.com', status: 'online' },
+            // Explicit Subscribed Users for Testing
+            { name: 'Subscribed Provider', role: 'provider', email: 'provider.active@ivara.com', status: 'active' },
+            { name: 'Subscribed Business', role: 'businessperson', email: 'business.active@ivara.com', status: 'active' }
         ];
 
         otherRoles.forEach(r => {
@@ -465,6 +469,7 @@ const seedUsers = async () => {
                 password: hashedPassword,
                 role: r.role,
                 category: 'other-services',
+                status: r.status || 'active', // Default to active for these so they show up
                 isActive: true
             });
         });
@@ -477,6 +482,7 @@ const seedUsers = async () => {
                 password: hashedPassword,
                 role: 'technician',
                 category: cat.id,
+                status: 'active', // Ensure these show up as active subscriptions
                 isActive: true
             });
             users.push({
@@ -485,6 +491,7 @@ const seedUsers = async () => {
                 password: hashedPassword,
                 role: 'user',
                 category: cat.id,
+                status: 'online',
                 isActive: true
             });
         });

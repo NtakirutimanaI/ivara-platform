@@ -29,7 +29,7 @@ const UserSchema = new Schema<IUser>({
     address: { type: String },
     profilePhoto: { type: String },
     category: { type: String },
-    status: { type: String, enum: ['online', 'offline', 'pending', 'inactive'], default: 'offline' },
+    status: { type: String, enum: ['online', 'offline', 'pending', 'inactive', 'active'], default: 'offline' },
     isVerified: { type: Boolean, default: false },
     earnings: { type: Number, default: 0 },
     level: { type: Number, enum: [1, 2, 3], default: 1 },

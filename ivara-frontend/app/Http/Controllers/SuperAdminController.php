@@ -945,7 +945,43 @@ class SuperAdminController extends Controller
             'audit' => $auditData
         ]);
     }
-    public function licenses() { return view('super_admin.licenses.index'); }
+    public function licenses(Request $request) {
+        $page = $request->query('page', 1);
+        $limit = $request->query('limit', 10);
+        $search = $request->query('search', '');
+        $status = $request->query('status', '');
+        $category = $request->query('category', '');
+
+        // Fetch Licenses
+        $lResponse = \Illuminate\Support\Facades\Http::get("http://127.0.0.1:5001/api/licenses", [
+            'page' => $page,
+            'limit' => $limit,
+            'search' => $search,
+            'status' => $status,
+            'category' => $category
+        ]);
+        $resData = $lResponse->successful() ? $lResponse->json() : ['licenses' => [], 'pagination' => ['total' => 0, 'limit' => $limit, 'page' => $page, 'pages' => 0]];
+
+        // Fetch Stats
+        $sResponse = \Illuminate\Support\Facades\Http::get("http://127.0.0.1:5001/api/licenses/stats");
+        $stats = $sResponse->successful() ? $sResponse->json() : ['total' => 0, 'active' => 0, 'expired' => 0, 'pending' => 0, 'expiringSoon' => 0];
+
+        return view('super_admin.licenses.index', [
+            'licenses' => json_decode(json_encode($resData['licenses'])),
+            'pagination' => $resData['pagination'],
+            'stats' => $stats
+        ]);
+    }
+
+    public function updateLicense(Request $request, $id) {
+        $response = \Illuminate\Support\Facades\Http::put("http://127.0.0.1:5001/api/licenses/{$id}", $request->all());
+        return response()->json(['success' => $response->successful()]);
+    }
+
+    public function deleteLicense($id) {
+        $response = \Illuminate\Support\Facades\Http::delete("http://127.0.0.1:5001/api/licenses/{$id}");
+        return response()->json(['success' => $response->successful()]);
+    }
     private function getMockRoles() {
         if (!session()->has('mock_roles')) {
             $initial = [
@@ -1106,7 +1142,48 @@ class SuperAdminController extends Controller
         session(['mock_roles' => $roles]);
         return response()->json(['success' => true, 'message' => 'Capability matrix synchronized successfully']);
     }
-    public function services() { return view('super_admin.services.index'); }
+    public function services(Request $request) {
+        $page = $request->query('page', 1);
+        $limit = $request->query('limit', 10);
+        $search = $request->query('search', '');
+        $category = $request->query('category', '');
+        $status = $request->query('status', '');
+
+        // Fetch Services
+        $sResponse = \Illuminate\Support\Facades\Http::get("http://127.0.0.1:5001/api/services-registry", [
+            'page' => $page,
+            'limit' => $limit,
+            'search' => $search,
+            'category' => $category,
+            'status' => $status
+        ]);
+        $resData = $sResponse->successful() ? $sResponse->json() : ['services' => [], 'pagination' => ['total' => 0, 'limit' => $limit, 'page' => $page, 'pages' => 0]];
+
+        // Fetch Stats
+        $stResponse = \Illuminate\Support\Facades\Http::get("http://127.0.0.1:5001/api/services-registry/stats");
+        $stats = $stResponse->successful() ? $stResponse->json() : ['total' => 0, 'active' => 0, 'review' => 0, 'avgPrice' => 0];
+
+        return view('super_admin.services.index', [
+            'services' => json_decode(json_encode($resData['services'])),
+            'pagination' => $resData['pagination'],
+            'stats' => $stats
+        ]);
+    }
+
+    public function storeService(Request $request) {
+        $response = \Illuminate\Support\Facades\Http::post("http://127.0.0.1:5001/api/services-registry", $request->all());
+        return response()->json(['success' => $response->successful()]);
+    }
+
+    public function updateServiceAction(Request $request, $id) {
+        $response = \Illuminate\Support\Facades\Http::put("http://127.0.0.1:5001/api/services-registry/{$id}", $request->all());
+        return response()->json(['success' => $response->successful()]);
+    }
+
+    public function deleteServiceAction($id) {
+        $response = \Illuminate\Support\Facades\Http::delete("http://127.0.0.1:5001/api/services-registry/{$id}");
+        return response()->json(['success' => $response->successful()]);
+    }
     public function courses() { return view('super_admin.courses.index'); }
     public function payments() { return view('super_admin.payments.index'); }
     public function invoices() { return view('super_admin.invoices.index'); }
@@ -1115,6 +1192,161 @@ class SuperAdminController extends Controller
     
     // Subscriptions
     public function subPlans() { return view('super_admin.subscriptions.plans'); }
-    public function subActive() { return view('super_admin.subscriptions.active'); }
-    public function subPayments() { return view('super_admin.subscriptions.payments'); }
+    public function subActive(Request $request) {
+        try {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $search = $request->query('search', '');
+            
+            // Fetch from Backend Microservice (Subscription collection)
+            $response = \Illuminate\Support\Facades\Http::get("http://127.0.0.1:5001/api/subscriptions", [
+                'page' => $page,
+                'limit' => $limit,
+                'search' => $search
+            ]);
+            $resData = $response->successful() ? $response->json() : ['subscriptions' => [], 'pagination' => ['total' => 0, 'limit' => $limit, 'page' => $page, 'pages' => 0]];
+            
+            $data = $resData['subscriptions'];
+            $pagination = $resData['pagination'];
+
+            // Convert array to object structure for Blade compatibility
+            $activeSubscriptions = collect($data)->map(function($item) {
+                return (object) [
+                    'id' => $item['_id'],
+                    'user' => (object) [
+                        'name' => $item['userName'],
+                        'email' => $item['userEmail'],
+                        'avatar' => null // Placeholder
+                    ],
+                    'plan' => $item['plan'],
+                    'price' => $item['price'],
+                    'start_date' => isset($item['startDate']) ? \Carbon\Carbon::parse($item['startDate']) : null,
+                    'end_date' => isset($item['endDate']) ? \Carbon\Carbon::parse($item['endDate']) : null,
+                    'status' => $item['status']
+                ];
+            });
+
+        } catch (\Exception $e) {
+            $activeSubscriptions = collect([]);
+            $pagination = ['total' => 0, 'limit' => 10, 'page' => 1, 'pages' => 0];
+        }
+        return view('super_admin.subscriptions.active', compact('activeSubscriptions', 'pagination'));
+    }
+
+    public function subPayments(Request $request) {
+        try {
+            $page = $request->query('page', 1);
+            $limit = $request->query('limit', 10);
+            $search = $request->query('search', '');
+
+            // Fetch Payments
+            $pResponse = \Illuminate\Support\Facades\Http::get("http://127.0.0.1:5001/api/payments", [
+                'page' => $page,
+                'limit' => $limit,
+                'search' => $search
+            ]);
+            $resData = $pResponse->successful() ? $pResponse->json() : ['payments' => [], 'pagination' => ['total' => 0, 'limit' => $limit, 'page' => $page, 'pages' => 0]];
+
+            // Fetch Stats
+            $sResponse = \Illuminate\Support\Facades\Http::get("http://127.0.0.1:5001/api/payments/stats");
+            $stats = $sResponse->successful() ? $sResponse->json() : ['total' => 0, 'business' => 0, 'individual' => 0];
+
+            $payments = collect($resData['payments'])->map(function($item) {
+                return (object) [
+                    'id' => $item['_id'],
+                    'user_name' => $item['userName'],
+                    'user_email' => $item['userEmail'],
+                    'amount' => $item['amount'],
+                    'method' => $item['paymentMethod'],
+                    'transaction_id' => $item['transactionId'],
+                    'status' => $item['status'],
+                    'account_type' => $item['accountType'],
+                    'created_at' => \Carbon\Carbon::parse($item['createdAt'])
+                ];
+            });
+
+            $pagination = $resData['pagination'];
+
+            return view('super_admin.subscriptions.payments', compact('payments', 'pagination', 'stats'));
+
+        } catch (\Exception $e) {
+            $payments = collect([]);
+            $pagination = ['total' => 0, 'limit' => 10, 'page' => 1, 'pages' => 0];
+            $stats = ['total' => 0, 'business' => 0, 'individual' => 0];
+            return view('super_admin.subscriptions.payments', compact('payments', 'pagination', 'stats'));
+        }
+    }
+
+    public function updateSubStatus(Request $request, $id) {
+        $response = \Illuminate\Support\Facades\Http::patch("http://127.0.0.1:5001/api/subscriptions/{$id}/status", [
+            'status' => $request->status
+        ]);
+        return response()->json(['success' => $response->successful()]);
+    }
+
+    public function deleteSub($id) {
+        $response = \Illuminate\Support\Facades\Http::delete("http://127.0.0.1:5001/api/subscriptions/{$id}");
+        return response()->json(['success' => $response->successful()]);
+    }
+
+    public function updatePayStatus(Request $request, $id) {
+        $response = \Illuminate\Support\Facades\Http::patch("http://127.0.0.1:5001/api/payments/{$id}/status", [
+            'status' => $request->status
+        ]);
+        return response()->json(['success' => $response->successful()]);
+    }
+
+    public function deletePay($id) {
+        $response = \Illuminate\Support\Facades\Http::delete("http://127.0.0.1:5001/api/payments/{$id}");
+        return response()->json(['success' => $response->successful()]);
+    }
+
+    public function exportPayments(Request $request) {
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $response = \Illuminate\Support\Facades\Http::get("http://127.0.0.1:5001/api/payments/export", [
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ]);
+
+        if (!$response->successful()) {
+            return back()->with('error', 'Failed to fetch export data.');
+        }
+
+        $data = $response->json();
+        $filename = "Subscription_Payments_Report_" . date('Y-m-d') . ".csv";
+        
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $callback = function() use ($data) {
+            $file = fopen('php://output', 'w');
+            if (count($data) > 0) {
+                fputcsv($file, array_keys($data[0]));
+                foreach ($data as $row) {
+                    fputcsv($file, $row);
+                }
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function storeSub(Request $request) {
+        $response = \Illuminate\Support\Facades\Http::post("http://127.0.0.1:5001/api/subscriptions", $request->all());
+        return response()->json(['success' => $response->successful(), 'data' => $response->json()]);
+    }
+
+    public function updateSub(Request $request, $id) {
+        $response = \Illuminate\Support\Facades\Http::put("http://127.0.0.1:5001/api/subscriptions/{$id}", $request->all());
+        return response()->json(['success' => $response->successful(), 'data' => $response->json()]);
+    }
+
 }
